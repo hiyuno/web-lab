@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.DS_Store
+node_modules/
+skills/optimize-assets/app/settings.json

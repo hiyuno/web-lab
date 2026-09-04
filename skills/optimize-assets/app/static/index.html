@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WALO · Optimizador de assets</title>
+<style>
+:root{--bg:#08090a;--card:#0f1011;--surface:#161718;--fg:#e5e5e6;--muted:#8a8f98;--line:#23252a;--line-strong:#383b3f;--accent:#e4f222;--ok:#27a644;--warn:#d99a00;--crit:#eb5757;--mono:"Berkeley Mono",ui-monospace,SFMono-Regular,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:13px/1.45 Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;letter-spacing:-.01em}
+header{position:sticky;top:0;z-index:5;background:rgba(15,16,17,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:16px 24px}
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+h1{font-size:15px;margin:0 6px 0 0;letter-spacing:-.02em;font-weight:590}
+.stats{display:flex;gap:14px;color:var(--muted);font-size:13px;flex-wrap:wrap}
+.stats b{color:var(--fg);font-variant-numeric:tabular-nums}
+.grow{flex:1}
+button{font:inherit;border:1px solid var(--line-strong);background:transparent;color:var(--mist,var(--fg));border-radius:6px;padding:7px 10px;cursor:pointer;line-height:1.2;transition:border-color .15s,background .15s,color .15s}
+button:hover{border-color:var(--muted);background:var(--surface)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:650}
+button.primary:hover{background:#f0ff45;border-color:#f0ff45}
+button.rec{border-color:var(--accent);color:var(--accent);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+.bar{height:3px;background:var(--line);border-radius:2px;margin-top:14px;overflow:hidden}.bar i{background:var(--accent)}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center;font-size:13px}
+select,input[type=search]{font:inherit;border:1px solid var(--line-strong);background:var(--bg);color:var(--fg);border-radius:6px;padding:7px 9px}select:focus,input[type=search]:focus{outline:none;border-color:var(--mist,var(--fg))}
+label.chk{display:flex;gap:5px;align-items:center;color:var(--muted)}
+main{padding:18px 24px 64px;max-width:1440px;margin:0 auto}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:22px 0 8px;display:flex;gap:10px;align-items:baseline}
+h2 small{text-transform:none;letter-spacing:0;font-weight:400}
+.card{display:grid;grid-template-columns:96px minmax(0,1fr) 360px;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:8px;align-items:start;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)}
+.thumb{width:96px;height:96px;object-fit:cover;border-radius:8px;background:var(--line);display:block}
+.name{font-family:var(--mono);font-size:12px;word-break:break-all}
+.rename{display:flex;gap:8px;align-items:center;margin:8px 0;flex-wrap:wrap}.rename input{flex:1;min-width:120px;background:var(--bg);color:var(--fg);border:1px solid var(--line-strong);border-radius:6px;padding:8px;font:12px var(--mono)}.rename input:focus{outline:1px solid var(--muted)}
+.meta{display:flex;gap:6px 10px;flex-wrap:wrap;color:var(--muted);font-size:11px;margin:6px 0;font-family:var(--mono)}
+.meta b{color:var(--fg);font-weight:600}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.crit .dot{background:var(--crit)}.warn .dot{background:var(--warn)}.ok .dot{background:var(--ok)}
+.issues{margin:4px 0 0;padding-left:16px;font-size:12px;color:var(--muted)}
+.issues li{margin:1px 0}
+.tag{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-size:10px}
+.tag.ext{color:var(--warn);border-color:var(--warn)}
+.actions{display:flex;flex-direction:column;gap:8px}
+.presets{display:flex;gap:6px}
+.presets button{flex:1}
+.opts{display:flex;gap:12px;font-size:12px;color:var(--muted)}
+.opts label{display:flex;gap:5px;align-items:center;cursor:pointer;color:var(--fg)}
+.opts input[type=checkbox]{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;margin:0}
+.result{font-size:12px;border-top:1px solid var(--line);padding-top:8px;min-height:18px;color:var(--muted)}
+.result b{color:var(--fg)}
+.links{display:flex;gap:6px;margin-top:6px}
+.links a,.links button{padding:3px 8px;font-size:12px;border:1px solid var(--line);border-radius:6px;color:var(--fg);text-decoration:none;background:var(--card);cursor:pointer}
+.links a:hover,.links button:hover{border-color:var(--accent)}
+.cover{font-size:12px;border-top:1px dashed var(--line);padding-top:8px;color:var(--muted)}
+.cover b{color:var(--fg)}
+.cover .links{margin-top:0;align-items:center}
+.hint{color:var(--muted);font-size:11px}
+.save{color:var(--ok);font-weight:600}
+.err{color:var(--crit)}
+.pbar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:5px}
+.pbar i{display:block;height:100%;background:var(--accent);transition:width .5s}
+.empty{color:var(--muted);padding:40px;text-align:center}
+.thumb{cursor:zoom-in}
+.outbtn{max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.outbtn:hover{color:var(--fg)}
+.stbox{width:min(640px,96vw)}
+.stbody{padding:14px;display:flex;flex-direction:column;gap:10px}
+.stbody p{margin:0;color:var(--muted);font-size:13px}
+.strow{display:flex;gap:8px;align-items:center}
+.strow input{flex:1;font:12px var(--mono);border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;padding:8px 10px}
+.stmsg{font-size:12px;min-height:16px;color:var(--muted)}
+.stmsg.err{color:var(--crit)}
+.stmsg.ok{color:var(--ok)}
+#st[hidden],#lb[hidden]{display:none}
+#st{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:21;display:flex;align-items:center;justify-content:center;padding:24px}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:20;display:flex;align-items:center;justify-content:center;padding:24px}
+.lbbox{background:var(--card);border-radius:14px;max-width:min(1400px,96vw);max-height:92vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.lbhead{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px}
+.lbhead .grow{flex:1}
+.lbpanes{display:flex;gap:12px;padding:14px;overflow:auto;justify-content:center;background:var(--bg)}
+.lbpanes figure{margin:0;display:flex;flex-direction:column;gap:6px;align-items:center;min-width:0}
+.lbpanes figcaption{font-size:12px;color:var(--muted)}
+.lbpanes figcaption b{color:var(--fg)}
+.lbpanes img,.lbpanes video{max-height:72vh;max-width:100%;object-fit:contain;border-radius:8px;background:#111}
+@media(max-width:960px){.card{grid-template-columns:72px minmax(0,1fr)}.thumb{width:72px;height:72px}.actions{grid-column:1/-1}}
+</style>
+<link rel="stylesheet" href="/workflow.css">
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>WALO · Optimizador de assets</h1>
+    <div class="stats" id="stats"></div>
+    <div class="grow"></div>
+    <button id="outBtn" class="outbtn" onclick="openSettings()" title="Carpeta donde se guardan los archivos optimizados">📁 <span id="outPath">…</span></button>
+    <span id="queue" class="stats"></span>
+    <button class="primary" id="batch" onclick="batchCritical()">Optimizar todos los críticos</button>
+  </div>
+  <div class="bar"><i id="gbar"></i></div>
+  <div class="filters">
+    <select id="fPage"><option value="">Todas las páginas</option></select>
+    <select id="fType"><option value="">Imágenes y videos</option><option value="image">Solo imágenes</option><option value="video">Solo videos</option></select>
+    <select id="fSev"><option value="">Cualquier severidad</option><option value="crit">🔴 Críticos</option><option value="warn">🟡 Revisar</option><option value="ok">🟢 OK</option></select>
+    <input type="search" id="fQ" placeholder="Buscar por nombre…">
+    <label class="chk"><input type="checkbox" id="fHide"> Ocultar ya optimizados</label>
+    <span class="grow"></span>
+    <span id="count" style="color:var(--muted)"></span>
+  </div>
+</header>
+<section class="overview" aria-label="Resumen y auditoría"><div id="pageSummary"></div><div id="auditPanel"></div></section>
+<main id="main"><div class="empty">Cargando…</div></main>
+<div id="st" hidden onclick="if(event.target===this)closeSettings()">
+  <div class="lbbox stbox">
+    <div class="lbhead"><span>Carpeta de salida</span><span class="grow"></span><button onclick="closeSettings()">Cerrar ✕</button></div>
+    <div class="stbody">
+      <p>Los archivos optimizados se guardan aquí, en una subcarpeta por página. Los ya convertidos se quedan donde están.</p>
+      <div class="strow"><input type="text" id="stPath" spellcheck="false" placeholder="/Users/…/carpeta"><button onclick="pickFolder()">Elegir…</button></div>
+      <div class="strow"><button class="primary" onclick="saveSettings()">Guardar</button><button onclick="resetSettings()">Usar la carpeta por defecto</button><span class="grow"></span><button onclick="api('/api/open-out',{})">Abrir en Finder</button></div>
+      <div id="stMsg" class="stmsg"></div>
+    </div>
+  </div>
+</div>
+<div id="lb" hidden onclick="if(event.target===this)closeLb()">
+  <div class="lbbox">
+    <div class="lbhead"><span id="lbTitle"></span><span class="grow"></span><button onclick="closeLb()">Cerrar ✕</button></div>
+    <div class="lbpanes" id="lbPanes"></div>
+  </div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const IMG = [2560, 2048, 1024], VID = [1080, 720, 480];
+const SEV = { crit: "🔴", warn: "🟡", ok: "🟢" };
+const fmt = (b) => b === 0 ? '0 KB' : b >= 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pageName = (f) => f === "_shared" ? "Compartidos (2+ páginas)" : f === "home" ? "Home" : f.replace(/^projects__/, "projects / ").replace(/-/g, " ");
+let assets = [], rows = new Map(), polling = null, pageOptionsBuilt = false;
+
+async function api(path, body) {
+  const r = await fetch(path, body ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : {});
+  return r.json();
+}
+
+async function load() {
+  const d = await api("/api/assets");
+  assets = d.assets;
+  showSettings(d.settings);
+  buildPageOptions();
+  render();
+  updateStats(d);
+  updateOverview(d);
+  if (d.jobs.queued + d.jobs.running > 0 || d.audit?.status === 'running') startPolling();
+}
+
+function buildPageOptions() {
+  if (pageOptionsBuilt) return;
+  pageOptionsBuilt = true;
+  const folders = [...new Set(assets.flatMap((a) => a.pages))].sort((a, b) => (a === "home" ? -1 : b === "home" ? 1 : a.localeCompare(b)));
+  for (const f of folders) $("#fPage").insertAdjacentHTML("beforeend", `<option value="${esc(f)}">${esc(pageName(f))}</option>`);
+}
+
+function visible(a) {
+  const p = $("#fPage").value, t = $("#fType").value, s = $("#fSev").value, q = $("#fQ").value.trim().toLowerCase(), hide = $("#fHide").checked;
+  if (p && !a.pages.includes(p)) return false;
+  if (t && a.type !== t) return false;
+  if (s && a.severity !== s) return false;
+  if (q && !(a.file+' '+a.export_name).toLowerCase().includes(q)) return false;
+  if (hide && a.result && !pendingReasons(a).length) return false;
+  return true;
+}
+
+function render() {
+  captureDraftNames();
+  drawSummary();
+  const main = $("#main");
+  rows = new Map();
+  const groups = new Map();
+  let n = 0;
+  for (const a of assets) {
+    if (!visible(a)) continue;
+    n++;
+    if (!groups.has(a.folder)) groups.set(a.folder, []);
+    groups.get(a.folder).push(a);
+  }
+  $("#count").textContent = `${n} de ${assets.length} archivos`;
+  if (!n) { main.innerHTML = '<div class="empty">Nada que mostrar con estos filtros.</div>'; return; }
+  const order = [...groups.keys()].sort((a, b) => (a === "home" ? -1 : b === "home" ? 1 : a === "_shared" ? 1 : b === "_shared" ? -1 : a.localeCompare(b)));
+  const sevRank = { crit: 0, warn: 1, ok: 2 };
+  main.innerHTML = order.map((f) => {
+    const list = groups.get(f).sort((x, y) => sevRank[x.severity] - sevRank[y.severity] || y.bytes - x.bytes);
+    const mb = list.reduce((s, a) => s + a.bytes, 0);
+    return `<h2>${esc(pageName(f))} <small>${list.length} archivos · ${fmt(mb)}</small></h2>` + list.map(card).join("");
+  }).join("");
+  for (const el of main.querySelectorAll(".card")) rows.set(el.dataset.id, el);
+  for (const a of assets) if(rows.has(a.id)) {
+    const input=rows.get(a.id).querySelector('.export-name');
+    if (draftNames.has(a.id)) input.value=draftNames.get(a.id);
+    updateNameButton(a.id);
+    updatePending(a.id);
+  }
+}
+
+function dims(a) {
+  const i = a.info || {};
+  if (a.type === "video") {
+    const parts = [];
+    if (i.w) parts.push(`${i.w}×${i.h}`);
+    if (i.codec) parts.push(i.codec);
+    if (i.duration) parts.push(i.duration + " s");
+    if (i.bitrate_mbps) parts.push(i.bitrate_mbps + " Mbps");
+    parts.push(i.audio ? "con audio" : "sin audio");
+    return parts.join(" · ");
+  }
+  return [i.w ? `${i.w}×${i.h}` : null, i.format].filter(Boolean).join(" · ");
+}
+
+const selections = new Map();
+function selection(a) {
+  if (!selections.has(a.id)) selections.set(a.id, storedSelection(a) || {preset: a.result?.preset || a.recommended, ...(a.result?.options || a.defaults || {})});
+  return selections.get(a.id);
+}
+function selectPreset(id, preset) {
+  selection(assets.find(a => a.id === id)).preset = preset;
+  for (const b of rows.get(id).querySelectorAll('.presets button')) {
+    const active = b.dataset.preset === String(preset);
+    b.classList.toggle('rec', active);
+    b.setAttribute('aria-pressed', String(active));
+  }
+  updateEstimate(id);
+  storeSelection(id);
+  updatePending(id);
+}
+function selectOption(id, key, value) { selection(assets.find(a => a.id === id))[key] = value; storeSelection(id); updateEstimate(id); updatePending(id); }
+function estimate(a) {
+  const s = selection(a), i = a.info || {}, r = a.result;
+  const video = a.type === 'video';
+  if (r && !pendingReasons(a).length) {
+    return {low:r.bytes, high:r.bytes, actual:true};
+  }
+  if ((i.format || '').toUpperCase() === 'SVG') return {low:a.bytes, high:a.bytes, copied:true};
+  if (!i.w || !i.h || (i.frames || 1) > 1) return null;
+  const scale = s.preset === 'retina' ? Math.min(1, (a.retina?.w || i.w) / i.w) : Math.min(1, s.preset / (video ? Math.min(i.w, i.h) : i.w));
+  const pixels = i.w * i.h * scale * scale;
+  if (video) {
+    if (!i.duration) return null;
+    const duration = s.trim ? Math.min(i.duration, s.trim) : i.duration;
+    const audio = i.audio && !s.strip_audio ? 16000 * duration : 0;
+    // Broad heuristic for CRF output; content complexity can exceed this range.
+    return {low:Math.max(1024, pixels * duration * .04 + audio), high:Math.max(2048, pixels * duration * .22 + audio)};
+  }
+  const png = (i.format || '').toUpperCase() === 'PNG';
+  return {low:Math.max(512,a.bytes * scale * scale * (png ? .15 : .35)), high:Math.max(1024,a.bytes * scale * scale * (png ? .85 : 1.1)), unchanged:scale === 1};
+}
+function estimateHtml(a) {
+  const retina = selection(a).preset === 'retina' && a.retina;
+  const note = retina ? `<div class="hint">Retina @2x · ${retina.w}×${retina.h} px · ${retina.basis === 'responsive' ? 'Responsive medido: '+retina.viewports.join(', ')+' px' : 'Auditoría original a 1440 px'}${retina.source_limited ? ' · Limitado por el original' : ''}</div>` : '';
+  const e = estimate(a);
+  if (!e) return '<span class="hint">Peso estimado no disponible para este archivo.</span>';
+  if (e.copied) return `<span class="hint">${fmt(e.low)} · SVG: se conserva sin cambios.</span>`;
+  if (e.actual) return `${note}<span class="hint">Peso real con estos ajustes: <b>${fmt(e.low)}</b></span>`;
+  const minSaving = Math.floor((1-e.high/a.bytes)*100), maxSaving = Math.floor((1-e.low/a.bytes)*100);
+  const saving = minSaving > 0 ? `Ahorro estimado: ${minSaving}–${maxSaving}%` : 'Puede no reducir el peso';
+  return `${note}<div title="Estimación orientativa basada en dimensiones, formato y duración. No se ha convertido una muestra; el resultado puede quedar fuera del rango."><b>Aprox.: ${fmt(e.low)}–${fmt(e.high)}</b><div class="hint">${saving}${a.type === 'video' ? ' · Solo video, sin cover' : ''}</div><div class="hint">${e.unchanged ? 'No se amplía: ya es menor o igual al tamaño seleccionado. ' : ''}Orientativo; depende del contenido.</div></div>`;
+}
+function updateEstimate(id) {
+  const el = rows.get(id)?.querySelector('.estimate');
+  if (el) el.innerHTML = estimateHtml(assets.find(a => a.id === id));
+}
+function card(a) {
+  const isVid = a.type === "video";
+  const presets = [...(isVid ? VID : IMG), ...(a.retina ? ['retina'] : [])];
+  const name = a.file.split("/").pop();
+  const r = a.rendered;
+  const rend = r && r.w ? `${r.w}×${r.h} px en pantalla${a.dpr > 1 ? ` @${a.dpr}x` : ""}` : "";
+  const pages = a.pages.length > 1 ? `<span class="tag">${a.pages.length} páginas</span>` : "";
+  const ext = a.external ? `<span class="tag ext">externo (Cloudflare Stream)</span>` : "";
+  const def = selection(a);
+  const opts = isVid ? `<div class="opts">
+      ${a.info && a.info.audio ? `<label><input type="checkbox" class="oAudio" onchange="selectOption('${a.id}','strip_audio',this.checked)" ${def.strip_audio ? "checked" : ""}> quitar audio</label>` : `<span class="tag">sin audio</span>`}
+      <label><input type="checkbox" class="oTrim" onchange="selectOption('${a.id}','trim',this.checked ? 12 : null)" ${def.trim ? "checked" : ""}> recortar a 12 s</label>
+    </div>` : "";
+  return `<div class="card ${a.severity}" data-id="${a.id}">
+    <img class="thumb" loading="lazy" src="/thumb/${a.id}" alt="" title="Ver preview" onclick="openLb('${a.id}')" onerror="this.style.visibility='hidden'">
+    <div>
+      <div class="name rename"><span class="dot"></span><input class="export-name" aria-label="Nombre de exportación sin extensión" title="Original: ${esc(name)}" value="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" data-saved-name="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" maxlength="160" oninput="updateNameButton('${a.id}')" onkeydown="if(event.key==='Enter')saveName('${a.id}')"><button class="save-name" onclick="saveName('${a.id}')" aria-label="Guardar nombre" title="Guardar nombre" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8M14 5v2"/></svg></button></div>
+      <div class="hint name-feedback" role="status">Edita el nombre aquí. Se renombrarán también los archivos generados.</div>
+      <div class="meta"><b>${fmt(a.bytes)}</b> <span>${esc(dims(a))}</span> ${rend ? `<span>${esc(rend)}</span>` : ""} ${pages} ${ext}</div>
+      ${a.issues.length ? `<ul class="issues">${a.issues.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : `<div class="meta">Sin problemas detectados</div>`}
+      <div class="asset-tools"><button onclick="openCompare('${a.id}')">Comparar</button><button onclick="openHistory('${a.id}')">Historial</button></div>
+    </div>
+    <div class="actions">
+      <div class="presets">${presets.map((p) => `<button data-preset="${p}" aria-pressed="${p === def.preset}" class="${p === def.preset ? "rec" : ""}" onclick="selectPreset('${a.id}',${p === 'retina' ? "'retina'" : p})">${p === 'retina' ? 'Retina' : isVid ? p + "p" : p + " px"}</button>`).join("")}</div>
+      ${opts}
+      <div class="pending-state" role="status">${pendingHtml(a)}</div>
+      <div class="result">${statusHtml(a)}</div>
+      ${isVid ? `<div class="cover">${coverHtml(a)}</div>` : ""}
+      <div class="downloads">${downloadHtml(a)}</div>
+      <div class="estimate" role="status" style="font-size:12px;color:var(--muted)">${estimateHtml(a)}</div>
+      <button class="optimize" onclick="convert('${a.id}')" ${a.job && ['queued','running'].includes(a.job.status) ? 'disabled' : ''}>Optimizar${isVid ? ' video y cover' : ' imagen'}</button>
+    </div>
+  </div>`;
+}
+
+function statusHtml(a) {
+  const j = a.job;
+  if (j && j.status === "queued") return `En cola · preset ${j.preset}${a.type === "video" ? "p" : " px"}`;
+  if (j && j.status === "running") return `Convirtiendo… <b>${j.progress}%</b><div class="pbar"><i style="width:${j.progress}%"></i></div>`;
+  if (j && j.status === "error") return `<span class="err">Error: ${esc(j.error)}</span>`;
+  const res = a.result;
+  if (!res) return `<span>Elige un tamaño para convertir.</span>`;
+  const pct = Math.round((1 - res.bytes / res.original_bytes) * 100);
+  const d = res.w ? `${res.w}×${res.h}` : "";
+  const ext = res.file.split(".").pop();
+  return `<div><b>${a.type === 'video' ? 'Video' : 'Imagen'}:</b></div>${fmt(res.original_bytes)} → <b>${fmt(res.bytes)}</b> <span class="save">${pct >= 0 ? "−" + pct + "%" : "+" + -pct + "%"}</span> · ${d} · ${ext}${res.options && res.options.trim ? " · " + res.options.trim + " s" : ""}`;
+}
+
+function coverHtml(a) {
+  const c = a.cover;
+  if (!c) return `<span class="hint">El cover se genera al optimizar.</span>`;
+  return `<div><b>Cover:</b></div><b>${fmt(c.bytes)}</b> · ${c.w}×${c.h} · ${esc(c.file.split('.').pop())}`;
+}
+
+function downloadHtml(a) {
+  if (!a.result || (a.job && ['queued','running'].includes(a.job.status))) return '';
+  const url = a.type === 'video' ? `/bundle/${a.id}` : `/result/${a.id}?download=1`;
+  return `<div class="links"><a href="${url}" title="${a.type === 'video' ? 'Descargar video y cover en ZIP' : 'Descargar imagen'}">Descargar</a><button onclick="reveal('${a.id}')">Finder</button></div>`;
+}
+
+async function makeCover(id) {
+  if (!await saveName(id)) return;
+  const el = rows.get(id);
+  if (el) el.querySelector(".cover").innerHTML = "Extrayendo primer frame…";
+  const r = await api("/api/cover", { id });
+  const a = assets.find((x) => x.id === id);
+  if (r.error) { if (el) el.querySelector(".cover").innerHTML = `<span class="err">Error: ${esc(r.error)}</span>`; return; }
+  if (a) a.cover = r;
+  if (el) el.querySelector(".cover").innerHTML = coverHtml(a);
+}
+
+function updateNameButton(id) {
+  const el = rows.get(id);
+  const input = el.querySelector('.export-name');
+  el.querySelector('.save-name').disabled = el.dataset.savingName === 'true' || input.value.trim() === input.dataset.savedName;
+  draftNames.set(id,input.value);
+  updatePending(id);
+}
+
+async function saveName(id) {
+  const el = rows.get(id);
+  const input = el.querySelector('.export-name');
+  if (el.dataset.savingName === 'true') return false;
+  if (input.value.trim() === input.dataset.savedName) return true;
+  const submittedName = input.value;
+  el.dataset.savingName = 'true';
+  updateNameButton(id);
+  const feedback = el.querySelector('.name-feedback');
+  try {
+    const r = await api('/api/name', {id, name: el.querySelector('.export-name').value});
+    if (r.error) throw new Error(r.error);
+    assets.find(a => a.id === id).export_name = r.export_name;
+    input.dataset.savedName = r.export_name;
+    if (input.value === submittedName) input.value = r.export_name;
+    feedback.textContent = 'Nombre guardado y archivos generados renombrados.';
+    const latest = await api('/api/assets');
+    assets = latest.assets;
+    updateOverview(latest);
+    return true;
+  } catch (error) {
+    feedback.textContent = error.message;
+    return false;
+  } finally {
+    el.dataset.savingName = 'false';
+    updateNameButton(id);
+  }
+}
+
+async function convert(id) {
+  if (!await saveName(id)) return;
+  const el = rows.get(id);
+  const options = {};
+  const preset = selection(assets.find(a => a.id === id)).preset;
+  if (el) {
+    const oa = el.querySelector(".oAudio"), ot = el.querySelector(".oTrim");
+    if (oa) options.strip_audio = oa.checked;
+    if (ot) options.trim = ot.checked ? 12 : null;
+    el.querySelector(".result").innerHTML = "En cola…";
+  }
+  const button = el.querySelector('.optimize');
+  button.disabled = true;
+  try {
+    const r = await api("/api/convert", { id, preset, options });
+    if (r.error) throw new Error(r.error);
+    startPolling();
+  } catch (error) {
+    el.querySelector('.result').textContent = error.message;
+    button.disabled = false;
+  }
+}
+
+async function batchCritical() {
+  const ids = assets.filter((a) => a.severity === "crit" && !a.result && !(a.job && (a.job.status === "queued" || a.job.status === "running"))).map((a) => a.id);
+  if (!ids.length) { alert("No quedan críticos sin optimizar."); return; }
+  if (!confirm(`Se van a convertir ${ids.length} archivos críticos con el preset recomendado. Los videos pueden tardar varios minutos. ¿Seguimos?`)) return;
+  await api("/api/convert-batch", { ids });
+  startPolling();
+}
+
+async function reveal(id, kind) { await api("/api/reveal", { id, kind }); }
+
+function media(file, url) {
+  const u = url || "/files/" + encodeURI(file);
+  return /\.(mp4|webm|mov|m4v)$/i.test(file)
+    ? `<video src="${u}" controls autoplay muted loop playsinline></video>`
+    : `<img src="${u}" alt="">`;
+}
+
+function legacyOpenLb(id) {
+  const a = assets.find((x) => x.id === id);
+  if (!a) return;
+  const i = a.info || {};
+  const panes = [{ label: `Original · <b>${fmt(a.bytes)}</b>${i.w ? ` · ${i.w}×${i.h}` : ""}`, file: a.file }];
+  if (a.result) panes.push({ label: `Optimizado · <b>${fmt(a.result.bytes)}</b>${a.result.w ? ` · ${a.result.w}×${a.result.h}` : ""} · preset ${a.result.preset}`, file: a.result.file, url: `/result/${a.id}` });
+  if (a.cover) panes.push({ label: `Cover · <b>${fmt(a.cover.bytes)}</b> · ${a.cover.w}×${a.cover.h}`, file: a.cover.file, url: `/cover/${a.id}` });
+  $("#lbTitle").textContent = a.file;
+  $("#lbPanes").innerHTML = panes.map((p) => `<figure><figcaption>${p.label}</figcaption>${media(p.file, p.url)}</figure>`).join("");
+  $("#lb").hidden = false;
+}
+
+function closeLb() { $("#lb").hidden = true; $("#lbPanes").innerHTML = ""; }
+document.addEventListener("keydown", (e) => { if (e.key !== "Escape") return; if (!$("#lb").hidden) closeLb(); if (!$("#st").hidden) closeSettings(); });
+
+// output folder settings ------------------------------------------------------
+let settings = null;
+function showSettings(s) {
+  settings = s;
+  const short = s.out_dir.replace(/^\/Users\/[^/]+/, "~");
+  $("#outPath").textContent = short + (s.is_default ? " (por defecto)" : "");
+  $("#outBtn").title = "Guardando en " + s.out_dir;
+}
+function openSettings() { $("#stPath").value = settings ? settings.out_dir : ""; $("#stMsg").textContent = ""; $("#stMsg").className = "stmsg"; $("#st").hidden = false; $("#stPath").focus(); }
+function closeSettings() { $("#st").hidden = true; }
+function msg(text, cls) { const m = $("#stMsg"); m.textContent = text; m.className = "stmsg " + (cls || ""); }
+async function saveSettings() {
+  const r = await api("/api/settings", { out_dir: $("#stPath").value });
+  if (r.error) return msg(r.error, "err");
+  showSettings(r);
+  msg("Guardado. Las próximas conversiones se escriben en " + r.out_dir, "ok");
+}
+async function resetSettings() { $("#stPath").value = ""; await saveSettings(); $("#stPath").value = settings.out_dir; }
+async function pickFolder() {
+  msg("Elige la carpeta en el diálogo de Finder…");
+  const r = await api("/api/pick-folder", {});
+  if (r.error) return msg(r.error, "err");
+  if (!r.out_dir) return msg("Cancelado.");
+  $("#stPath").value = r.out_dir;
+  await saveSettings();
+}
+
+function updateStats(d) {
+  const total = assets.reduce((s, a) => s + a.bytes, 0);
+  const done = assets.filter((a) => a.result);
+  const before = done.reduce((s, a) => s + a.result.original_bytes, 0);
+  const after = done.reduce((s, a) => s + a.result.bytes, 0);
+  const crit = assets.filter((a) => a.severity === "crit").length;
+  $("#stats").innerHTML = `<span><b>${assets.length}</b> archivos · <b>${fmt(total)}</b></span>
+    <span><b>${crit}</b> críticos</span>
+    ${done.length ? `<span>optimizados <b>${done.length}</b>: ${fmt(before)} → <b>${fmt(after)}</b> <span class="save">−${Math.round((1 - after / before) * 100)}%</span></span>` : ""}`;
+  const active = d.jobs.queued + d.jobs.running, finished = d.jobs.done + d.jobs.error;
+  $("#queue").textContent = active ? `${d.jobs.running ? "procesando 1" : ""}${d.jobs.running && d.jobs.queued ? " · " : ""}${d.jobs.queued ? d.jobs.queued + " en cola" : ""}` : (finished ? `${d.jobs.done} listos${d.jobs.error ? " · " + d.jobs.error + " con error" : ""}` : "");
+  $("#gbar").style.width = (active + finished) ? Math.round(finished / (active + finished) * 100) + "%" : "0";
+  $("#batch").disabled = !!active;
+}
+
+function startPolling() {
+  if (polling) return;
+  polling = setInterval(async () => {
+    const d = await api("/api/assets");
+    assets = d.assets;
+    for (const a of assets) {
+      const el = rows.get(a.id);
+      if (el) {
+        el.querySelector(".result").innerHTML = statusHtml(a);
+        if (el.querySelector('.cover')) el.querySelector('.cover').innerHTML = coverHtml(a);
+        el.querySelector('.downloads').innerHTML = downloadHtml(a);
+        updateEstimate(a.id);
+        el.querySelector('.optimize').disabled = !!(a.job && ['queued','running'].includes(a.job.status));
+      }
+    }
+    updateStats(d);
+    updateOverview(d);
+    for(const a of assets) if(rows.has(a.id)) updatePending(a.id);
+    if (!(d.jobs.queued + d.jobs.running) && d.audit?.status !== 'running') { clearInterval(polling); polling = null; }
+  }, 1200);
+}
+
+for (const id of ["fPage", "fType", "fSev", "fHide"]) $("#" + id).addEventListener("change", render);
+$("#fQ").addEventListener("input", render);
+</script>
+<script src="/workflow.js"></script>
+<script>load();</script>
+</body>
+</html>
