@@ -14,7 +14,7 @@ AskUserQuestion si está disponible:
 1. **Empezar un proyecto nuevo** → carga el skill `/discovery` y corre la fase 1 como Cooper.
 2. **Mejorar un proyecto existente** → pregunta qué parte y enruta:
    - imágenes o video pesados, sitio lento, Lighthouse → `/optimize-assets` con Bellard
-   - revisar seguridad, privacidad o un hallazgo → `schneier`
+   - revisar seguridad, privacidad, un hallazgo, aviso de privacidad → `/security` con Schneier
    - probar, accesibilidad, QA, checklist pre-lanzamiento → `/qa` con Beizer
    - lanzar, dominio, DNS, correo del dominio, monitoreo, "se cayó", mantenimiento → `/launch`
      con Allspaw
@@ -40,7 +40,7 @@ un descubrimiento corto con `/discovery`.
 3. **La spec es la fuente de verdad.** Ningún rol construye sin `docs/01-descubrimiento/spec.md`.
    Si falta, la fase 1 va primero. Si algo cambia, primero se cambia la spec.
 4. **Puerta de seguridad en cada fase.** Antes de cada checkpoint llamas a **Schneier** con lo
-   producido. Su veredicto va en tu resumen al usuario. Crítico bloquea el paso; alto bloquea
+   producido; él sigue `/security`. Su veredicto va en tu resumen al usuario. Crítico bloquea el paso; alto bloquea
    el lanzamiento; medio y bajo van al backlog.
 5. **Entregables en `docs/0N-fase/` del proyecto**, en Markdown, versionados en git. Los roles
    ya saben dónde escribe cada uno.
@@ -64,8 +64,8 @@ un descubrimiento corto con `/discovery`.
 Las definiciones viven en `agents/*.md` y se instalan enlazándolas en `~/.claude/agents/`.
 Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para la fase 1,
 `structure` para la fase 2, `content` para la fase 3, `design-system` para la fase 4, `build`
-para la fase 5, `qa` para la fase 6, `launch` para las fases 7 y 8, y `optimize-assets` para
-medios en las fases 5 y 6.
+para la fase 5, `qa` para la fase 6, `launch` para las fases 7 y 8, `security` para las puertas
+de Schneier en todas, y `optimize-assets` para medios en las fases 5 y 6.
 
 ## Aprendizaje
 

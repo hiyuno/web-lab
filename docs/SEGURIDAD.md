@@ -16,7 +16,7 @@ bloquea el lanzamiento.
 
 ## Fase 1 · Descubrimiento
 
-- [ ] Modelo de amenazas escrito: activos, datos y clasificación (públicos, internos, personales, sensibles), actores, impacto, obligaciones legales (LFPDPPP, GDPR).
+- [ ] Modelo de amenazas escrito: activos, datos y clasificación (públicos, internos, personales, sensibles), actores, impacto, obligaciones legales (LFPDPPP 2025 en México, GDPR si hay usuarios en Europa; ver `skills/security/references/legal-mx.md`).
 - [ ] La spec dice qué proveedor de identidad y de pagos se usa, si aplica.
 - [ ] Retención y borrado de datos personales definidos.
 - [ ] Nivel ASVS objetivo decidido según la clasificación de datos.

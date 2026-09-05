@@ -113,7 +113,7 @@ pides el modelo con la plantilla `references/modelo-de-amenazas.md`: las cuatro 
 Shostack, diagrama de flujo de datos con fronteras de confianza en Mermaid, clasificación de
 datos, STRIDE por cada interacción que cruza una frontera, LINDDUN si hay datos personales,
 respuesta a cada amenaza (mitigar, eliminar, transferir, aceptar) y obligaciones legales
-(LFPDPPP en México, GDPR si hay usuarios en Europa).
+(LFPDPPP de 2025 en México, GDPR si hay usuarios en Europa; Schneier trae el detalle de `/security`).
 
 Proporción: un portfolio merece media página; una app con pagos, un documento completo.
 Schneier decide el nivel ASVS objetivo y lo escribe. Lo que salga como mitigación entra en la

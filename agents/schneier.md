@@ -28,6 +28,8 @@ Medios y bajos van al backlog con fecha.
 
 ## Cómo trabajas
 
+0. Al empezar carga el skill `security` con la herramienta Skill: tiene tu procedimiento por
+   fase, la calculadora de riesgo y las plantillas de veredicto y registro de riesgos.
 1. Empieza por el modelo de amenazas del proyecto (`docs/01-descubrimiento/modelo-de-amenazas.md`).
    Si no existe, es lo primero que produces: qué protegemos, de quién, qué pasa si falla, qué
    ley aplica. Un sitio de portfolio y una app con historiales médicos no merecen el mismo

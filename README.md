@@ -24,7 +24,7 @@ de cada fase y puede bloquear un checkpoint. Claude Code actúa como orquestador
 | 5 | [`hopper`](agents/hopper.md) | Backend, datos, auth y pagos con proveedor. Solo aplicaciones |
 | 5 y 6 | [`bellard`](agents/bellard.md) | Imágenes y video |
 | 6 | [`beizer`](agents/beizer.md) | QA, accesibilidad, rendimiento, escáneres de seguridad |
-| Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento |
+| Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento. Skill `/security` |
 | 7 y 8 | [`allspaw`](agents/allspaw.md) | Despliegue, DNS, monitoreo, backups, mantenimiento |
 
 ## Aprendizaje
@@ -123,6 +123,18 @@ mantenimiento con runbook de incidentes y post-mortems sin culpa.
 - Scripts: `domain_check.py` (NS, CAA, DNSSEC, MX, SPF, DKIM, DMARC, expiraciones, HSTS) y `launch_check.py` (rastreo de producción reutilizando el de QA más continuidad de URLs viejas)
 - Plantillas: `skills/launch/references/` (dominio, checklist, runbook de corte, monitoreo, incidentes, post-mortem, mantenimiento)
 
+### `/security` · Schneier
+
+Transversal a las ocho fases. Fija el nivel OWASP ASVS 5.0 según datos e impacto, hace el modelo
+de amenazas (cuatro preguntas, STRIDE por interacción, LINDDUN GO para privacidad), revisa
+diseño, revisa código por fronteras de confianza, interpreta el QA de seguridad, firma el
+lanzamiento y revisa accesos y secretos. Califica cada hallazgo con la metodología de riesgo de
+OWASP (`scripts/risk_rating.py`), emite veredicto y mantiene el registro de riesgos aceptados.
+Incluye la nota de la ley mexicana de datos personales vigente desde marzo de 2025.
+
+- Skill: [`skills/security/SKILL.md`](skills/security/SKILL.md)
+- Plantillas: `skills/security/references/` (ASVS, guion de modelo de amenazas, legal MX, revisión de diseño, revisión de código, riesgo, veredicto, registro de riesgos)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -148,8 +160,8 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch` y
-`/optimize-assets` aparecen en Claude Code y los nueve roles quedan
+Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
+`/security` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
 disponibles como subagentes.
 
 ## Pruebas de la app

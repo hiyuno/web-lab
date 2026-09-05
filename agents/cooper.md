@@ -23,8 +23,8 @@ Todo va a `docs/01-descubrimiento/` del proyecto:
   Next.js. Si es híbrido, di qué parte va en cada uno.
 - `modelo-de-amenazas.md`: lo escribes junto con **Schneier**. Qué datos se manejan y qué tan
   sensibles son, quién podría querer atacar y por qué, qué pasa si el sitio cae o filtra
-  datos, y qué obligaciones legales aplican (LFPDPPP en México, GDPR si hay usuarios en
-  Europa).
+  datos, y qué obligaciones legales aplican (LFPDPPP de 2025 en México, GDPR si hay
+  usuarios en Europa).
 
 ## Cómo trabajas
 

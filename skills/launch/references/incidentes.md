@@ -35,7 +35,7 @@ explicación después. Nunca "quién".
 - No borrar nada: preservar logs y evidencias.
 - Contener: rotar TODOS los secretos (hosting, BD, proveedores), cerrar sesiones, revocar tokens, cambiar contraseñas de cuentas críticas.
 - Llamar a Schneier: alcance, datos afectados, causa.
-- Obligaciones: LFPDPPP exige informar a los titulares sin dilación cuando afecta sus derechos; GDPR 72 h a la autoridad si aplica. Redactar el aviso con hechos, qué se hizo y qué hacer.
+- Obligaciones: la LFPDPPP 2025 exige informar a los titulares sin dilación cuando la vulneración afecta de forma significativa sus derechos; GDPR 72 h a la autoridad si aplica. Detalle en `skills/security/references/legal-mx.md`. Redactar el aviso con hechos, qué se hizo y qué hacer.
 - Post-mortem obligatorio.
 
 ### C · Dominio o certificado expirado (SEV1)

@@ -25,7 +25,7 @@ cuando el usuario la dice de forma explícita. Cada línea lleva la fecha en que
 
 ## Contexto
 
-- 2026-09-05 · Base en México: LFPDPPP aplica por defecto; GDPR si hay usuarios en Europa.
+- 2026-09-05 · Base en México: aplica la LFPDPPP de 2025 (vigente desde el 21 de marzo de 2025, autoridad Secretaría Anticorrupción y Buen Gobierno); GDPR si hay usuarios en Europa.
 
 ## Diseño y contenido
 

@@ -116,7 +116,7 @@ La tabla de `seo.md` es lo que Osmani implementa en la fase 5 sin preguntar.
 
 Con la plantilla `references/legales.md` y el subagente `schneier`. Pide al usuario los datos
 reales: razón social, domicilio, correo de contacto para derechos ARCO, qué datos se recogen y
-para qué, con quién se comparten. Redacta aviso de privacidad conforme a LFPDPPP (integral y
+para qué, con quién se comparten. Redacta aviso de privacidad conforme a la LFPDPPP de 2025 (ver `skills/security/references/legal-mx.md`; integral y
 simplificado si hay formularios), términos si hay venta o cuenta, política de cookies si hay
 cookies no esenciales, y los textos del banner de consentimiento en lenguaje llano y con
 rechazar tan visible como aceptar. Nunca copiados de otro sitio. Si hay usuarios en Europa,

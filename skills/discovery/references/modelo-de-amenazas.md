@@ -52,7 +52,7 @@ STRIDE por cada interacción que cruza una frontera. LINDDUN (vinculación, iden
 
 ## 4. Obligaciones legales
 
-- LFPDPPP (México): aviso de privacidad, derechos ARCO, [aplica | no aplica].
+- LFPDPPP 2025 (México, vigente desde el 21 de marzo de 2025; autoridad: Secretaría Anticorrupción y Buen Gobierno): aviso de privacidad con datos sensibles identificados, derechos ARCO, [aplica | no aplica]. Ver `skills/security/references/legal-mx.md`.
 - GDPR (Europa): base legal, consentimiento, derecho al borrado, [aplica | no aplica].
 - Sector: [salud, finanzas, menores: qué aplica].
 

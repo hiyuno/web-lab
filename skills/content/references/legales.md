@@ -2,8 +2,10 @@
 
 Fecha: [aaaa-mm-dd] · Autores: Rosenfeld con Schneier · Estado: borrador | revisado por Schneier | aprobado
 
-Nunca copiados de otro sitio. Datos reales del responsable, en lenguaje llano. Si hay usuarios en
-Europa, Schneier añade lo que pide GDPR.
+Nunca copiados de otro sitio. Datos reales del responsable, en lenguaje llano. Ley aplicable en
+México: LFPDPPP publicada el 20 de marzo de 2025 (sustituye a la de 2010; la autoridad es la
+Secretaría Anticorrupción y Buen Gobierno, no el INAI). Resumen en
+`skills/security/references/legal-mx.md`. Si hay usuarios en Europa, Schneier añade lo que pide GDPR.
 
 ## Datos del responsable (los da el usuario)
 
@@ -16,12 +18,12 @@ Europa, Schneier añade lo que pide GDPR.
 - Tiempo de conservación: [ ]
 - Cookies no esenciales: [ninguna | cuáles y para qué]
 
-## Aviso de privacidad (LFPDPPP) · contenido mínimo
+## Aviso de privacidad (LFPDPPP 2025) · contenido mínimo
 
 - [ ] Identidad y domicilio del responsable
-- [ ] Datos personales que se tratan y si hay datos sensibles
+- [ ] Datos personales que se tratan, identificando cuáles son sensibles (obligatorio en la ley de 2025)
 - [ ] Finalidades primarias y secundarias, con forma de negarse a las secundarias
-- [ ] Transferencias a terceros y su finalidad
+- [ ] Transferencias a terceros y su finalidad (ya no obligatorio en la ley de 2025; se mantiene como buena práctica y por GDPR)
 - [ ] Medios para ejercer derechos ARCO (acceso, rectificación, cancelación, oposición) y para revocar el consentimiento
 - [ ] Opciones para limitar uso o divulgación
 - [ ] Uso de cookies y tecnologías de rastreo, si las hay
