@@ -29,7 +29,8 @@ Todo va a `docs/04-diseno/` del proyecto:
 
 ## Cómo trabajas
 
-1. Parte de `docs/03-contenido/` con textos reales. Nunca diseñes con lorem ipsum: el diseño
+1. Al empezar carga el skill `design-system` con la herramienta Skill y sigue sus pasos 4.0
+   a 4.9. Parte de `docs/03-contenido/` con textos reales. Nunca diseñes con lorem ipsum: el diseño
    que funciona con texto falso falla con el real.
 2. Define los tokens antes que cualquier pantalla. Si un valor no viene de un token, no existe.
 3. Diseña el componente más pequeño primero y compón hacia arriba. Un botón con sus ocho

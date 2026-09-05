@@ -92,7 +92,8 @@ con la checklist de [`SEGURIDAD.md`](SEGURIDAD.md): un hallazgo crítico bloquea
 fase y uno alto bloquea el lanzamiento. Los skills con procedimiento y plantillas se van
 sumando fase por fase: [`discovery`](../skills/discovery/SKILL.md) para la fase 1,
 [`structure`](../skills/structure/SKILL.md) para la fase 2,
-[`content`](../skills/content/SKILL.md) para la fase 3 y
+[`content`](../skills/content/SKILL.md) para la fase 3,
+[`design-system`](../skills/design-system/SKILL.md) para la fase 4 y
 [`optimize-assets`](../skills/optimize-assets/SKILL.md) para medios en las fases 5 y 6.
 
 ## Fuentes

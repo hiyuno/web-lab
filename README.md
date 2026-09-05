@@ -71,6 +71,19 @@ Todo en `docs/03-contenido/`.
 - Skill: [`skills/content/SKILL.md`](skills/content/SKILL.md)
 - Plantillas: `skills/content/references/` (guía editorial, mensajes, brief por página, matriz, seo, legales, assets, revisión)
 
+### `/design-system` · Frost
+
+Fase 4 del proceso. Con el contenido aprobado produce la dirección visual, los tokens en tres
+capas en formato W3C DTCG, los componentes con sus nueve estados, las plantillas en tres anchos,
+la accesibilidad WCAG 2.2 AA como propiedad del sistema, el movimiento, el prototipo en código
+y el QA de diseño con prueba de usabilidad. `scripts/tokens_to_tailwind.py` convierte los
+tokens al bloque `@theme` de Tailwind v4 con modo oscuro y verifica el contraste de cada par
+semántico en ambos modos. Todo en `docs/04-diseno/`.
+
+- Skill: [`skills/design-system/SKILL.md`](skills/design-system/SKILL.md)
+- Tokens base: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
+- Plantillas: `skills/design-system/references/` (dirección visual, componente, plantilla, accesibilidad, motion, prueba de usabilidad, QA)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -96,7 +109,8 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
+Con eso `/discovery`, `/structure`, `/content`, `/design-system` y `/optimize-assets` aparecen en
+Claude Code y los nueve roles quedan
 disponibles como subagentes.
 
 ## Pruebas de la app
