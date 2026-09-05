@@ -16,7 +16,8 @@ AskUserQuestion si está disponible:
    - imágenes o video pesados, sitio lento, Lighthouse → `/optimize-assets` con Bellard
    - revisar seguridad, privacidad o un hallazgo → `schneier`
    - probar, accesibilidad, QA, checklist pre-lanzamiento → `/qa` con Beizer
-   - lanzar, dominio, DNS, monitoreo, "se cayó" → `allspaw`
+   - lanzar, dominio, DNS, correo del dominio, monitoreo, "se cayó", mantenimiento → `/launch`
+     con Allspaw
    - rediseño de estructura, sitemap, navegación, redirects → `/structure` con Rosenfeld
    - textos, contenido, SEO on-page, legales → `/content` con Rosenfeld
    - diseño visual, tokens, componentes, prototipo → `/design-system` con Frost
@@ -63,8 +64,8 @@ un descubrimiento corto con `/discovery`.
 Las definiciones viven en `agents/*.md` y se instalan enlazándolas en `~/.claude/agents/`.
 Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para la fase 1,
 `structure` para la fase 2, `content` para la fase 3, `design-system` para la fase 4, `build`
-para la fase 5, `qa` para la fase 6 y `optimize-assets` para medios en las fases 5 y 6. Las
-fases 7 y 8 se irán sumando.
+para la fase 5, `qa` para la fase 6, `launch` para las fases 7 y 8, y `optimize-assets` para
+medios en las fases 5 y 6.
 
 ## Aprendizaje
 

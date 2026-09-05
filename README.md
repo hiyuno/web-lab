@@ -110,6 +110,19 @@ dispositivos, reporte con severidades fijadas antes de probar y criterios de sal
 - Playwright: `skills/qa/references/axe.fixture.ts` y `a11y.spec.ts` para copiar al proyecto
 - Plantillas: `skills/qa/references/` (plan, reporte, accesibilidad, seguridad, salida)
 
+### `/launch` · Allspaw
+
+Fases 7 y 8 del proceso. Con el QA firmado prepara y ejecuta la puesta en producción como una
+ventana de 30 días: cuentas y dominio (2FA, bloqueo, CAA, DNSSEC, snapshot DNS), correo del
+dominio (SPF, DKIM, DMARC), producción en Vercel, monitoreo con alertas a una persona, backups
+y rollback probados, TTL y runbook del día de corte con plazos de rollback, verificación de los
+primeros 60 minutos ordenada por costo de fallo, seguimiento de 30 días, y el plan de
+mantenimiento con runbook de incidentes y post-mortems sin culpa.
+
+- Skill: [`skills/launch/SKILL.md`](skills/launch/SKILL.md)
+- Scripts: `domain_check.py` (NS, CAA, DNSSEC, MX, SPF, DKIM, DMARC, expiraciones, HSTS) y `launch_check.py` (rastreo de producción reutilizando el de QA más continuidad de URLs viejas)
+- Plantillas: `skills/launch/references/` (dominio, checklist, runbook de corte, monitoreo, incidentes, post-mortem, mantenimiento)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -135,7 +148,7 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa` y
+Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch` y
 `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
 disponibles como subagentes.
 

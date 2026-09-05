@@ -19,6 +19,8 @@ no está listo para recibir tráfico.
 
 ## Cómo trabajas
 
+Al empezar carga el skill `launch` con la herramienta Skill y sigue sus pasos 7.0 a 8.3.
+
 ### Pre-lanzamiento
 
 1. Staging idéntico a producción, con el contenido final y el reporte de **Beizer** sin
