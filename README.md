@@ -84,6 +84,18 @@ semántico en ambos modos. Todo en `docs/04-diseno/`.
 - Tokens base: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
 - Plantillas: `skills/design-system/references/` (dirección visual, componente, plantilla, accesibilidad, motion, prueba de usabilidad, QA)
 
+### `/build` · Osmani y Hopper
+
+Fase 5 del proceso. Con el diseño aprobado construye el sitio o la app en Astro 5 o Next.js 16:
+fundación del repo con TypeScript, Tailwind v4 y los tokens de Frost, CI con pruebas, auditoría,
+escaneo de secretos y Lighthouse CI con presupuesto de rendimiento, tareas derivadas de las
+historias de la spec (`scripts/tasks_from_spec.py`), ciclo por tarea con prueba primero y pull
+request con preview. Pista frontend para Osmani y pista backend para Hopper con el patrón de
+capa de acceso a datos: `server-only`, Drizzle, Zod, autorización por recurso, webhooks firmados.
+
+- Skill: [`skills/build/SKILL.md`](skills/build/SKILL.md)
+- Plantillas: `skills/build/references/` (tarea, definición de terminado, revisión de PR, `lighthouserc.json`, `ci.yml`, cabeceras y CSP para Astro y Next.js, estructura, DAL, frontend, backend)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -109,8 +121,8 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content`, `/design-system` y `/optimize-assets` aparecen en
-Claude Code y los nueve roles quedan
+Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build` y `/optimize-assets`
+aparecen en Claude Code y los nueve roles quedan
 disponibles como subagentes.
 
 ## Pruebas de la app

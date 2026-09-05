@@ -20,7 +20,8 @@ AskUserQuestion si está disponible:
    - rediseño de estructura, sitemap, navegación, redirects → `/structure` con Rosenfeld
    - textos, contenido, SEO on-page, legales → `/content` con Rosenfeld
    - diseño visual, tokens, componentes, prototipo → `/design-system` con Frost
-   - construir o arreglar código → `osmani` y, si hay servidor, `hopper`
+   - construir o arreglar código, CI, base de datos, login → `/build` con Osmani y, si hay
+     servidor, Hopper
 3. **Retomar un proyecto a medias** → lee `docs/` del proyecto, di en qué fase está y qué
    falta para el siguiente checkpoint.
 
@@ -61,8 +62,9 @@ un descubrimiento corto con `/discovery`.
 
 Las definiciones viven en `agents/*.md` y se instalan enlazándolas en `~/.claude/agents/`.
 Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para la fase 1,
-`structure` para la fase 2, `content` para la fase 3, `design-system` para la fase 4 y
-`optimize-assets` para medios en las fases 5 y 6. El resto de fases se irán sumando.
+`structure` para la fase 2, `content` para la fase 3, `design-system` para la fase 4, `build`
+para la fase 5 y `optimize-assets` para medios en las fases 5 y 6. El resto de fases se irán
+sumando.
 
 ## Aprendizaje
 

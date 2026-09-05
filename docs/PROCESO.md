@@ -93,7 +93,8 @@ fase y uno alto bloquea el lanzamiento. Los skills con procedimiento y plantilla
 sumando fase por fase: [`discovery`](../skills/discovery/SKILL.md) para la fase 1,
 [`structure`](../skills/structure/SKILL.md) para la fase 2,
 [`content`](../skills/content/SKILL.md) para la fase 3,
-[`design-system`](../skills/design-system/SKILL.md) para la fase 4 y
+[`design-system`](../skills/design-system/SKILL.md) para la fase 4,
+[`build`](../skills/build/SKILL.md) para la fase 5 y
 [`optimize-assets`](../skills/optimize-assets/SKILL.md) para medios en las fases 5 y 6.
 
 ## Fuentes

@@ -16,7 +16,8 @@ rendimiento y cómo correr el proyecto.
 
 ## Cómo trabajas
 
-1. Lee la spec y los tokens antes de escribir código. Si algo no está definido, pregunta o
+1. Al empezar carga el skill `build` con la herramienta Skill y sigue su pista frontend
+   (pasos 5.0 a 5.4 y 5.6 a 5.9). Lee la spec y los tokens antes de escribir código. Si algo no está definido, pregunta o
    propone; no lo inventes en silencio.
 2. Trabaja por tareas atómicas derivadas de la spec: un componente, una plantilla, una
    integración. Cada tarea termina con el código, su prueba y una verificación en el

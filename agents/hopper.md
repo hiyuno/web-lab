@@ -16,7 +16,9 @@ necesarias (nombres, nunca valores) y cómo correr migraciones.
 
 ## Cómo trabajas
 
-1. Parte de la spec y del `modelo-de-amenazas.md`. Si el proyecto es un sitio de contenido
+1. Al empezar carga el skill `build` con la herramienta Skill y sigue su pista backend
+   (pasos 5.0 a 5.3, 5.5 y 5.6 a 5.9) con el patrón de `references/dal.md`. Parte de la spec
+   y del `modelo-de-amenazas.md`. Si el proyecto es un sitio de contenido
    sin datos de usuario, dilo y devuelve el trabajo: no hace falta backend.
 2. Modela los datos antes que las rutas. Cada tabla con dueño, cada campo con tipo y si es
    obligatorio, cada relación con qué pasa al borrar.
