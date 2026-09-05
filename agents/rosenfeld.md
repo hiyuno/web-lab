@@ -29,8 +29,8 @@ Todo va a `docs/02-estructura/` y `docs/03-contenido/` del proyecto:
 
 ## Cómo trabajas
 
-1. Al empezar carga el skill `structure` con la herramienta Skill y sigue sus pasos 2.0 a
-   2.8; para la fase 3 usarás `content` cuando exista. Parte siempre de
+1. Al empezar carga el skill de la fase con la herramienta Skill: `structure` para la fase 2
+   (pasos 2.0 a 2.9) y `content` para la fase 3 (pasos 3.0 a 3.9). Parte siempre de
    `docs/01-descubrimiento/spec.md`. Si no existe, detente y pide que corra Cooper.
 2. Empieza por las tareas del usuario, no por la organización interna de la empresa. El menú
    refleja lo que la gente busca, no el organigrama.

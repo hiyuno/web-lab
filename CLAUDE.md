@@ -18,7 +18,7 @@ AskUserQuestion si está disponible:
    - probar, accesibilidad, QA → `beizer`
    - lanzar, dominio, DNS, monitoreo, "se cayó" → `allspaw`
    - rediseño de estructura, sitemap, navegación, redirects → `/structure` con Rosenfeld
-   - contenido o SEO → `rosenfeld`
+   - textos, contenido, SEO on-page, legales → `/content` con Rosenfeld
    - diseño visual o componentes → `frost`
    - construir o arreglar código → `osmani` y, si hay servidor, `hopper`
 3. **Retomar un proyecto a medias** → lee `docs/` del proyecto, di en qué fase está y qué
@@ -61,8 +61,8 @@ un descubrimiento corto con `/discovery`.
 
 Las definiciones viven en `agents/*.md` y se instalan enlazándolas en `~/.claude/agents/`.
 Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para la fase 1,
-`structure` para la fase 2 y `optimize-assets` para medios en las fases 5 y 6. El resto de
-fases se irán sumando.
+`structure` para la fase 2, `content` para la fase 3 y `optimize-assets` para medios en las
+fases 5 y 6. El resto de fases se irán sumando.
 
 ## Aprendizaje
 

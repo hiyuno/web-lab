@@ -59,6 +59,18 @@ baja fidelidad por plantilla y validación con tree testing. Todo en `docs/02-es
 - Inventario: `skills/structure/scripts/inventory.py` (Python stdlib, sin dependencias)
 - Plantillas: `skills/structure/references/` (inventario, flujos, organización, sitemap, redirects, wireframe, validación)
 
+### `/content` · Rosenfeld
+
+Fase 3 del proceso. Con el sitemap firmado produce el contenido real antes de diseñar: guía de
+voz y tono, mensajes clave con pruebas, brief por página sobre los wireframes, redacción
+concisa y escaneable con microcopia, SEO por página con JSON-LD por plantilla, legales conforme a
+LFPDPPP revisados por Schneier, lista de assets para Bellard y revisión con un aprobador y dos
+rondas. `scripts/content_matrix.py` genera la matriz y los briefs vacíos desde el sitemap.
+Todo en `docs/03-contenido/`.
+
+- Skill: [`skills/content/SKILL.md`](skills/content/SKILL.md)
+- Plantillas: `skills/content/references/` (guía editorial, mensajes, brief por página, matriz, seo, legales, assets, revisión)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -84,7 +96,7 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
+Con eso `/discovery`, `/structure`, `/content` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
 disponibles como subagentes.
 
 ## Pruebas de la app
