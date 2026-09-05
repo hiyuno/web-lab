@@ -3,7 +3,54 @@
 Herramientas y skills para hacer webs y apps con Claude Code. Cada utilidad vive en su propia
 carpeta con todo lo que necesita; los skills se instalan enlazándolos en `~/.claude/skills`.
 
+## Proceso
+
+Las ocho fases para hacer una web, con checkpoints, decisión de arquitectura y estándares
+mínimos, están en [`docs/PROCESO.md`](docs/PROCESO.md). Cada skill del repo cubre una fase.
+
+## Roles
+
+Un equipo de subagentes, uno por fase del proceso, más un rol de seguridad que revisa al cierre
+de cada fase y puede bloquear un checkpoint. Claude Code actúa como orquestador siguiendo
+[`CLAUDE.md`](CLAUDE.md); la checklist de seguridad está en
+[`docs/SEGURIDAD.md`](docs/SEGURIDAD.md).
+
+| Fase | Rol | Especialidad |
+|------|-----|--------------|
+| 1 | [`cooper`](agents/cooper.md) | Descubrimiento, spec, decisión de arquitectura, modelo de amenazas |
+| 2 y 3 | [`rosenfeld`](agents/rosenfeld.md) | Arquitectura de información, contenido, SEO, redirects |
+| 4 | [`frost`](agents/frost.md) | Sistema de diseño, componentes, accesibilidad, prototipo |
+| 5 | [`osmani`](agents/osmani.md) | Frontend en Astro o Next.js, rendimiento, CSP y cabeceras |
+| 5 | [`hopper`](agents/hopper.md) | Backend, datos, auth y pagos con proveedor. Solo aplicaciones |
+| 5 y 6 | [`bellard`](agents/bellard.md) | Imágenes y video |
+| 6 | [`beizer`](agents/beizer.md) | QA, accesibilidad, rendimiento, escáneres de seguridad |
+| Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento |
+| 7 y 8 | [`allspaw`](agents/allspaw.md) | Despliegue, DNS, monitoreo, backups, mantenimiento |
+
 ## Skills
+
+### `/discovery` · Cooper
+
+Fase 1 del proceso. Arranca un proyecto desde la idea, sin brief: entrevista al usuario en siete
+rondas cortas con checkpoint, investiga sitio actual y competencia, y produce en
+`docs/01-descubrimiento/` del proyecto el brief, la decisión de arquitectura (Astro o
+Next.js), el modelo de amenazas con Schneier, la spec como fuente de verdad y el plan por
+fases.
+
+- Skill: [`skills/discovery/SKILL.md`](skills/discovery/SKILL.md)
+- Guion de entrevista: [`skills/discovery/references/entrevista.md`](skills/discovery/references/entrevista.md)
+- Plantillas: `skills/discovery/references/` (brief, spec, decisión, modelo de amenazas, plan)
+
+### `/structure` · Rosenfeld
+
+Fase 2 del proceso. Con la spec aprobada define la estructura: inventario y auditoría del sitio
+actual si es rediseño (`scripts/inventory.py`), flujos por tarea, organización y etiquetado
+con card sorting, sitemap con URLs finales y navegación, mapa de redirects 301, wireframes de
+baja fidelidad por plantilla y validación con tree testing. Todo en `docs/02-estructura/`.
+
+- Skill: [`skills/structure/SKILL.md`](skills/structure/SKILL.md)
+- Inventario: `skills/structure/scripts/inventory.py` (Python stdlib, sin dependencias)
+- Plantillas: `skills/structure/references/` (inventario, flujos, organización, sitemap, redirects, wireframe, validación)
 
 ### `/optimize-assets` · Bellard
 
@@ -26,11 +73,12 @@ Node con Playwright solo para la auditoría responsive opcional.
 
 ```bash
 git clone https://github.com/hiyuno/web-lab.git ~/Documents/GitSync/web-lab
-ln -s ~/Documents/GitSync/web-lab/skills/optimize-assets ~/.claude/skills/optimize-assets
-mkdir -p ~/.claude/agents && ln -s ~/Documents/GitSync/web-lab/agents/bellard.md ~/.claude/agents/bellard.md
+for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
+mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/optimize-assets` aparece en Claude Code y `bellard` queda disponible como subagente.
+Con eso `/discovery`, `/structure` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
+disponibles como subagentes.
 
 ## Pruebas de la app
 
