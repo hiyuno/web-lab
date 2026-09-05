@@ -28,6 +28,7 @@ el idioma del usuario.
 
 ## Paso 2.0 · Entrada
 
+0. Lee `<web-lab>/learnings/rosenfeld.md` y `<web-lab>/docs/PREFERENCIAS.md` y aplícalos.
 1. Lee `docs/01-descubrimiento/spec.md`, `brief.md` y `decision-arquitectura.md`. Si no
    existen o no están aprobados, detente y propón `/discovery`.
 2. Anota: audiencias y sus tareas, historias de la spec, si es rediseño y con qué URL, si hay
@@ -146,6 +147,13 @@ validada.
    explícita.
 3. Con la aprobación, di qué sigue: fase 3, contenido, también tuya, partiendo del sitemap y
    la lista de keywords por página.
+
+## Paso 2.9 · Retro y aprendizajes
+
+Con la fase aprobada, tres preguntas al usuario: qué funcionó, qué no, qué preferencia suya
+descubrimos. Escribe el resultado, más lo que tú observaste, en
+`<web-lab>/learnings/rosenfeld.md` con fecha y proyecto. Las preferencias confirmadas van a
+`docs/PREFERENCIAS.md`. Si algo se repitió tres veces, propón promoverlo al rol o a este skill.
 
 ## Errores que evitas
 

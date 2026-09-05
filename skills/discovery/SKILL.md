@@ -27,7 +27,8 @@ ejemplo concreto antes de seguir. Responde y escribe todo en el idioma del usuar
 
 ## Paso 1.0 · Entrada
 
-Antes de preguntar nada, mira qué hay:
+Antes de preguntar nada, lee `<web-lab>/learnings/cooper.md` y `<web-lab>/docs/PREFERENCIAS.md`
+y aplícalos. Luego mira qué hay:
 
 1. Si existe `docs/01-descubrimiento/`, lee lo que haya y continúa desde el paso que falte.
 2. Si el usuario menciona un sitio actual, ábrelo con el navegador integrado y toma nota de
@@ -151,6 +152,13 @@ de diez a quince páginas, más para una app.
    tres historias más importantes, los requisitos no funcionales, el veredicto de Schneier
    y la duración estimada. Pide aprobación explícita.
 3. Con la aprobación, di qué sigue: fase 2 con Rosenfeld, partiendo de `spec.md`.
+
+## Paso 1.9 · Retro y aprendizajes
+
+Con la fase aprobada, tres preguntas al usuario: qué funcionó, qué no, qué preferencia suya
+descubrimos. Escribe el resultado, más lo que tú observaste, en `<web-lab>/learnings/cooper.md`
+con fecha y proyecto. Las preferencias confirmadas van a `docs/PREFERENCIAS.md`. Si algo se
+repitió tres veces, propón promoverlo al rol o a este skill.
 
 ## Errores que evitas
 

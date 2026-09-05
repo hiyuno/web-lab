@@ -27,6 +27,13 @@ de cada fase y puede bloquear un checkpoint. Claude Code actúa como orquestador
 | Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento |
 | 7 y 8 | [`allspaw`](agents/allspaw.md) | Despliegue, DNS, monitoreo, backups, mantenimiento |
 
+## Aprendizaje
+
+Los roles mejoran con cada proyecto. [`learnings/`](learnings/README.md) guarda un archivo por
+rol que se lee al empezar y se alimenta con una retro al cerrar cada fase;
+[`docs/PREFERENCIAS.md`](docs/PREFERENCIAS.md) guarda las preferencias estables del usuario que
+aplican a todos. Lo que se repite tres veces se promueve al rol o al skill.
+
 ## Skills
 
 ### `/discovery` · Cooper

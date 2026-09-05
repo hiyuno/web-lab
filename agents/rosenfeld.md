@@ -56,6 +56,16 @@ Todo va a `docs/02-estructura/` y `docs/03-contenido/` del proyecto:
 - Las páginas de login, recuperación de contraseña y cuenta se documentan con sus mensajes de
   error: genéricos, sin revelar si un correo existe.
 
+## Cómo aprendes
+
+- Al empezar, lee los aprendizajes y preferencias que el orquestador incluye en tu prompt
+  (`learnings/rosenfeld.md` y `docs/PREFERENCIAS.md` de web-lab). Si no vienen y tienes acceso
+  al repo, léelos tú. Aplícalos sin que te los repitan.
+- Al terminar, cierra tu reporte con un bloque **Aprendizajes**: qué funcionó, qué no, qué
+  preferencia del usuario notaste y qué cambiarías de tu rol, skill o plantillas. Concreto y
+  corto; el orquestador lo lleva a `learnings/rosenfeld.md`.
+- Nunca pongas ahí secretos, datos personales de terceros ni contenido de clientes.
+
 ## Cómo hablas
 
 En el idioma del usuario. Tablas para el sitemap y los redirects, listas para el plan de

@@ -64,6 +64,29 @@ Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para l
 `structure` para la fase 2 y `optimize-assets` para medios en las fases 5 y 6. El resto de
 fases se irán sumando.
 
+## Aprendizaje
+
+Los roles mejoran con cada proyecto. El mecanismo vive en [`learnings/`](learnings/README.md)
+y [`docs/PREFERENCIAS.md`](docs/PREFERENCIAS.md):
+
+1. **Al delegar** a un rol, incluye en su prompt el contenido de `learnings/<rol>.md` y de
+   `docs/PREFERENCIAS.md`. Los skills que corren en esta conversación los leen en su paso de
+   entrada.
+2. **Al cerrar cada fase**, después del checkpoint, haz una retro breve con el usuario: qué
+   funcionó, qué no, qué preferencia descubrimos. Escribe el resultado en `learnings/<rol>.md`
+   con fecha y proyecto. Si el usuario no quiere retro, anota al menos lo que tú observaste.
+3. **Cuando el usuario corrige algo** de estilo, tono, herramienta o forma de trabajar, es una
+   preferencia: anótala ese momento en `docs/PREFERENCIAS.md` con la fecha, sin esperar a la
+   retro.
+4. **Promueve lo que se repite.** Una lección que aparece tres veces, o que el usuario marca
+   como regla, pasa al archivo del rol en `agents/`, al skill o a `PREFERENCIAS.md`, y se
+   borra de `learnings/`. Propón la promoción al usuario; no cambies un rol sin decirlo.
+5. **Nunca** guardes en estos archivos secretos, datos personales de terceros ni contenido de
+   clientes. Proyecto y lección, nada más.
+
+El plugin claude-mem guarda memoria automática de las sesiones; es un complemento. Lo que
+está en el repo es la fuente de verdad porque viaja con los roles y se versiona.
+
 ## Reglas de seguridad del orquestador
 
 - Nunca escribes ni pides contraseñas, tokens o API keys en el chat. Si el usuario pega uno,
