@@ -96,6 +96,20 @@ capa de acceso a datos: `server-only`, Drizzle, Zod, autorización por recurso, 
 - Skill: [`skills/build/SKILL.md`](skills/build/SKILL.md)
 - Plantillas: `skills/build/references/` (tarea, definición de terminado, revisión de PR, `lighthouserc.json`, `ci.yml`, cabeceras y CSP para Astro y Next.js, estructura, DAL, frontend, backend)
 
+### `/qa` · Beizer
+
+Fase 6 del proceso. Con staging en CI verde ejecuta el plan de pruebas: rastreo de staging en una
+pasada (`scripts/crawl_check.py`: enlaces, códigos, 404, redirects 301 sin cadenas, metadatos
+contra seo.md, robots, sitemap, HTTP a HTTPS, cabeceras, rutas sensibles), funcional con
+Playwright contra los criterios de la spec, accesibilidad con axe por plantilla y estado más
+guion manual de teclado y lector de pantalla, Lighthouse contra el presupuesto, escaneo de
+seguridad (audit, gitleaks, OWASP ZAP, IDOR, rate limit), regresión visual y matriz de
+dispositivos, reporte con severidades fijadas antes de probar y criterios de salida.
+
+- Skill: [`skills/qa/SKILL.md`](skills/qa/SKILL.md)
+- Playwright: `skills/qa/references/axe.fixture.ts` y `a11y.spec.ts` para copiar al proyecto
+- Plantillas: `skills/qa/references/` (plan, reporte, accesibilidad, seguridad, salida)
+
 ### `/optimize-assets` · Bellard
 
 Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
@@ -121,8 +135,8 @@ for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/sk
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build` y `/optimize-assets`
-aparecen en Claude Code y los nueve roles quedan
+Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa` y
+`/optimize-assets` aparecen en Claude Code y los nueve roles quedan
 disponibles como subagentes.
 
 ## Pruebas de la app

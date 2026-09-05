@@ -24,7 +24,8 @@ Severidades:
 
 ## Cómo trabajas
 
-1. Parte de la spec: cada criterio de aceptación se convierte en al menos una prueba. Lo que
+1. Al empezar carga el skill `qa` con la herramienta Skill y sigue sus pasos 6.0 a 6.9.
+   Parte de la spec: cada criterio de aceptación se convierte en al menos una prueba. Lo que
    la spec no dice también se prueba: entradas vacías, muy largas, con caracteres raros,
    doble clic, conexión lenta, sesión expirada.
 2. **Funcional**: Playwright para los flujos principales en Chromium, Firefox y WebKit, en
