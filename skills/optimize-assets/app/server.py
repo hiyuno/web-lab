@@ -95,14 +95,14 @@ class State:
     def restore(self, aid, vid):
         with self.lock:
             if any(j['asset']==aid and j['status'] in ('queued','running') for j in self.jobs.values()):
-                raise ValueError('Espera a que termine la optimización.')
+                raise ValueError('Wait for the optimization to finish.')
             v = self.versions.get(aid, vid)
             if not v['result'] or not os.path.isfile(v['result']['abs']):
-                raise ValueError('El archivo de esta versión no está disponible.')
+                raise ValueError('The file for this version is not available.')
             name = v['export_name']
             for other in self.assets:
                 if other['id'] != aid and self.export_name(other['id']).casefold() == name.casefold():
-                    raise ValueError('Otro asset utiliza el nombre de esta versión.')
+                    raise ValueError('Another asset uses this version name.')
             self.archive_current(aid, 'before_restore')
             self.publish(aid, v['result'], v.get('cover'), name, self.out)
             a = self.by_id[aid]
@@ -181,17 +181,17 @@ class State:
 
     def set_name(self, aid, name):
         if not isinstance(name, str):
-            raise ValueError("Introduce un nombre válido.")
+            raise ValueError("Enter a valid name.")
         name = name.strip()
         if not name or len(name) > 160 or name.startswith('.') or any(c in name for c in '/\\:*?"<>|') or any(ord(c) < 32 for c in name):
-            raise ValueError("Usa un nombre sin rutas ni caracteres especiales (máximo 160 caracteres).")
+            raise ValueError("Use a name without paths or special characters (160 characters max).")
         if os.path.splitext(name)[1].lower() in ('.jpg', '.jpeg', '.png', '.webp', '.mp4', '.webm', '.gif', '.svg', '.mov', '.m4v'):
             name = os.path.splitext(name)[0]
         if not name:
-            raise ValueError("Introduce un nombre sin extensión.")
+            raise ValueError("Enter a name without an extension.")
         with self.lock:
             if any(j['asset'] == aid and j['status'] in ('queued', 'running') for j in self.jobs.values()):
-                raise ValueError("Espera a que termine la conversión antes de cambiar el nombre.")
+                raise ValueError("Wait for the conversion to finish before renaming.")
             for other in self.assets:
                 if other['id'] != aid:
                     other_name = self.export_name(other['id']).casefold()
@@ -258,7 +258,7 @@ class State:
     def enqueue(self, aid, preset=None, options=None):
         a = self.by_id[aid]
         if preset not in (None,'retina',*C.IMAGE_PRESETS,*C.VIDEO_PRESETS):
-            raise ValueError('Tamaño no válido.')
+            raise ValueError('Invalid size.')
         options = {k: v for k, v in (options or {}).items() if k in ('strip_audio', 'trim')}
         if preset == 'retina':
             if not a.get('retina'):
@@ -440,7 +440,7 @@ class Handler(BaseHTTPRequestHandler):
                 v=S.versions.get(aid,vid)
                 return self._file(v.get(kind,{}).get('abs'),download='download' in qs)
             except (ValueError,AttributeError):
-                return self._send(404,{'error':'Versión no encontrada'})
+                return self._send(404,{'error':'Version not found'})
         if path == "/api/assets":
             return self._send(200, S.snapshot())
         if path == "/api/settings":

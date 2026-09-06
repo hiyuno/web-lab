@@ -1,49 +1,49 @@
-# Wireframe · plantilla [nombre] · [proyecto]
+# Wireframe · template [name] · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Rosenfeld · Páginas que la usan: [ ] · Historias: [ ]
+Date: [yyyy-mm-dd] · Author: Rosenfeld · Pages that use it: [ ] · Stories: [ ]
 
-Baja fidelidad: bloques, jerarquía y contenido real. Sin color ni tipografía. Móvil primero.
+Low fidelity: blocks, hierarchy and real content. No color or typography. Mobile first.
 
-## Móvil (una columna)
+## Mobile (one column)
 
 ```
 ┌──────────────────────────────┐
-│ [Cabecera] logo · menú ☰      │  → componente: Header
+│ [Header] logo · menu ☰        │  → component: Header
 ├──────────────────────────────┤
-│ [Bloque 1] Título H1:         │  → componente: Hero
-│ "<texto real o esquema>"      │     historias: H-01
-│ Subtítulo: "<...>"            │
-│ [Botón primario: "<verbo>"]   │
+│ [Block 1] H1 headline:        │  → component: Hero
+│ "<real text or outline>"      │     stories: S-01
+│ Subheadline: "<...>"          │
+│ [Primary button: "<verb>"]    │
 ├──────────────────────────────┤
-│ [Bloque 2] <qué demuestra>    │  → componente: <nombre>
+│ [Block 2] <what it proves>    │  → component: <name>
 │ ...                           │
 ├──────────────────────────────┤
-│ [Pie] legales · contacto      │  → componente: Footer
+│ [Footer] legal · contact      │  → component: Footer
 └──────────────────────────────┘
 ```
 
-## Escritorio: qué cambia
+## Desktop: what changes
 
-- Bloque 1: [ej. imagen a la derecha, texto a la izquierda]
-- Bloque 2: [ej. tres columnas en vez de apiladas]
-- Navegación: menú visible en lugar de ☰
+- Block 1: [e.g. image on the right, text on the left]
+- Block 2: [e.g. three columns instead of stacked]
+- Navigation: visible menu instead of ☰
 
-## Bloques
+## Blocks
 
-| # | Bloque | Qué dice / muestra (contenido real o esquema) | Componente fase 4 | Historias | Obligatorio |
-|---|--------|-----------------------------------------------|-------------------|-----------|-------------|
-| 1 | | | | | sí |
+| # | Block | What it says / shows (real content or outline) | Phase 4 component | Stories | Required |
+|---|-------|-----------------------------------------------|-------------------|---------|----------|
+| 1 | | | | | yes |
 
-## Formularios en esta plantilla (si hay)
+## Forms in this template (if any)
 
-| Campo | Tipo | Obligatorio | Por qué se pide | Validación | Mensaje de error |
-|-------|------|-------------|-----------------|------------|------------------|
-| | | | | | genérico, sin revelar si existe |
+| Field | Type | Required | Why it is asked | Validation | Error message |
+|-------|------|----------|-----------------|------------|---------------|
+| | | | | | generic, does not reveal existence |
 
-## Estados que hay que diseñar en la fase 4
+## States to design in phase 4
 
-- Vacío: [ ] · Cargando: [ ] · Error: [ ] · Éxito: [ ]
+- Empty: [ ] · Loading: [ ] · Error: [ ] · Success: [ ]
 
-## Notas para Frost y Osmani
+## Notes for Frost and Osmani
 
 - [ ]

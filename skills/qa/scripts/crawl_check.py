@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Fase 6, paso 6.2: rastreo de staging en una pasada.
+"""Phase 6, step 6.2: one-pass staging crawl.
 
-Recorre los enlaces internos desde la home (hasta --max páginas) y verifica: código HTTP,
-enlaces rotos, título, meta description, H1 único, canonical, noindex; 404 personalizada con
-código 404; robots.txt y sitemap.xml; HTTP → HTTPS; cabeceras de seguridad de la home; rutas
-sensibles que no deben responder; y, si se pasan, el mapa de redirects (301 al destino, sin
-cadenas) y la tabla SEO (título y meta esperados por URL).
+Follows internal links from the home (up to --max pages) and verifies: HTTP status, broken
+links, title, meta description, single H1, canonical, noindex; custom 404 with a 404 code;
+robots.txt and sitemap.xml; HTTP → HTTPS; the home's security headers; sensitive paths that must
+not respond; and, if given, the redirect map (301 to target, no chains) and the SEO table
+(expected title and meta per URL).
 
-Solo contra staging del propio usuario.
+Only against the user's own staging.
 
-Uso:
-  crawl_check.py https://staging.example.com --md > docs/06-qa/rastreo.md
-  crawl_check.py https://staging.example.com --redirects docs/02-estructura/redirects.md --seo docs/03-contenido/seo.md --md
+Usage:
+  crawl_check.py https://staging.example.com --md > docs/06-qa/crawl.md
+  crawl_check.py https://staging.example.com --redirects docs/02-structure/redirects.md --seo docs/03-content/seo.md --md
   crawl_check.py https://staging.example.com --json
 """
 import argparse, json, re, sys, urllib.error, urllib.parse, urllib.request, uuid
@@ -22,11 +22,11 @@ SKIP_EXT = re.compile(r"\.(pdf|jpe?g|png|gif|svg|webp|avif|mp4|webm|zip|css|js|w
 SENSITIVE = ["/.env", "/.env.local", "/.env.production", "/.git/HEAD", "/.git/config", "/backup.zip",
              "/db.sql", "/wp-config.php", "/.DS_Store", "/package.json", "/server.js.map", "/.vercel/project.json"]
 HEADERS = {
-    "strict-transport-security": "HSTS ausente",
-    "content-security-policy": "CSP ausente",
-    "x-content-type-options": "X-Content-Type-Options ausente",
-    "referrer-policy": "Referrer-Policy ausente",
-    "permissions-policy": "Permissions-Policy ausente",
+    "strict-transport-security": "HSTS missing",
+    "content-security-policy": "CSP missing",
+    "x-content-type-options": "X-Content-Type-Options missing",
+    "referrer-policy": "Referrer-Policy missing",
+    "permissions-policy": "Permissions-Policy missing",
 }
 
 
@@ -113,7 +113,7 @@ def parse_seo(path):
     seo = {}
     for line in open(path, encoding="utf-8"):
         cells = [c.strip() for c in line.strip().strip("|").split("|")]
-        if len(cells) >= 3 and cells[0].startswith("/") and cells[1] and not cells[1].startswith("Título"):
+        if len(cells) >= 3 and cells[0].startswith("/") and cells[1] and not cells[1].startswith("Title"):
             seo[cells[0].rstrip("/") or "/"] = {"title": cells[1], "desc": cells[2]}
     return seo
 
@@ -122,8 +122,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("base")
     ap.add_argument("--max", type=int, default=200)
-    ap.add_argument("--redirects", help="docs/02-estructura/redirects.md")
-    ap.add_argument("--seo", help="docs/03-contenido/seo.md")
+    ap.add_argument("--redirects", help="docs/02-structure/redirects.md")
+    ap.add_argument("--seo", help="docs/03-content/seo.md")
     ap.add_argument("--md", action="store_true")
     ap.add_argument("--json", action="store_true")
     a = ap.parse_args()
@@ -149,7 +149,7 @@ def main():
         row = {"url": u, "status": status, "final": final if norm(final) != k else ""}
         pages[k] = row
         if status != 200:
-            add("crítico" if status in (0, 500, 502, 503) else "mayor", u, f"responde {status}", "arreglar o redirigir 301")
+            add("critical" if status in (0, 500, 502, 503) else "major", u, f"responds {status}", "fix or redirect 301")
             continue
         if "html" not in hdrs.get("content-type", ""):
             continue
@@ -160,19 +160,19 @@ def main():
             pass
         row.update(title=p.title, desc=p.desc, h1=len(p.h1), canonical=p.canonical, robots=p.robots, imgs_no_alt=p.imgs_no_alt)
         if not p.title:
-            add("mayor", u, "sin <title>", "añadir título único de 50-60 caracteres (seo.md)")
+            add("major", u, "no <title>", "add a unique 50-60 character title (seo.md)")
         elif len(p.title) > 65:
-            add("menor", u, f"título de {len(p.title)} caracteres", "acortar a 50-60")
+            add("minor", u, f"title of {len(p.title)} characters", "shorten to 50-60")
         if not p.desc:
-            add("menor", u, "sin meta description", "añadir 120-160 caracteres con CTA (seo.md)")
+            add("minor", u, "no meta description", "add 120-160 characters with a CTA (seo.md)")
         if len(p.h1) != 1:
-            add("mayor", u, f"{len(p.h1)} H1", "exactamente un H1 por página")
+            add("major", u, f"{len(p.h1)} H1", "exactly one H1 per page")
         if "noindex" in p.robots.lower():
-            add("crítico", u, "meta robots noindex en staging; verificar que no pase a producción", "quitar en producción o confirmar intención")
+            add("critical", u, "meta robots noindex on staging; verify it does not reach production", "remove in production or confirm intent")
         if p.canonical and norm(p.canonical) != norm(final or u):
-            add("mayor", u, f"canonical apunta a {p.canonical}", "canonical debe ser la propia URL salvo duplicados intencionales")
+            add("major", u, f"canonical points to {p.canonical}", "canonical must be the page's own URL unless intentionally consolidated")
         if p.imgs_no_alt:
-            add("mayor", u, f"{p.imgs_no_alt} <img> sin atributo alt", "alt descriptivo o alt=\"\" si decorativa (assets.md)")
+            add("major", u, f"{p.imgs_no_alt} <img> without alt attribute", "descriptive alt or alt=\"\" if decorative (assets.md)")
         for l in sorted(p.links):
             if not SKIP_EXT.search(urllib.parse.urlsplit(l).path) and norm(l) not in seen:
                 queue.append(l)
@@ -180,40 +180,40 @@ def main():
     # --- 404 ---
     st, _, _, body = fetch(base + "web-lab-404-" + uuid.uuid4().hex[:8])
     if st != 404:
-        add("mayor", "/<ruta inexistente>", f"responde {st} en vez de 404", "la 404 personalizada debe devolver código 404")
+        add("major", "/<nonexistent path>", f"responds {st} instead of 404", "the custom 404 must return a 404 code")
     elif len(body) < 500:
-        add("menor", "/404", "404 sin contenido personalizado", "página 404 con navegación de vuelta")
+        add("minor", "/404", "404 without custom content", "404 page with navigation back")
 
     # --- robots y sitemap ---
-    for path, sev in (("robots.txt", "mayor"), ("sitemap.xml", "mayor")):
+    for path, sev in (("robots.txt", "major"), ("sitemap.xml", "major")):
         st, _, _, body = fetch(base + path)
         if st != 200:
-            add(sev, "/" + path, f"responde {st}", f"publicar {path}")
+            add(sev, "/" + path, f"responds {st}", f"publish {path}")
         elif path == "robots.txt" and re.search(r"Disallow:\s*/\s*$", body.decode("utf-8", "replace"), re.M):
-            add("crítico", "/robots.txt", "Disallow: / bloquea todo el sitio", "confirmar que es solo staging; en producción quitar")
+            add("critical", "/robots.txt", "Disallow: / blocks the whole site", "confirm it is staging only; remove in production")
 
     # --- HTTP → HTTPS ---
     http_url = urllib.parse.urlunsplit(("http", origin.netloc, "/", "", ""))
     st, loc, _, _ = fetch(http_url, follow=False)
     if st not in (301, 308) or not str(loc).startswith("https://"):
-        add("crítico", http_url, f"HTTP responde {st} sin redirigir a HTTPS", "forzar redirección 301 a https en el hosting")
+        add("critical", http_url, f"HTTP responds {st} without redirecting to HTTPS", "force a 301 redirect to https at the hosting")
 
     # --- cabeceras de la home ---
     st, _, hdrs, _ = fetch(base)
     for h, msg in HEADERS.items():
         if h not in hdrs:
-            add("mayor" if h != "content-security-policy" else "crítico", "/", msg, "ver skills/build/references/headers.md")
+            add("major" if h != "content-security-policy" else "critical", "/", msg, "see skills/build/references/headers.md")
     csp = hdrs.get("content-security-policy", "")
     if "unsafe-inline" in csp and "script-src" in csp and re.search(r"script-src[^;]*unsafe-inline", csp):
-        add("mayor", "/", "CSP con unsafe-inline en script-src", "nonce o hashes")
+        add("major", "/", "CSP with unsafe-inline in script-src", "nonce or hashes")
     if "frame-ancestors" not in csp and "x-frame-options" not in hdrs:
-        add("mayor", "/", "sin frame-ancestors ni X-Frame-Options", "frame-ancestors 'none'")
+        add("major", "/", "no frame-ancestors or X-Frame-Options", "frame-ancestors 'none'")
 
     # --- rutas sensibles ---
     for path in SENSITIVE:
         st, _, hdrs, body = fetch(base + path.lstrip("/"))
         if st == 200 and len(body) > 0 and "html" not in hdrs.get("content-type", ""):
-            add("bloqueante", path, "responde 200 con contenido", "bloquear en el hosting y rotar cualquier secreto expuesto")
+            add("blocker", path, "responds 200 with content", "block at the hosting and rotate any exposed secret")
 
     # --- redirects ---
     redir_results = []
@@ -227,9 +227,9 @@ def main():
                 chain = st2 in (301, 302, 307, 308)
             redir_results.append({"src": src, "dst": dst, "status": st, "location": loc, "ok": ok and not chain, "chain": chain})
             if not ok:
-                add("mayor", src, f"redirect responde {st} → {loc}", f"301 directo a {dst}")
+                add("major", src, f"redirect responds {st} → {loc}", f"301 straight to {dst}")
             elif chain:
-                add("mayor", src, f"cadena: {dst} redirige otra vez a {loc2}", "apuntar directo al destino final")
+                add("major", src, f"chain: {dst} redirects again to {loc2}", "point straight to the final target")
 
     # --- seo esperado ---
     if a.seo:
@@ -237,36 +237,36 @@ def main():
             k = norm(urllib.parse.urljoin(base, path.lstrip("/")))
             row = pages.get(k)
             if not row:
-                add("menor", path, "está en seo.md pero no se alcanzó desde la home", "enlazar internamente o revisar URL")
+                add("minor", path, "in seo.md but not reached from the home", "link internally or check the URL")
                 continue
             if exp["title"] and row.get("title") != exp["title"]:
-                add("menor", path, f"título '{row.get('title','')}' ≠ seo.md '{exp['title']}'", "alinear con seo.md")
+                add("minor", path, f"title '{row.get('title','')}' ≠ seo.md '{exp['title']}'", "align with seo.md")
             if exp["desc"] and row.get("desc") != exp["desc"]:
-                add("menor", path, "meta description distinta a seo.md", "alinear con seo.md")
+                add("minor", path, "meta description differs from seo.md", "align with seo.md")
 
-    order = {"bloqueante": 0, "crítico": 1, "mayor": 2, "menor": 3, "trivial": 4}
+    order = {"blocker": 0, "critical": 1, "major": 2, "minor": 3, "trivial": 4}
     findings.sort(key=lambda f: (order[f["sev"]], f["where"]))
     counts = {s: sum(1 for f in findings if f["sev"] == s) for s in order}
 
     if a.json:
         print(json.dumps({"base": base, "pages": list(pages.values()), "redirects": redir_results, "findings": findings, "counts": counts}, indent=2, ensure_ascii=False))
         return
-    out = [f"# Rastreo de staging · {base}", "",
-           f"Páginas rastreadas: {len(pages)} · Hallazgos: " + ", ".join(f"{v} {k}" for k, v in counts.items() if v), "",
-           "## Hallazgos", "", "| Severidad | Dónde | Qué | Arreglo propuesto |", "|---|---|---|---|"]
+    out = [f"# Staging crawl · {base}", "",
+           f"Pages crawled: {len(pages)} · Findings: " + ", ".join(f"{v} {k}" for k, v in counts.items() if v), "",
+           "## Findings", "", "| Severity | Where | What | Proposed fix |", "|---|---|---|---|"]
     for f in findings:
         out.append(f"| {f['sev']} | {f['where']} | {f['what'].replace('|', '\\|')} | {f['fix']} |")
     if not findings:
-        out.append("| — | — | sin hallazgos | — |")
-    out += ["", "## Páginas", "", "| URL | Estado | Título | H1 | Meta | Canonical | Robots | img sin alt |", "|---|---|---|---|---|---|---|---|"]
+        out.append("| — | — | no findings | — |")
+    out += ["", "## Pages", "", "| URL | Status | Title | H1 | Meta | Canonical | Robots | img without alt |", "|---|---|---|---|---|---|---|---|"]
     for r in pages.values():
-        out.append(f"| {r['url']} | {r['status']} | {str(r.get('title',''))[:60]} | {r.get('h1','')} | {'sí' if r.get('desc') else 'no'} | {'ok' if not r.get('canonical') or norm(r['canonical'])==norm(r['url']) else r['canonical']} | {r.get('robots','')} | {r.get('imgs_no_alt','')} |")
+        out.append(f"| {r['url']} | {r['status']} | {str(r.get('title',''))[:60]} | {r.get('h1','')} | {'yes' if r.get('desc') else 'no'} | {'ok' if not r.get('canonical') or norm(r['canonical'])==norm(r['url']) else r['canonical']} | {r.get('robots','')} | {r.get('imgs_no_alt','')} |")
     if redir_results:
-        out += ["", "## Redirects", "", "| Origen | Destino esperado | Código | Location | Ok |", "|---|---|---|---|---|"]
+        out += ["", "## Redirects", "", "| Source | Expected target | Code | Location | Ok |", "|---|---|---|---|---|"]
         for r in redir_results:
-            out.append(f"| {r['src']} | {r['dst']} | {r['status']} | {r['location']} | {'sí' if r['ok'] else 'NO'} |")
+            out.append(f"| {r['src']} | {r['dst']} | {r['status']} | {r['location']} | {'yes' if r['ok'] else 'NO'} |")
     print("\n".join(out))
-    print(f"{len(pages)} páginas, {len(findings)} hallazgos", file=sys.stderr)
+    print(f"{len(pages)} pages, {len(findings)} findings", file=sys.stderr)
 
 
 if __name__ == "__main__":

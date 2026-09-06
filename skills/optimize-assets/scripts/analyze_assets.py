@@ -87,7 +87,7 @@ def analyze_image(e, info):
         return issues, sev, "unknown"
     fmt = info["format"]
     if info["w"] > T["img_max_width"]:
-        issues.append(f"{info['w']}px de ancho; redimensionar a máx 2560px"); sev = sev_max(sev, "warn")
+        issues.append(f"{info['w']}px wide; resize to max 2560px"); sev = sev_max(sev, "warn")
     r = e.get("rendered")
     if r and r.get("w") and info["w"]:
         need = r["w"] * (e.get("dpr") or 1)
@@ -114,7 +114,7 @@ def analyze_video(e, info):
         issues.append(f"{mb:.1f} MB; recomprimir"); sev = "warn"
     va = e.get("video") or {}
     if not info:
-        issues.append("sin ffprobe: solo se evaluó el peso")
+        issues.append("no ffprobe: only weight was evaluated")
         return issues, sev, "video"
     if info["h"] and info["h"] > T["vid_max_height"]:
         issues.append(f"{info['w']}x{info['h']}; bajar a 1080p (720p si es fondo)"); sev = sev_max(sev, "warn")
@@ -125,14 +125,14 @@ def analyze_video(e, info):
     if info["audio"] and (va.get("muted") or va.get("autoplay")):
         issues.append("tiene pista de audio pero se reproduce muted/autoplay; quitar audio (-an)"); sev = sev_max(sev, "warn")
     if info["codec"] and info["codec"] not in GOOD_VCODECS:
-        issues.append(f"códec {info['codec']}; reexportar en H.264"); sev = "crit"
+        issues.append(f"codec {info['codec']}; re-export in H.264"); sev = "crit"
     if va.get("autoplay") and not va.get("poster"):
-        issues.append("autoplay sin poster; añadir imagen de poster")
+        issues.append("autoplay without poster; add a poster image")
     if va.get("loop") and info["duration"] > T["vid_loop_max_s"]:
         issues.append(f"loop de {info['duration']}s; recortar a < 15s")
     r = e.get("rendered")
     if r and r.get("w") and info["w"] and info["w"] > r["w"] * (e.get("dpr") or 1) * 1.6:
-        issues.append(f"{info['w']}px para {r['w']}px renderizados; reducir resolución")
+        issues.append(f"{info['w']}px for {r['w']}px rendered; reduce resolution")
     return issues, sev, info["codec"] or "video"
 
 
@@ -165,14 +165,14 @@ def main():
     pages = sorted({p for r in results for p in r["pages"]})
     icon = {"crit": "🔴", "warn": "🟡", "ok": "🟢"}
 
-    L = ["# Auditoría de assets", ""]
+    L = ["# Asset audit", ""]
     L += ["## Resumen", "",
           "| | Archivos | Peso |", "|---|---|---|",
-          f"| Imágenes | {len(imgs)} | {fmt_bytes(sum(r['bytes'] for r in imgs))} |",
+          f"| Images | {len(imgs)} | {fmt_bytes(sum(r['bytes'] for r in imgs))} |",
           f"| Videos | {len(vids)} | {fmt_bytes(sum(r['bytes'] for r in vids))} |",
           f"| Total | {len(results)} | {fmt_bytes(sum(r['bytes'] for r in results))} |", "",
-          f"🔴 críticos: {counts['crit']} · 🟡 revisar: {counts['warn']} · 🟢 ok: {counts['ok']}", ""]
-    L += ["## Top ofensores (por peso)", "", "| Sev | Archivo | Tipo | Peso | Páginas | Qué hacer |", "|---|---|---|---|---|---|"]
+          f"🔴 critical: {counts['crit']} · 🟡 review: {counts['warn']} · 🟢 ok: {counts['ok']}", ""]
+    L += ["## Top offenders (by weight)", "", "| Sev | File | Type | Weight | Pages | What to do |", "|---|---|---|---|---|---|"]
     for r in sorted(results, key=lambda r: -r["bytes"])[:15]:
         L.append(f"| {icon[r['severity']]} | `{r['file']}` | {r['kind']} | {fmt_bytes(r['bytes'])} | {', '.join(r['pages'])} | {'; '.join(r['issues']) or '—'} |")
     L.append("")
@@ -180,7 +180,7 @@ def main():
         rows = [r for r in results if p in r["pages"]]
         if not rows:
             continue
-        L += [f"## Página: {p}", "", f"{len(rows)} assets · {fmt_bytes(sum(r['bytes'] for r in rows))}", "",
+        L += [f"## Page: {p}", "", f"{len(rows)} assets · {fmt_bytes(sum(r['bytes'] for r in rows))}", "",
               "| Sev | Archivo | Peso | Dimensiones | Renderizado | Problemas |", "|---|---|---|---|---|---|"]
         for r in sorted(rows, key=lambda r: ({"crit": 0, "warn": 1, "ok": 2}[r["severity"]], -r["bytes"])):
             i = r["info"] or {}

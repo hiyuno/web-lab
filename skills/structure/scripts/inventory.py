@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Fase 2, paso 2.1: inventario de un sitio existente, una fila por URL.
+"""Phase 2, step 2.1: inventory of an existing site, one row per URL.
 
-Entrada: el JSON de optimize-assets/scripts/sitemap.py ({"pages": [{"url": ...}]}) o un
-archivo de texto con una URL por línea. Visita cada URL y extrae estado HTTP, título, meta
-description, H1, canonical, meta robots, palabras, enlaces internos y formularios.
+Input: the JSON from optimize-assets/scripts/sitemap.py ({"pages": [{"url": ...}]}) or a text
+file with one URL per line. Visits every URL and extracts HTTP status, title, meta description,
+H1, canonical, meta robots, word count, internal links and forms.
 
-Uso:
-  inventory.py pages.json            # CSV en stdout
-  inventory.py urls.txt --md         # tabla Markdown con columna "decisión" vacía
+Usage:
+  inventory.py pages.json            # CSV to stdout
+  inventory.py urls.txt --md         # Markdown table with an empty "decision" column
   inventory.py pages.json --json     # JSON
 """
 import argparse, csv, html, json, re, sys, urllib.error, urllib.parse, urllib.request
@@ -129,11 +129,11 @@ def load_urls(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("source", help="pages.json de sitemap.py o archivo con una URL por línea")
-    ap.add_argument("--md", action="store_true", help="tabla Markdown con columna decisión")
+    ap.add_argument("source", help="pages.json from sitemap.py or a file with one URL per line")
+    ap.add_argument("--md", action="store_true", help="Markdown table with a decision column")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--discover", action="store_true",
-                    help="añade al inventario los enlaces internos no listados que encuentre")
+                    help="add unlisted internal links it finds to the inventory")
     a = ap.parse_args()
 
     urls = load_urls(a.source)
@@ -159,7 +159,7 @@ def main():
     elif a.md:
         def cell(v):
             return html.escape(str(v)).replace("|", "\\|")[:80]
-        print("| url | estado | título | meta description | h1 | canonical | robots | palabras | enlaces int. | formularios | campos | tráfico | posiciones | decisión |")
+        print("| url | status | title | meta description | h1 | canonical | robots | words | internal links | forms | fields | traffic | rankings | decision |")
         print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
         for r in rows:
             print(f"| {r['url']} | {r['status']} | {cell(r['title'])} | {cell(r['description'])} | {cell(r['h1'])} | "

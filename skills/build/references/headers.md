@@ -1,17 +1,17 @@
-# Cabeceras de seguridad y CSP
+# Security headers and CSP
 
-Objetivo: HSTS, CSP sin `unsafe-inline` ni `unsafe-eval`, `X-Content-Type-Options: nosniff`,
-`Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` mínima,
-`frame-ancestors 'none'` (o `X-Frame-Options: DENY`). Verifica con `curl -sI <url>` y en
-securityheaders.com. Beizer lo comprueba en la fase 6.
+Goal: HSTS, CSP without `unsafe-inline` or `unsafe-eval`, `X-Content-Type-Options: nosniff`,
+`Referrer-Policy: strict-origin-when-cross-origin`, minimal `Permissions-Policy`,
+`frame-ancestors 'none'` (or `X-Frame-Options: DENY`). Verify with `curl -sI <url>` and on
+securityheaders.com. Beizer checks it in phase 6.
 
-Inventaría primero qué carga cada página (analítica, fuentes, videos, mapas, pagos) y añade
-solo esos orígenes. Cada tercero nuevo pasa por Schneier.
+Inventory first what each page loads (analytics, fonts, video, maps, payments) and add only
+those origins. Every new third party goes through Schneier.
 
-## Astro (sitio estático) · `vercel.json`
+## Astro (static site) · `vercel.json`
 
-Sin scripts inline propios, la CSP puede ser estática. Astro inyecta estilos inline para los
-componentes; usa `style-src 'self' 'unsafe-inline'` solo si no puedes evitarlo, o configura
+With no inline scripts of your own, the CSP can be static. Astro injects inline styles for
+components; use `style-src 'self' 'unsafe-inline'` only if you cannot avoid it, or set
 `build.inlineStylesheets: 'never'`.
 
 ```json
@@ -32,18 +32,18 @@ componentes; usa `style-src 'self' 'unsafe-inline'` solo si no puedes evitarlo, 
 }
 ```
 
-Si hay scripts inline inevitables (JSON-LD es `type="application/ld+json"` y **no** lo bloquea
-la CSP; no cuenta), usa hashes: `script-src 'self' 'sha256-...'`. Astro puede generar los
-hashes con `experimental.csp` en versiones recientes; revisa la documentación de la versión.
+If inline scripts are unavoidable (JSON-LD is `type="application/ld+json"` and is **not** blocked
+by CSP; it does not count), use hashes: `script-src 'self' 'sha256-...'`. Astro can generate the
+hashes with `experimental.csp` in recent versions; check the docs for your version.
 
-## Next.js (aplicación) · CSP con nonce en `proxy.ts` (antes `middleware.ts`)
+## Next.js (application) · CSP with nonce in `proxy.ts` (formerly `middleware.ts`)
 
-Next.js necesita scripts inline para hidratar, así que la CSP estricta usa un nonce por
-petición. Esto obliga a renderizado dinámico en las rutas que la reciben; para páginas
-estáticas de marketing usa una CSP con hashes o sepáralas en Astro.
+Next.js needs inline scripts to hydrate, so a strict CSP uses a per-request nonce. That forces
+dynamic rendering on the routes that receive it; for static marketing pages use a hash-based CSP
+or split them into Astro.
 
 ```ts
-// proxy.ts (Next.js 16) — solo cabeceras y redirecciones. NUNCA la barrera de auth.
+// proxy.ts (Next.js 16) — headers and redirects only. NEVER the auth barrier.
 import { NextResponse, type NextRequest } from 'next/server'
 
 export function proxy(request: NextRequest) {
@@ -78,9 +78,9 @@ export const config = {
 }
 ```
 
-Lee el nonce en el layout con `(await headers()).get('x-nonce')` y pásalo a `<Script nonce>`.
+Read the nonce in the layout with `(await headers()).get('x-nonce')` and pass it to `<Script nonce>`.
 
-Resto de cabeceras en `next.config.ts`:
+Remaining headers in `next.config.ts`:
 
 ```ts
 const securityHeaders = [
@@ -93,11 +93,11 @@ const securityHeaders = [
 export default { async headers() { return [{ source: '/(.*)', headers: securityHeaders }] } }
 ```
 
-## Verificación
+## Verification
 
 ```bash
 curl -sI https://<staging> | grep -iE "strict-transport|content-security|x-content-type|referrer|permissions|x-frame"
 ```
 
-Modo reporte primero si el sitio ya está en producción: `Content-Security-Policy-Report-Only`
-durante una semana con `report-to`, luego se hace obligatoria.
+Report-only mode first if the site is already in production: `Content-Security-Policy-Report-Only`
+for a week with `report-to`, then make it enforced.

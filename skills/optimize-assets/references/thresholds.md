@@ -1,62 +1,61 @@
-# Umbrales y criterios del análisis
+# Analysis thresholds and criteria
 
-Los valores viven en el diccionario `T` al inicio de `scripts/analyze_assets.py`. Son
-heurísticas razonables para sitios de marketing/portafolio; ajústalos si el usuario tiene
-otro criterio (por ejemplo, un sitio de fotografía tolera imágenes más pesadas).
+The values live in the `T` dictionary at the top of `scripts/analyze_assets.py`. They are
+reasonable heuristics for marketing/portfolio sites; adjust them if the user has another criterion
+(for example, a photography site tolerates heavier images).
 
-## Imágenes
+## Images
 
-| Criterio | Warn | Crit | Por qué |
+| Criterion | Warn | Crit | Why |
 |---|---|---|---|
-| Peso | > 300 KB | > 1 MB | Por encima de 300 KB una imagen ya domina el LCP en móvil. |
-| Sobredimensión | ancho ≥ 2× (renderizado × DPR) | ≥ 3× | El navegador descarga píxeles que nunca muestra. Se usa el ancho renderizado más grande visto en cualquier página. |
-| Ancho absoluto | > 4000 px | — | Casi nunca se necesita más de 2560 px, ni en retina. |
-| PNG sin alpha | > 100 KB | — | PNG solo compensa con transparencia o gráficos planos; una foto en PNG pesa 3-10× más que en WebP. |
-| GIF animado | — | siempre | Un MP4/WebM equivalente pesa 5-20× menos. |
-| SVG | > 150 KB | — | Suele ser un SVG exportado con imágenes embebidas o sin simplificar. |
-| BMP / TIFF | — | siempre | Formatos sin compresión para web. |
+| Weight | > 300 KB | > 1 MB | Above 300 KB an image already dominates mobile LCP. |
+| Oversize | width ≥ 2× (rendered × DPR) | ≥ 3× | The browser downloads pixels it never shows. The largest rendered width seen on any page is used. |
+| Absolute width | > 4000 px | — | More than 2560 px is almost never needed, even on retina. |
+| PNG without alpha | > 100 KB | — | PNG only pays off with transparency or flat graphics; a photo in PNG weighs 3-10× more than in WebP. |
+| Animated GIF | — | always | An equivalent MP4/WebM weighs 5-20× less. |
+| SVG | > 150 KB | — | Usually an exported SVG with embedded images or unsimplified paths. |
+| BMP / TIFF | — | always | Uncompressed formats, not for the web. |
 
-Nota Framer: Framer sirve variantes WebP/AVIF redimensionadas, así que el peso *servido*
-puede ser mucho menor que el original. Aun así conviene subir originales razonables (≤ 2560 px,
-< 1 MB): las variantes grandes para retina parten del original y el primer render de cada
-variante es más lento.
+Framer note: Framer serves resized WebP/AVIF variants, so the *served* weight can be much lower
+than the original. It still pays to upload reasonable originals (≤ 2560 px, < 1 MB): the large
+retina variants derive from the original and the first render of each variant is slower.
 
 ## Videos
 
-| Criterio | Warn | Crit | Por qué |
+| Criterion | Warn | Crit | Why |
 |---|---|---|---|
-| Peso | > 8 MB | > 20 MB | Framer y la mayoría de builders no recomprimen video. |
-| Resolución | alto > 1080 px | — | 4K en un hero web no se aprecia y multiplica el peso ×4. Fondos: 720p basta. |
-| Bitrate | > 6 Mbps | > 12 Mbps | Objetivo 3-5 Mbps a 1080p, 1.5-2.5 Mbps a 720p. |
-| Audio en muted/autoplay | siempre | — | Pista de audio inútil que pesa y a veces bloquea autoplay. |
-| Códec | — | fuera de H.264/HEVC/AV1/VP9 | ProRes, MJPEG o similares no son para web. |
-| Autoplay sin poster | nota | — | Sin poster hay un hueco vacío hasta que carga el primer frame. |
-| Loop largo | > 30 s | — | Los loops de fondo funcionan igual con 8-15 s. |
+| Weight | > 8 MB | > 20 MB | Framer and most builders do not re-encode video. |
+| Resolution | height > 1080 px | — | 4K in a web hero is not noticeable and multiplies weight ×4. Backgrounds: 720p is enough. |
+| Bitrate | > 6 Mbps | > 12 Mbps | Target 3-5 Mbps at 1080p, 1.5-2.5 Mbps at 720p. |
+| Audio on muted/autoplay | always | — | Useless audio track that adds weight and sometimes blocks autoplay. |
+| Codec | — | outside H.264/HEVC/AV1/VP9 | ProRes, MJPEG or similar are not for the web. |
+| Autoplay without poster | note | — | Without a poster there is an empty gap until the first frame loads. |
+| Long loop | > 30 s | — | Background loops work just as well at 8-15 s. |
 
-## Comandos de optimización (para el usuario, no ejecutar sin que lo pida)
+## Optimization commands (for the user, do not run unless asked)
 
-Video hero/fondo, 1080p, sin audio, listo para streaming progresivo:
+Hero/background video, 1080p, no audio, ready for progressive streaming:
 ```bash
 ffmpeg -i in.mp4 -an -vf "scale=-2:1080" -c:v libx264 -crf 26 -preset slow -movflags +faststart -pix_fmt yuv420p out.mp4
 ```
-Fondo 720p más agresivo: cambia `1080` por `720` y `-crf 26` por `-crf 28`.
-Versión WebM (opcional, más pequeña, sin soporte en Safari viejo):
+More aggressive 720p background: change `1080` to `720` and `-crf 26` to `-crf 28`.
+WebM version (optional, smaller, no support on old Safari):
 ```bash
 ffmpeg -i in.mp4 -an -vf "scale=-2:1080" -c:v libvpx-vp9 -b:v 0 -crf 34 out.webm
 ```
-Poster de un video:
+Poster from a video:
 ```bash
 ffmpeg -i in.mp4 -ss 00:00:01 -frames:v 1 -q:v 3 poster.jpg
 ```
-GIF a MP4:
+GIF to MP4:
 ```bash
 ffmpeg -i in.gif -movflags +faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" out.mp4
 ```
-Imagen: redimensionar a 2560 px y recomprimir con sips (viene en macOS):
+Image: resize to 2560 px and recompress with sips (ships with macOS):
 ```bash
 sips -Z 2560 -s format jpeg -s formatOptions 80 in.png --out out.jpg
 ```
-Imagen a WebP con Pillow:
+Image to WebP with Pillow:
 ```bash
 python3 -c "from PIL import Image; im=Image.open('in.png'); im.thumbnail((2560,2560)); im.save('out.webp', quality=80, method=6)"
 ```

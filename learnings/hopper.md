@@ -1,12 +1,12 @@
-# Aprendizajes · hopper
+# Learnings · hopper
 
-Lo que este rol ha aprendido en proyectos reales. Lo lee al empezar; se alimenta en la retro
-de cada fase. Ver [README](README.md) para el formato y la regla de promoción.
+What this role has learned on real projects. Read on start; fed in each phase's retro. See the
+[README](README.md) for the format and the promotion rule.
 
-## Reglas ya promovidas
+## Rules already promoted
 
-Ninguna todavía. Cuando una lección se repita tres veces, pasa a `agents/hopper.md` o a su skill y
-se anota aquí en una línea con la fecha.
+None yet. When a lesson repeats three times, it moves to `agents/hopper.md` or its skill and is
+noted here in one line with the date.
 
-## Entradas
+## Entries
 

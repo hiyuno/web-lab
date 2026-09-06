@@ -12,11 +12,11 @@ const emit = value => process.stdout.write(JSON.stringify(value) + '\n');
   const login = await context.newPage();
   const initial = await login.goto(pages[0].url,{waitUntil:'domcontentloaded',timeout:45000});
   if(initial?.status() === 401) {
-    if(!password) {await browser.close();throw Error('El sitio está protegido por contraseña. Introduce la contraseña en Medir la web.');}
+    if(!password) {await browser.close();throw Error('The site is password-protected. Enter the password in Measure the site.');}
     await login.locator('#password').fill(password);
     try {
       await Promise.all([login.waitForNavigation({waitUntil:'domcontentloaded',timeout:15000}),login.locator('button[type="submit"]').click()]);
-    } catch {await browser.close();throw Error('No se pudo acceder. Comprueba la contraseña del sitio.');}
+    } catch {await browser.close();throw Error('Could not access. Check the site password.');}
   }
   await login.close();
   // Media metadata is sufficient; do not stream all videos during the audit.
@@ -55,7 +55,7 @@ const emit = value => process.stdout.write(JSON.stringify(value) + '\n');
           await page.evaluate(y=>scrollTo(0,y),pos);
           await page.waitForTimeout(100);
         }
-        if(!finished) throw Error('Página demasiado larga: recorrido incompleto');
+        if(!finished) throw Error('Page too long: incomplete traversal');
         emit({type:'measurement',page:entry.slug,url:entry.url,width,height:1000,assets:[...measures.values()]});
       } catch(error) { emit({type:'failure',page:entry.slug,width,error:error.message}); }
       finally {await page.close();emit({type:'progress',completed:++completed,total:pages.length*widths.length});}

@@ -1,53 +1,53 @@
-# Plan de pruebas · [proyecto]
+# Test plan · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Beizer · Staging: [URL] · Commit: [sha] · Estado: propuesta | aprobado
+Date: [yyyy-mm-dd] · Author: Beizer · Staging: [URL] · Commit: [sha] · Status: proposal | approved
 
-## Alcance
+## Scope
 
-- Historias imprescindibles e importantes de la spec: [H-01, H-02, ...]
-- Flujos de `docs/02-estructura/flujos.md`: [T1, T2, ...]
-- Plantillas: [home, interior, listado, detalle, formulario, legal, cuenta]
-- Fuera de alcance esta ronda: [ ] (y por qué)
+- Must and should stories in the spec: [S-01, S-02, ...]
+- Flows from `docs/02-structure/flows.md`: [T1, T2, ...]
+- Templates: [home, interior, listing, detail, form, legal, account]
+- Out of scope this round: [ ] (and why)
 
-## Severidades y criterios de salida
+## Severities and exit criteria
 
-Se fijan aquí, antes de encontrar nada. Ver `salida.md`. Bloqueante y crítico bloquean el
-lanzamiento; mayor se arregla o lo acepta el usuario por escrito; menor y trivial van al backlog.
+Set here, before anything is found. See `exit.md`. Blocker and critical block the launch; major is
+fixed or accepted by the user in writing; minor and trivial go to the backlog.
 
-## Matriz de navegadores y dispositivos
+## Browser and device matrix
 
-| Entorno | Versión | Quién | Cómo |
-|---------|---------|-------|------|
-| Chromium, Firefox, WebKit escritorio | últimas | Playwright | CI |
-| Chromium 375 × 812 | última | Playwright | CI |
-| iPhone [modelo] · iOS Safari | | [usuario] | manual, guion |
-| Android [modelo] · Chrome | | [usuario] | manual, guion |
-| Safari Mac, Edge | últimas | Beizer | manual |
-| Lector de pantalla | VoiceOver Mac / iPhone | [quién] | guion en accesibilidad.md |
+| Environment | Version | Who | How |
+|-------------|---------|-----|-----|
+| Desktop Chromium, Firefox, WebKit | latest | Playwright | CI |
+| Chromium 375 × 812 | latest | Playwright | CI |
+| iPhone [model] · iOS Safari | | [user] | manual, script |
+| Android [model] · Chrome | | [user] | manual, script |
+| Safari Mac, Edge | latest | Beizer | manual |
+| Screen reader | VoiceOver Mac / iPhone | [who] | script in accessibility.md |
 
-## Áreas y responsables
+## Areas and owners
 
-| Área | Qué | Herramienta | Quién | Salida |
-|------|-----|-------------|-------|--------|
-| Rastreo | enlaces, códigos, 404, redirects, metadatos, cabeceras, rutas sensibles | crawl_check.py | Beizer | rastreo.md |
-| Funcional | criterios de aceptación, casos límite, formularios, analítica | Playwright + manual | Beizer | tests/e2e, reporte |
-| Accesibilidad | axe por plantilla y estado; manual teclado y lector | axe.fixture.ts + guion | Beizer + [quién] | accesibilidad.md |
-| Rendimiento | Lighthouse móvil ×3 vs presupuesto; campo si hay | Lighthouse, CrUX | Beizer | reporte |
-| Seguridad | audit, gitleaks, ZAP baseline, IDOR, rate limit, formularios | guion seguridad.md | Beizer → Schneier | seguridad.md |
-| Visual y dispositivos | capturas base 375/768/1280; recorrido en móviles reales | Playwright, manual | Beizer + [usuario] | tests/visual |
+| Area | What | Tool | Who | Output |
+|------|------|------|-----|--------|
+| Crawl | links, codes, 404, redirects, metadata, headers, sensitive paths | crawl_check.py | Beizer | crawl.md |
+| Functional | acceptance criteria, edge cases, forms, analytics | Playwright + manual | Beizer | tests/e2e, report |
+| Accessibility | axe per template and state; manual keyboard and reader | axe.fixture.ts + script | Beizer + [who] | accessibility.md |
+| Performance | mobile Lighthouse ×3 vs budget; field if any | Lighthouse, CrUX | Beizer | report |
+| Security | audit, gitleaks, ZAP baseline, IDOR, rate limit, forms | security.md script | Beizer → Schneier | security.md |
+| Visual and devices | baseline screenshots 375/768/1280; walkthrough on real phones | Playwright, manual | Beizer + [user] | tests/visual |
 
-## Datos de prueba
+## Test data
 
-- Usuarios de prueba (dos, para IDOR): [ ] · nunca cuentas reales
-- Correo de prueba para formularios: [ ]
-- Tarjetas de prueba del proveedor de pagos: [ ]
+- Test users (two, for IDOR): [ ] · never real accounts
+- Test email for forms: [ ]
+- Payment provider test cards: [ ]
 
-## Calendario
+## Calendar
 
-| Día | Qué |
-|-----|-----|
-| 1 | rastreo, axe, Lighthouse, escaneos |
-| 2-3 | funcional y Playwright |
-| 3 | manual: lector de pantalla y móviles |
-| 4 | reporte, triaje, re-prueba |
-| 5 | salida y puerta de Schneier |
+| Day | What |
+|-----|------|
+| 1 | crawl, axe, Lighthouse, scans |
+| 2-3 | functional and Playwright |
+| 3 | manual: screen reader and phones |
+| 4 | report, triage, retest |
+| 5 | exit and Schneier's gate |

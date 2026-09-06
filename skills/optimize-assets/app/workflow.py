@@ -56,7 +56,7 @@ class Versions:
         for record in self.list(aid):
             if record['id'] == vid:
                 return record
-        raise ValueError('Versión no encontrada.')
+        raise ValueError('Version not found.')
 
 
 def page_summaries(assets, results, covers):

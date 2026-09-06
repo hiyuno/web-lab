@@ -1,203 +1,199 @@
 ---
 name: build
-description: Osmani y Hopper, ingeniería. Fase 5 del proceso de web-lab. Con el diseño aprobado, construye el sitio o la app en Astro 5 o Next.js 16 siguiendo la spec: fundación del repo con TypeScript, Tailwind v4 con los tokens de Frost, CI con pruebas, auditoría y Lighthouse CI con presupuesto de rendimiento, tareas derivadas de las historias, ciclo por tarea con prueba primero y pull request con preview, pista frontend (componentes, SEO, cabeceras y CSP, Core Web Vitals) y pista backend solo para apps (capa de acceso a datos server-only, Drizzle y Postgres, Zod, auth con proveedor, autorización por recurso, rate limiting, webhooks). Usa este skill cuando el usuario pida construir, implementar, programar, maquetar, "pasar el diseño a código", montar el repo, configurar CI, Next.js, Astro, base de datos, login, API, server actions, o cuando un proyecto tenga docs/04-diseno aprobado y aún no tenga código. Trabaja por tareas con checkpoint del usuario.
+description: Osmani and Hopper, engineering. Phase 5 of the web-lab process. With the approved design, builds the site or app in Astro 5 or Next.js 16 following the spec: repo foundation with TypeScript, Tailwind v4 with Frost's tokens, CI with tests, audit and Lighthouse CI with a performance budget, tasks derived from the stories, a per-task cycle with tests first and pull requests with preview, a frontend track (components, SEO, headers and CSP, Core Web Vitals) and a backend track for apps only (server-only data access layer, Drizzle and Postgres, Zod, auth with a provider, per-resource authorization, rate limiting, webhooks). Use this skill when the user asks to build, implement, code, lay out, "turn the design into code", set up the repo, configure CI, Next.js, Astro, database, login, API, server actions, or when a project has an approved docs/04-design and no code yet. Works in tasks with user checkpoints.
 ---
 
-# /build · Osmani y Hopper
+# /build · Osmani and Hopper
 
-Este skill corre la fase 5: del diseño aprobado a un staging con contenido real que Beizer
-puede probar. Lo cargan dos roles: **Osmani** (frontend y rendimiento, `agents/osmani.md`) y
-**Hopper** (backend, datos y auth, `agents/hopper.md`). Los pasos 5.0 a 5.3 y 5.6 a 5.9 son
-comunes; el 5.4 es la pista de Osmani y el 5.5 la de Hopper, que solo se activa si
-`decision-arquitectura.md` dice aplicación.
+This skill runs phase 5: from the approved design to a staging with real content that Beizer can
+test. Two roles load it: **Osmani** (frontend and performance, `agents/osmani.md`) and **Hopper**
+(backend, data and auth, `agents/hopper.md`). Steps 5.0 to 5.3 and 5.6 to 5.9 are shared; 5.4
+is Osmani's track and 5.5 is Hopper's, which only activates if `architecture-decision.md` says
+application.
 
-El resultado es el repositorio del proyecto en staging más `docs/05-desarrollo/` con
-`tareas.md`, `frontend.md` y, si aplica, `backend.md`.
+The result is the project repository on staging plus `docs/05-development/` with `tasks.md`,
+`frontend.md` and, if applicable, `backend.md`.
 
-## Regla de oro: spec → tarea → prueba → código → verificar → commit
+## Golden rule: spec → task → test → code → verify → commit
 
-Nada se construye sin una tarea que venga de una historia de la spec. Ninguna tarea se
-implementa sin su prueba en rojo primero. Ningún commit sin verificar en el navegador y sin
-poder explicarlo. Nunca se desactiva un lint, una prueba o una advertencia para que pase el
-build. Responde en el idioma del usuario; código, nombres y commits en inglés.
+Nothing is built without a task that comes from a spec story. No task is implemented without its
+test in red first. No commit without checking in the browser and without being able to explain
+it. Never disable a lint, a test or a warning to make the build pass. Reply in the user's
+language; code, names and commits in English.
 
-Trabajas como orquestador: delegas tareas al subagente `osmani` o `hopper` según la pista,
-una o pocas a la vez, con el issue completo en el prompt, y revisas cada pull request antes
-de mezclar. Los cambios de alcance vuelven a la spec primero.
+You work as orchestrator: you delegate tasks to the `osmani` or `hopper` subagent by track, one
+or a few at a time, with the full issue in the prompt, and you review every pull request before
+merging. Scope changes go back to the spec first.
 
-## Calibración y traspaso
+## Calibration and hand-off
 
-Exacto: el presupuesto de `lighthouserc.json`, las cabeceras de `headers.md`, los nueve
-estados de cada componente y los tres casos de prueba por acción. Un lint desactivado, una
-prueba saltada o un `any` para que compile son hallazgos, no atajos. Antes de abrir un pull
-request, el subagente corre `better-interface` sobre lo que tocó y adjunta su veredicto; las
-reglas de accesibilidad, layout, tipografía, color, superficies y redacción son de los
-`better-*`, y aquí solo se exige que se cumplan. Lo que no se probó en el navegador se
-reporta como **No verificado**.
+Exact: the budget in `lighthouserc.json`, the headers in `headers.md`, the nine states of every
+component and the three test cases per action. A disabled lint, a skipped test or an `any` to
+make it compile are findings, not shortcuts. Before opening a pull request, the subagent runs
+`better-interface` over what it touched and attaches its verdict; accessibility, layout,
+typography, color, surface and writing rules belong to the `better-*` skills, and here they are
+only required to be met. What was not tested in the browser is reported as **Not verified**.
 
-## Paso 5.0 · Entrada
+## Step 5.0 · Entry
 
-0. Lee `<web-lab>/learnings/osmani.md`, `<web-lab>/learnings/hopper.md` y
-   `<web-lab>/docs/PREFERENCIAS.md`.
-1. Lee `docs/01-descubrimiento/spec.md`, `decision-arquitectura.md` y
-   `modelo-de-amenazas.md`; `docs/03-contenido/seo.md`, `assets.md`, `legales.md` y los
-   briefs; `docs/04-diseno/tokens.css`, `componentes/`, `plantillas/`, `accesibilidad.md`,
-   `motion.md` y el prototipo. Si el diseño no está aprobado, detente y propón `/design-system`.
-2. Confirma con el usuario: framework según la decisión, gestor de paquetes (pnpm por
-   defecto), hosting (Vercel por defecto), repositorio remoto y quién revisa los pull requests.
-   No crees el repo remoto ni despliegues sin que lo pida.
+0. Read `<web-lab>/learnings/osmani.md`, `<web-lab>/learnings/hopper.md` and
+   `<web-lab>/docs/PREFERENCES.md`.
+1. Read `docs/01-discovery/spec.md`, `architecture-decision.md` and `threat-model.md`;
+   `docs/03-content/seo.md`, `assets.md`, `legal.md` and the briefs; `docs/04-design/tokens.css`,
+   `components/`, `templates/`, `accessibility.md`, `motion.md` and the prototype. If the design
+   is not approved, stop and propose `/design-system`.
+2. Confirm with the user: framework per the decision, package manager (pnpm by default),
+   hosting (Vercel by default), remote repository and who reviews pull requests. Do not create the
+   remote repo or deploy without being asked.
 
-## Paso 5.1 · Fundación del repositorio
+## Step 5.1 · Repository foundation
 
-Un día que ahorra semanas. Con `references/estructura.md` para las carpetas de cada framework:
+One day that saves weeks. With `references/structure.md` for each framework's folders:
 
-1. Scaffold: `pnpm create astro@latest` o `pnpm create next-app@latest` con TypeScript
-   estricto. Tailwind v4 y `docs/04-diseno/tokens.css` como hoja principal.
-2. `.gitignore` con `.env*` (menos `.env.example`) desde el primer commit. `.env.example` con
-   nombres y descripción, nunca valores.
-3. Lint y formato (ESLint, Prettier). Hooks de pre-commit con lint-staged: lint, tipos y
+1. Scaffold: `pnpm create astro@latest` or `pnpm create next-app@latest` with strict TypeScript.
+   Tailwind v4 and `docs/04-design/tokens.css` as the main stylesheet.
+2. `.gitignore` with `.env*` (except `.env.example`) from the first commit. `.env.example` with
+   names and descriptions, never values.
+3. Lint and format (ESLint, Prettier). Pre-commit hooks with lint-staged: lint, types and
    `gitleaks protect --staged`.
-4. CI con `references/ci.yml`: tipos, lint, pruebas, build, `pnpm audit --audit-level=high` y
-   Lighthouse CI con `references/lighthouserc.json` como umbral que falla el build.
-5. Vercel enlazado al repo: preview por rama, producción solo desde `main`. La preview de
-   `main` es staging. Skills `deploy-to-vercel` o `vercel:deploy` si hace falta.
-6. Protección de rama `main`: CI verde y una revisión antes de mezclar.
-7. Dependabot o Renovate con agrupación semanal y parches de seguridad inmediatos.
-8. `CLAUDE.md` del proyecto: stack, comandos, dónde están los docs, reglas de este skill.
-   Parte del de web-lab.
-9. Primer commit: "chore: scaffold" con todo lo anterior. Verifica que la preview levanta.
+4. CI with `references/ci.yml`: types, lint, tests, build, `pnpm audit --audit-level=high` and
+   Lighthouse CI with `references/lighthouserc.json` as a threshold that fails the build.
+5. Vercel linked to the repo: preview per branch, production only from `main`. The `main`
+   preview is staging. `deploy-to-vercel` or `vercel:deploy` skills if needed.
+6. `main` branch protection: green CI and one review before merging.
+7. Dependabot or Renovate with weekly grouping and immediate security patches.
+8. The project's `CLAUDE.md`: stack, commands, where the docs are, this skill's rules. Start from
+   web-lab's.
+9. First commit: "chore: scaffold" with all of the above. Verify the preview comes up.
 
-## Paso 5.2 · Plan de tareas
+## Step 5.2 · Task plan
 
 ```bash
-python3 <skill>/scripts/tasks_from_spec.py docs/01-descubrimiento/spec.md > docs/05-desarrollo/tareas.md
+python3 <skill>/scripts/tasks_from_spec.py docs/01-discovery/spec.md > docs/05-development/tasks.md
 ```
 
-Genera una sección por historia con sus criterios de aceptación convertidos en casos de
-prueba y una tabla de tareas vacía. Completa cada tarea con `references/tarea.md`: contexto,
-objetivo, criterios, restricciones, pista (frontend o backend), dependencias y comando de
-prueba. Tareas del tamaño de un pull request revisable: un componente, una plantilla, una
-acción, una integración. Ordena por dependencias; primero fundación, luego componentes base
-(botón, campo, enlace), luego plantillas, luego flujos.
+Generates one section per story with its acceptance criteria turned into test cases and an
+empty task table. Complete each task with `references/task.md`: context, goal, criteria,
+constraints, track (frontend or backend), dependencies and test command. Tasks the size of a
+reviewable pull request: one component, one template, one action, one integration. Order by
+dependencies; foundation first, then base components (button, field, link), then templates, then
+flows.
 
-**Checkpoint A**: el usuario aprueba el plan de tareas y el orden. Aquí se ve si algo de la
-spec no cabe en el plazo; se decide antes de escribir código.
+**Checkpoint A**: the user approves the task plan and order. Here you see whether something in
+the spec does not fit the deadline; it is decided before writing code.
 
-## Paso 5.3 · Ciclo por tarea
+## Step 5.3 · Per-task cycle
 
-El mismo para ambas pistas. Delega al subagente con el issue completo y estas reglas:
+The same for both tracks. Delegate to the subagent with the full issue and these rules:
 
-1. Rama `feat/<id>-<slug>` desde `main` actualizado.
-2. Prueba primero, en rojo: unitaria para lógica y componentes, Playwright para flujos.
-   Correrla y verla fallar antes de implementar.
-3. Implementar solo lo que la prueba pide. Componentes de Frost con sus nueve estados;
-   valores solo desde tokens.
-4. Verificar en el navegador integrado en 375 y 1280, modo claro y oscuro si existe.
-5. `pnpm lint && pnpm typecheck && pnpm test` verdes. Si algo falla, se arregla o se reporta;
-   nunca se silencia.
-6. Commit convencional pequeño: `feat(scope): ...`, `fix:`, `chore:`, `test:`. Un commit que
-   no se puede explicar en una frase se divide.
-7. Pull request con la plantilla de `references/revision-pr.md` rellenada, preview de Vercel
-   y captura. Tú revisas con la checklist; solo entonces se mezcla.
+1. Branch `feat/<id>-<slug>` from an up-to-date `main`.
+2. Test first, in red: unit for logic and components, Playwright for flows. Run it and watch it
+   fail before implementing.
+3. Implement only what the test asks for. Frost's components with their nine states; values only
+   from tokens.
+4. Verify in the built-in browser at 375 and 1280, light and dark mode if it exists.
+5. `pnpm lint && pnpm typecheck && pnpm test` green. If something fails, it is fixed or reported;
+   never silenced.
+6. Small conventional commit: `feat(scope): ...`, `fix:`, `chore:`, `test:`. A commit that
+   cannot be explained in one sentence is split.
+7. Pull request with the `references/pr-review.md` template filled in, Vercel preview and
+   screenshot. You review with the checklist; only then is it merged.
 
-## Paso 5.4 · Pista frontend · Osmani
+## Step 5.4 · Frontend track · Osmani
 
-Delegas a `osmani`. Además del ciclo:
+You delegate to `osmani`. Beyond the cycle:
 
-- **Astro**: content collections tipadas para todo el contenido de los briefs; un layout por
-  plantilla de Frost; islas solo donde hay interacción real, con `client:visible` o
-  `client:idle`, nunca `client:load` sin razón; `<Image>` y `<Picture>` de Astro con los
-  assets de Bellard; fuentes locales en subconjunto con `font-display: swap` y preload de la
-  principal; View Transitions si el diseño lo pide.
-- **Next.js**: App Router; Server Components por defecto y `"use client"` solo en hojas
-  interactivas; grupos de ruta `(marketing)` y `(app)`; Cache Components con `"use cache"`
-  explícito y `cacheLife` en lo cacheable, Suspense en lo dinámico; `loading.tsx` y
-  `error.tsx` por segmento; `next/image` y `next/font`. Skills `vercel:nextjs`,
+- **Astro**: typed content collections for all the briefs' content; one layout per Frost
+  template; islands only where there is real interaction, with `client:visible` or
+  `client:idle`, never `client:load` without reason; Astro's `<Image>` and `<Picture>` with
+  Bellard's assets; local subset fonts with `font-display: swap` and preload of the main one;
+  View Transitions if the design asks for them.
+- **Next.js**: App Router; Server Components by default and `"use client"` only on interactive
+  leaves; `(marketing)` and `(app)` route groups; Cache Components with explicit `"use cache"`
+  and `cacheLife` on what is cacheable, Suspense on what is dynamic; `loading.tsx` and
+  `error.tsx` per segment; `next/image` and `next/font`. Skills `vercel:nextjs`,
   `react-best-practices`, `composition-patterns`, `vercel:next-cache-components`.
-- **Común**: HTML semántico con landmarks, foco visible, `label` en todo campo; la tabla de
-  `seo.md` implementada con metadatos, JSON-LD, `sitemap.xml`, `robots.txt`, OG por página,
-  canonical y `hreflang`; cabeceras y CSP con `references/headers.md` (nonce en Next.js,
-  estática en Astro); redirects de `docs/02-estructura/redirects.md` en `vercel.json` o
-  `astro.config`; enlaces externos con `rel="noopener noreferrer"`; nada de HTML sin
-  sanitizar; ningún secreto en el cliente.
-- **Presupuesto** que CI vigila con `lighthouserc.json`: HTML 50 KB, CSS 60 KB, JS inicial
-  150 KB comprimidos, fuentes 80 KB, imágenes sobre el pliegue 200 KB; LCP 2.5 s, INP 200 ms,
-  CLS 0.1 en móvil simulado. Si un pull request lo rompe, no se mezcla.
-- Imágenes y video: pide a `bellard` las variantes con `/optimize-assets` sobre `assets.md`;
-  tú los colocas con `width`, `height`, `sizes`, `loading` y `fetchpriority` correctos.
+- **Shared**: semantic HTML with landmarks, visible focus, `label` on every field; the `seo.md`
+  table implemented with metadata, JSON-LD, `sitemap.xml`, `robots.txt`, OG per page, canonical
+  and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, static on
+  Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
+  external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client.
+- **Budget** that CI enforces with `lighthouserc.json`: HTML 50 KB, CSS 60 KB, initial JS
+  150 KB compressed, fonts 80 KB, above-the-fold images 200 KB; LCP 2.5 s, INP 200 ms, CLS 0.1
+  on simulated mobile. If a pull request breaks it, it is not merged.
+- Images and video: ask `bellard` for the variants with `/optimize-assets` over `assets.md`; you
+  place them with correct `width`, `height`, `sizes`, `loading` and `fetchpriority`.
 
-## Paso 5.5 · Pista backend · Hopper (solo aplicaciones)
+## Step 5.5 · Backend track · Hopper (applications only)
 
-Delegas a `hopper`. Con `references/dal.md` como patrón:
+You delegate to `hopper`. With `references/dal.md` as the pattern:
 
-- **Capa de acceso a datos** en `src/data/` marcada `import 'server-only'`: la única que lee
-  `process.env` y toca la base de datos. Cada función autentica, autoriza por recurso
-  (propiedad u organización en la consulta, nunca solo el id) y devuelve un DTO mínimo.
-- **Base de datos**: Postgres en Neon (o el del hosting) con Drizzle y migraciones
-  versionadas en `drizzle/`. Esquema con dueño por tabla y `on delete` explícito. Nunca
-  cambios a mano en producción.
-- **Validación**: Zod en toda frontera: `FormData`, `params`, `searchParams`, cabeceras,
-  cuerpo de webhooks. Los tipos se borran en tiempo de ejecución; el esquema no.
-- **Auth** con proveedor: Clerk, Better Auth o Auth.js según `decision-arquitectura.md`.
-  Skill `vercel:auth`. Cookies `HttpOnly`, `Secure`, `SameSite=Lax`. El middleware o `proxy.ts`
-  solo redirige; nunca es la barrera. Cada server action y route handler re-verifica.
-- **Server actions** delgadas en `src/actions/`: validan con Zod, llaman a la capa de datos,
-  devuelven solo lo que la interfaz necesita, `revalidatePath` o `updateTag`. Errores al
-  cliente genéricos; el detalle al log.
-- **Rate limiting** con `@upstash/ratelimit` o el del hosting en login, registro,
-  recuperación, formularios públicos y operaciones caras.
-- **Pagos** con Stripe o Mercado Pago vía Checkout; webhooks verificados por firma antes de
-  leer el cuerpo; idempotencia por id de evento.
-- **Subidas** a Vercel Blob o S3: tipo real, tamaño máximo, renombrado, servidas desde otro
-  origen.
-- **Logs** sin datos personales. **Backups** automáticos activados en el proveedor.
-- **Pruebas** por acción: caso feliz, entrada inválida, usuario sin permiso (IDOR).
+- **Data access layer** in `src/data/` marked `import 'server-only'`: the only one that reads
+  `process.env` and touches the database. Every function authenticates, authorizes per resource
+  (ownership or organization in the query, never just the id) and returns a minimal DTO.
+- **Database**: Postgres on Neon (or the hosting's) with Drizzle and versioned migrations in
+  `drizzle/`. Schema with an owner per table and explicit `on delete`. Never manual changes in
+  production.
+- **Validation**: Zod at every boundary: `FormData`, `params`, `searchParams`, headers, webhook
+  bodies. Types are erased at runtime; the schema is not.
+- **Auth** with a provider: Clerk, Better Auth or Auth.js per `architecture-decision.md`. Skill
+  `vercel:auth`. Cookies `HttpOnly`, `Secure`, `SameSite=Lax`. Middleware or `proxy.ts` only
+  redirects; it is never the barrier. Every server action and route handler re-verifies.
+- **Thin server actions** in `src/actions/`: validate with Zod, call the data layer, return only
+  what the UI needs, `revalidatePath` or `updateTag`. Generic errors to the client; detail to the
+  log.
+- **Rate limiting** with `@upstash/ratelimit` or the hosting's on login, signup, recovery, public
+  forms and expensive operations.
+- **Payments** with Stripe or Mercado Pago via Checkout; webhooks verified by signature before
+  reading the body; idempotency by event id.
+- **Uploads** to Vercel Blob or S3: real type, max size, renamed, served from another origin.
+- **Logs** without personal data. **Backups** automatic, enabled at the provider.
+- **Tests** per action: happy path, invalid input, user without permission (IDOR).
 
-## Paso 5.6 · Integración en staging
+## Step 5.6 · Staging integration
 
-Contenido real de los briefs cargado en colecciones o CMS; assets de Bellard en su sitio;
-redirects respondiendo 301; formularios que llegan a su destino; analítica y banner de
-consentimiento funcionando; legales publicados en sus URLs; 404 personalizada. La preview de
-`main` es lo que Beizer prueba. Ábrela y recorre los flujos principales de `flujos.md`.
+Real content from the briefs loaded into collections or CMS; Bellard's assets in place;
+redirects responding 301; forms reaching their destination; analytics and consent banner
+working; legal pages published at their URLs; custom 404. The `main` preview is what Beizer
+tests. Open it and walk the main flows in `flows.md`.
 
-## Paso 5.7 · Definición de terminado
+## Step 5.7 · Definition of done
 
-Con `references/definicion-de-terminado.md`. Por tarea: prueba verde, verificado en
-navegador, lint y tipos limpios, sin secretos, commit explicable, revisado y mezclado. Por
-fase: todas las historias imprescindibles implementadas, presupuesto cumplido en CI,
-cabeceras verificadas con `curl -sI`, `pnpm audit` sin altos, `gitleaks detect` limpio,
-`docs/05-desarrollo/frontend.md` y `backend.md` escritos con `references/frontend.md` y
-`references/backend.md`.
+With `references/definition-of-done.md`. Per task: green test, verified in the browser, clean
+lint and types, no secrets, explainable commit, reviewed and merged. Per phase: every must-have
+story implemented, budget met in CI, headers verified with `curl -sI`, `pnpm audit` without
+highs, `gitleaks detect` clean, `docs/05-development/frontend.md` and `backend.md` written with
+`references/frontend.md` and `references/backend.md`.
 
-## Paso 5.8 · Puerta de seguridad
+## Step 5.8 · Security gate
 
-Lanza a `schneier` con acceso al repo y la fase 5 de `docs/SEGURIDAD.md` más los puntos de
-auditoría de Next.js: base de datos y `process.env` solo en la capa de datos; props de
-componentes cliente sin datos privados; cada `"use server"` valida, autoriza, comprueba
-propiedad y filtra el retorno; parámetros de ruta validados; `proxy.ts` y `route.ts` revisados
-con lupa. Un hallazgo crítico se arregla antes del checkpoint.
+Launch `schneier` with repo access and phase 5 of `docs/SECURITY.md` plus the Next.js audit
+points: database and `process.env` only in the data layer; client component props without
+private data; every `"use server"` validates, authorizes, checks ownership and filters its
+return; route params validated; `proxy.ts` and `route.ts` reviewed closely. A critical finding
+is fixed before the checkpoint.
 
-## Paso 5.9 · Checkpoint y retro
+## Step 5.9 · Checkpoint and retro
 
-1. **Checkpoint B**: presenta la URL de staging, el estado de CI, el reporte de Lighthouse
-   móvil, cuántas historias imprescindibles e importantes están hechas, el veredicto de
-   Schneier y lo que quedó fuera. Pide aprobación explícita.
-2. Retro a `<web-lab>/learnings/osmani.md` y `hopper.md`; preferencias de stack o
-   herramientas confirmadas a `docs/PREFERENCIAS.md`.
-3. Con la aprobación, di qué sigue: fase 6 con Beizer sobre staging.
+1. **Checkpoint B**: present the staging URL, the CI status, the mobile Lighthouse report, how
+   many must and should stories are done, Schneier's verdict and what was left out. Ask for
+   explicit approval.
+2. Retro to `<web-lab>/learnings/osmani.md` and `hopper.md`; confirmed stack or tool preferences
+   to `docs/PREFERENCES.md`.
+3. With approval, say what comes next: phase 6 with Beizer on staging.
 
-## Antes de terminar
+## Before you finish
 
-| Síntoma | Arreglo |
-|---------|---------|
-| Un color, espacio o radio literal en un componente | token de `tokens.css`; Frost lo tiene o se añade |
-| `"use client"` o `client:load` en un archivo sin evento ni estado | quítalo; Server Component o HTML |
-| `auth()` solo en `page.tsx` y no en la acción o en `src/data` | re-verifica dentro; el middleware no es barrera |
-| `process.env` o el cliente de BD fuera de `src/data/` | muévelo; los tres greps de `dal.md` |
-| Una acción que devuelve el registro completo | DTO con lo que la interfaz necesita |
-| `NEXT_PUBLIC_` con "secret", "key" o "token" en el nombre | es privado; quita el prefijo y muévelo al servidor |
-| `eslint-disable`, `@ts-ignore`, `test.skip` o `any` nuevos en el diff | arregla la causa o justifica en el PR con issue |
-| Un PR con más de 400 líneas de cambio | divídelo por tarea |
-| El commit de la prueba es posterior al de la implementación | prueba primero; si no, dilo en el PR |
-| Lighthouse CI en amarillo "por ahora" | no se mezcla; el presupuesto es el umbral |
-| Lorem ipsum o una imagen de más de 300 KB en staging | briefs y Bellard antes del checkpoint |
+| Symptom | Fix |
+|---------|-----|
+| A literal color, spacing or radius in a component | token from `tokens.css`; Frost has it or it is added |
+| `"use client"` or `client:load` on a file with no event or state | remove it; Server Component or HTML |
+| `auth()` only in `page.tsx` and not in the action or in `src/data` | re-verify inside; middleware is not a barrier |
+| `process.env` or the DB client outside `src/data/` | move it; the three greps in `dal.md` |
+| An action that returns the full record | DTO with what the UI needs |
+| `NEXT_PUBLIC_` with "secret", "key" or "token" in the name | it is private; drop the prefix and move it to the server |
+| New `eslint-disable`, `@ts-ignore`, `test.skip` or `any` in the diff | fix the cause or justify in the PR with an issue |
+| A PR with more than 400 changed lines | split it by task |
+| The test commit is later than the implementation commit | test first; if not, say so in the PR |
+| Lighthouse CI yellow "for now" | not merged; the budget is the threshold |
+| Lorem ipsum or an image over 300 KB on staging | briefs and Bellard before the checkpoint |

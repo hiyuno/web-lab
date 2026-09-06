@@ -1,49 +1,49 @@
-# Checklist de lanzamiento · [proyecto]
+# Launch checklist · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Allspaw · Cada punto con fecha y quién verificó. Firmas al final.
+Date: [yyyy-mm-dd] · Author: Allspaw · Every item with the date and who verified it. Signatures at the end.
 
-## Entrada
-- [ ] `docs/06-qa/salida.md` firmado por Beizer y Schneier, sin bloqueantes ni críticos · [fecha, quién]
+## Entry
+- [ ] `docs/06-qa/exit.md` signed by Beizer and Schneier, no blockers or criticals · [date, who]
 
-## Cuentas y dominio (7.1)
-- [ ] Registrador con 2FA, bloqueo, renovación automática, a nombre del dueño
-- [ ] Accesos individuales y mínimos en registrador, DNS, hosting, repo, analítica, pagos
-- [ ] CAA publicado · DNSSEC activado o anotado
-- [ ] Snapshot DNS guardado
+## Accounts and domain (7.1)
+- [ ] Registrar with 2FA, lock, auto-renewal, in the owner's name
+- [ ] Individual, minimal access on registrar, DNS, hosting, repo, analytics, payments
+- [ ] CAA published · DNSSEC on or noted
+- [ ] DNS snapshot saved
 
-## Correo (7.2)
-- [ ] SPF único, -all, ≤ 10 consultas
-- [ ] DKIM por cada fuente
-- [ ] DMARC publicado con política [ ] y rua
+## Email (7.2)
+- [ ] Single SPF, -all, ≤ 10 lookups
+- [ ] DKIM per source
+- [ ] DMARC published with policy [ ] and rua
 
-## Producción (7.3)
-- [ ] Producción solo desde main; protección de rama
-- [ ] Variables de producción cargadas; sensibles separadas de preview; tokens con expiración
-- [ ] Dominio en el proyecto; certificado emitido
-- [ ] HTTPS forzado; HSTS
-- [ ] Redirects cargados y probados uno a uno contra la URL de producción
+## Production (7.3)
+- [ ] Production only from main; branch protection
+- [ ] Production variables loaded; sensitive ones separate from preview; tokens with expiration
+- [ ] Domain on the project; certificate issued
+- [ ] HTTPS forced; HSTS
+- [ ] Redirects loaded and tested one by one against the production URL
 
-## Observabilidad (7.4)
-- [ ] Disponibilidad multi-región, alerta tras 3 fallos
-- [ ] Errores (Sentry) sin datos personales; alertas configuradas
-- [ ] Core Web Vitals de campo
-- [ ] Vigilancia de dominio: NS, MX, TXT, CAA, expiraciones
-- [ ] Alertas llegan a [nombre] por [canal]; probadas con una alerta de prueba
-- [ ] Analítica con consentimiento correcto; anotación de lanzamiento preparada
-- [ ] Línea base exportada (posiciones, páginas de aterrizaje) si hay sitio previo
+## Observability (7.4)
+- [ ] Multi-region availability, alert after 3 failures
+- [ ] Errors (Sentry) without personal data; alerts configured
+- [ ] Field Core Web Vitals
+- [ ] Domain watch: NS, MX, TXT, CAA, expiries
+- [ ] Alerts reach [name] via [channel]; tested with a test alert
+- [ ] Analytics with correct consent; launch annotation ready
+- [ ] Baseline exported (rankings, landing pages) if there is a previous site
 
-## Backups y rollback (7.5)
-- [ ] Backups automáticos; retención [ ] días
-- [ ] Restauración probada el [fecha] en [entorno]
-- [ ] Instant Rollback probado; advertencias (env, BD, auto-assign) en el runbook
-- [ ] Rollback de DNS: snapshot + tiempo con TTL actual
+## Backups and rollback (7.5)
+- [ ] Automatic backups; retention [ ] days
+- [ ] Restore tested on [date] in [environment]
+- [ ] Instant Rollback tested; warnings (env, DB, auto-assign) in the runbook
+- [ ] DNS rollback: snapshot + time with current TTL
 
-## Corte (7.6)
-- [ ] TTL bajado a 300 s el [fecha] (24-72 h antes) y confirmado con dig
-- [ ] Ventana: [día y hora], entre semana, temprano
-- [ ] Plazos de rollback: web/DNS 2 h · correo 24 h
-- [ ] `runbook-corte.md` completo con quién hace cada paso
-- [ ] Veredicto de Schneier: [aprobado | con condiciones] · [fecha]
+## Cutover (7.6)
+- [ ] TTL lowered to 300 s on [date] (24-72 h before) and confirmed with dig
+- [ ] Window: [day and time], midweek, early
+- [ ] Rollback deadlines: web/DNS 2 h · email 24 h
+- [ ] `cutover-runbook.md` complete with who does each step
+- [ ] Schneier's verdict: [approved | with conditions] · [date]
 
-## Firmas
-Allspaw: [fecha] · Schneier: [fecha] · Usuario (go-live autorizado): [fecha]
+## Signatures
+Allspaw: [date] · Schneier: [date] · User (go-live authorized): [date]

@@ -1,15 +1,16 @@
-// tests/e2e/a11y.spec.ts · web-lab fase 6
-// axe por plantilla en claro y oscuro, sobre estados tras interactuar, más lo que axe no cubre.
+// tests/e2e/a11y.spec.ts · web-lab phase 6
+// axe per template in light and dark, on states after interacting, plus what axe does not cover.
+// Button and link name patterns accept English and Spanish; adjust to the project's language.
 import { test, expect, fingerprint } from './fixtures/axe'
 
-// Una URL representativa por plantilla del sitemap
+// One representative URL per sitemap template
 const templates: Record<string, string> = {
   home: '/',
-  interior: '/sobre',
-  listado: '/blog',
-  detalle: '/blog/primer-articulo',
-  formulario: '/contacto',
-  legal: '/aviso-de-privacidad',
+  interior: '/about',
+  listing: '/blog',
+  detail: '/blog/first-post',
+  form: '/contact',
+  legal: '/privacy-notice',
 }
 
 for (const [name, path] of Object.entries(templates)) {
@@ -23,44 +24,44 @@ for (const [name, path] of Object.entries(templates)) {
   }
 }
 
-test('a11y · menú móvil abierto', async ({ page, makeAxeBuilder }) => {
+test('a11y · open mobile menu', async ({ page, makeAxeBuilder }) => {
   await page.setViewportSize({ width: 375, height: 812 })
   await page.goto('/')
-  await page.getByRole('button', { name: /menú|menu/i }).click()
+  await page.getByRole('button', { name: /menu|menú/i }).click()
   const results = await makeAxeBuilder().include('header').analyze()
   expect(fingerprint(results)).toEqual([])
 })
 
-test('a11y · formulario con errores', async ({ page, makeAxeBuilder }) => {
-  await page.goto('/contacto')
-  await page.getByRole('button', { name: /enviar|pedir|solicitar/i }).click()
+test('a11y · form with errors', async ({ page, makeAxeBuilder }) => {
+  await page.goto('/contact')
+  await page.getByRole('button', { name: /send|submit|request|enviar|pedir|solicitar/i }).click()
   await expect(page.getByRole('alert').first()).toBeVisible()
   const results = await makeAxeBuilder().analyze()
   expect(fingerprint(results)).toEqual([])
 })
 
-test('a11y · hover del botón primario mantiene contraste', async ({ page, makeAxeBuilder }) => {
+test('a11y · primary button hover keeps contrast', async ({ page, makeAxeBuilder }) => {
   await page.goto('/')
-  await page.getByRole('link', { name: /pedir|empezar|contactar/i }).first().hover()
+  await page.getByRole('link', { name: /get started|request|contact|pedir|empezar|contactar/i }).first().hover()
   const results = await makeAxeBuilder().analyze()
   expect(fingerprint(results)).toEqual([])
 })
 
-// Lo que axe no puede evaluar
+// What axe cannot evaluate
 
-test('saltar al contenido es el primer foco y funciona', async ({ page }) => {
+test('skip to content is the first focus and works', async ({ page }) => {
   await page.goto('/')
   await page.keyboard.press('Tab')
-  const skip = page.getByRole('link', { name: /saltar|skip/i })
+  const skip = page.getByRole('link', { name: /skip|saltar/i })
   await expect(skip).toBeFocused()
   await page.keyboard.press('Enter')
   const inMain = await page.evaluate(() => document.activeElement?.closest('main') !== null)
   expect(inMain).toBe(true)
 })
 
-test('modal atrapa el foco y cierra con Escape', async ({ page }) => {
+test('modal traps focus and closes with Escape', async ({ page }) => {
   await page.goto('/')
-  const opener = page.getByRole('button', { name: /abrir|ver más/i }).first()
+  const opener = page.getByRole('button', { name: /open|see more|abrir|ver más/i }).first()
   if (!(await opener.isVisible())) test.skip()
   await opener.click()
   const dialog = page.getByRole('dialog')
@@ -74,20 +75,20 @@ test('modal atrapa el foco y cierra con Escape', async ({ page }) => {
   await expect(opener).toBeFocused()
 })
 
-test('sin enlaces con texto ambiguo', async ({ page }) => {
+test('no links with ambiguous text', async ({ page }) => {
   await page.goto('/')
-  const ambiguous = ['leer más', 'clic aquí', 'aquí', 'ver más', 'read more', 'click here', 'más']
+  const ambiguous = ['read more', 'click here', 'here', 'see more', 'more', 'leer más', 'clic aquí', 'aquí', 'ver más', 'más']
   for (const link of await page.getByRole('link').all()) {
     const text = (await link.innerText()).trim().toLowerCase()
     const name = ((await link.getAttribute('aria-label')) ?? '').trim().toLowerCase()
-    expect(ambiguous, `enlace ambiguo: "${text}"`).not.toContain(name || text)
+    expect(ambiguous, `ambiguous link: "${text}"`).not.toContain(name || text)
   }
 })
 
-test('el conmutador de tema anuncia su estado actual', async ({ page }) => {
+test('the theme toggle announces its current state', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/')
-  const toggle = page.getByRole('button', { name: /modo|tema|theme/i })
+  const toggle = page.getByRole('button', { name: /mode|theme|modo|tema/i })
   if (!(await toggle.isVisible())) test.skip()
   const before = await toggle.getAttribute('aria-label')
   await toggle.click()

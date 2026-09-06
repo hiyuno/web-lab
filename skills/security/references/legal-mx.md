@@ -1,47 +1,47 @@
-# Datos personales en México · ley vigente
+# Personal data in Mexico · law in force
 
-**Ley Federal de Protección de Datos Personales en Posesión de los Particulares**, publicada en
-el Diario Oficial el 20 de marzo de 2025 y vigente desde el 21 de marzo de 2025. Sustituye a la
-ley de 2010. Verifica la versión en la Cámara de Diputados antes de redactar un aviso; esta
-nota resume lo que cambia para nuestros proyectos, no es asesoría legal.
+**Ley Federal de Protección de Datos Personales en Posesión de los Particulares**, published in
+the Diario Oficial on 20 March 2025 and in force since 21 March 2025. It replaces the 2010 law.
+Check the current text at the Cámara de Diputados before drafting a notice; this note summarizes
+what changes for our projects, it is not legal advice.
 
-## Qué cambió
+## What changed
 
-- **Autoridad**: el INAI fue extinguido. Las atribuciones pasan a la **Secretaría Anticorrupción
-  y Buen Gobierno**. Tribunales especializados habilitados desde julio de 2025.
-- **Responsable**: cualquier persona física o moral que trate datos personales, sin necesidad de
-  decidir sobre el tratamiento. Casi todo sitio con formulario es responsable.
-- **Titular y dato personal**: la definición ya no exige que sea persona física.
-- **Aviso de privacidad integral**: ya no obliga a informar las transferencias; sí obliga a
-  **detallar qué datos personales se tratan, identificando los sensibles**. Seguimos informando
-  transferencias como buena práctica y porque GDPR lo exige si aplica.
-- **Sanciones**: 100 a 320 000 UMA; se duplican con datos sensibles.
-- **Derechos ARCO** (acceso, rectificación, cancelación, oposición) se mantienen, con medios
-  para ejercerlos y para revocar el consentimiento.
+- **Authority**: INAI was dissolved. Its powers pass to the **Secretaría Anticorrupción y Buen
+  Gobierno**. Specialized courts in place since July 2025.
+- **Controller**: any natural or legal person that processes personal data, with no need to
+  decide on the processing. Almost every site with a form is a controller.
+- **Data subject and personal data**: the definition no longer requires a natural person.
+- **Full privacy notice**: it no longer requires informing about transfers; it does require
+  **detailing which personal data is processed, identifying the sensitive ones**. We keep
+  informing about transfers as good practice and because GDPR requires it if applicable.
+- **Sanctions**: 100 to 320,000 UMA; doubled with sensitive data.
+- **ARCO rights** (access, rectification, cancellation, opposition) remain, with means to
+  exercise them and to revoke consent.
 
-## Lo que el aviso debe tener (plantilla `skills/content/references/legales.md`)
+## What the notice must contain (template `skills/content/references/legal.md`)
 
-- Identidad y domicilio del responsable
-- Datos personales que se tratan, identificando los sensibles
-- Finalidades primarias y secundarias, con forma de negarse a las secundarias
-- Medios para ejercer ARCO y revocar consentimiento
-- Opciones para limitar uso o divulgación
-- Uso de cookies y tecnologías de rastreo, si las hay
-- Cómo se comunican cambios; fecha de última actualización
-- Transferencias a terceros (buena práctica; obligatorio bajo GDPR)
-- Aviso simplificado junto a cada formulario: quién, para qué, enlace al integral
+- Identity and address of the controller
+- Personal data processed, identifying the sensitive ones
+- Primary and secondary purposes, with a way to refuse the secondary ones
+- Means to exercise ARCO rights and revoke consent
+- Options to limit use or disclosure
+- Use of cookies and tracking technologies, if any
+- How changes are communicated; last update date
+- Transfers to third parties (good practice; mandatory under GDPR)
+- Short notice next to every form: who, for what, link to the full one
 
-## Ante una vulneración de datos
+## In case of a data breach
 
-- Contener y preservar evidencia (ver `skills/launch/references/incidentes.md`, escenario B).
-- Informar a los titulares afectados sin dilación cuando la vulneración afecte de forma
-  significativa sus derechos patrimoniales o morales: qué pasó, qué datos, qué se hizo, qué
-  pueden hacer, cómo contactar.
-- Si hay usuarios en la UE, además la autoridad en 72 horas.
-- Documentar en el post-mortem.
+- Contain and preserve evidence (see `skills/launch/references/incidents.md`, scenario B).
+- Inform the affected data subjects without delay when the breach significantly affects their
+  property or moral rights: what happened, which data, what was done, what they can do, how to
+  get in touch.
+- If there are users in the EU, also the authority within 72 hours.
+- Document in the post-mortem.
 
-## Menores y datos sensibles
+## Minors and sensitive data
 
-Consentimiento de quien ejerce la patria potestad; datos sensibles con consentimiento expreso
-y por escrito (o su equivalente electrónico verificable). Si el proyecto los trata, nivel ASVS
-L3 y revisión legal humana antes de publicar el aviso.
+Consent from whoever holds parental authority; sensitive data with express written consent (or
+its verifiable electronic equivalent). If the project processes them, ASVS level L3 and a human
+legal review before publishing the notice.

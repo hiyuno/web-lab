@@ -1,97 +1,97 @@
-# Spec · [nombre del proyecto]
+# Spec · [project name]
 
-Versión: 0.1 · Fecha: [aaaa-mm-dd] · Autor: Cooper · Revisó: Schneier · Estado: borrador | aprobada
+Version: 0.1 · Date: [yyyy-mm-dd] · Author: Cooper · Reviewed by: Schneier · Status: draft | approved
 
-Fuente de verdad del proyecto. Describe comportamiento externo, no implementación. Cualquier
-cambio se hace aquí primero y luego en el código.
+Source of truth for the project. Describes external behavior, not implementation. Any change is
+made here first and then in the code.
 
-## 1. Principios del proyecto
+## 1. Project principles
 
-Reglas que aplican a toda decisión y no se negocian en el camino.
+Rules that apply to every decision and are not negotiated along the way.
 
-1. [Ej.: el visitante nunca espera más de 2.5 s para ver el contenido principal]
-2. [Ej.: no se pide un dato personal sin una razón escrita]
-3. [Ej.: todo se puede usar solo con teclado]
+1. [E.g.: the visitor never waits more than 2.5 s to see the main content]
+2. [E.g.: no personal data is requested without a written reason]
+3. [E.g.: everything can be used with the keyboard alone]
 
-## 2. Alcance
+## 2. Scope
 
-### Incluido en esta versión
-
-- [ ]
-
-### Fuera de alcance
+### In this version
 
 - [ ]
 
-## 3. Audiencias
+### Out of scope
 
-Resumen del brief: quién y sus tareas principales.
+- [ ]
 
-## 4. Historias de usuario y criterios de aceptación
+## 3. Audiences
 
-Formato: como [audiencia], quiero [acción], para [resultado]. Criterios en dado, cuando,
-entonces. Cada criterio debe poder convertirse en una prueba automatizada o manual.
+Summary from the brief: who and their main tasks.
 
-### H-01 · [título]
+## 4. User stories and acceptance criteria
 
-Como [audiencia], quiero [acción], para [resultado].
+Format: as a [audience], I want [action], so that [outcome]. Criteria in given, when, then. Every
+criterion must be convertible into an automated or manual test.
 
-Prioridad: imprescindible | importante | deseable
+### S-01 · [title]
 
-Criterios:
-- Dado [contexto], cuando [acción], entonces [resultado observable].
-- Dado [contexto], cuando [acción inválida], entonces [mensaje o comportamiento].
+As a [audience], I want [action], so that [outcome].
 
-### H-02 · [título]
+Priority: must | should | could
+
+Criteria:
+- Given [context], when [action], then [observable result].
+- Given [context], when [invalid action], then [message or behavior].
+
+### S-02 · [title]
 
 ...
 
-## 5. Páginas y flujos
+## 5. Pages and flows
 
-| Página o flujo | Intención en una frase | Historias que cubre | Plantilla |
-|----------------|------------------------|---------------------|-----------|
+| Page or flow | One-sentence intent | Stories covered | Template |
+|--------------|---------------------|-----------------|----------|
 | | | | |
 
-## 6. Datos
+## 6. Data
 
-| Entidad | Campos principales | Clase (pública, interna, personal, sensible) | Origen | Retención |
-|---------|--------------------|-----------------------------------------------|--------|-----------|
+| Entity | Main fields | Class (public, internal, personal, sensitive) | Source | Retention |
+|--------|-------------|-----------------------------------------------|--------|-----------|
 | | | | | |
 
-## 7. Integraciones y proveedores
+## 7. Integrations and providers
 
-| Servicio | Para qué | Proveedor elegido | Alternativa |
-|----------|----------|-------------------|-------------|
-| Identidad | | | |
-| Pagos | | | |
+| Service | For what | Chosen provider | Alternative |
+|---------|----------|-----------------|-------------|
+| Identity | | | |
+| Payments | | | |
 | CMS | | | |
-| Correo | | | |
-| Analítica | | | |
+| Email | | | |
+| Analytics | | | |
 
-## 8. Requisitos no funcionales
+## 8. Non-functional requirements
 
-| Id | Requisito | Valor | Cómo se verifica |
-|----|-----------|-------|------------------|
-| RNF-01 | LCP en móvil | ≤ 2.5 s | Lighthouse móvil, Beizer |
-| RNF-02 | INP | ≤ 200 ms | Lighthouse y campo |
-| RNF-03 | CLS | ≤ 0.1 | Lighthouse |
-| RNF-04 | Accesibilidad | WCAG 2.2 AA | axe + manual |
-| RNF-05 | Idiomas | | |
-| RNF-06 | Cabeceras y CSP según docs/SEGURIDAD.md | completas | curl -sI |
-| RNF-xx | [mitigaciones del modelo de amenazas] | | |
+| Id | Requirement | Value | How it is verified |
+|----|-------------|-------|--------------------|
+| NFR-01 | Mobile LCP | ≤ 2.5 s | Mobile Lighthouse, Beizer |
+| NFR-02 | INP | ≤ 200 ms | Lighthouse and field |
+| NFR-03 | CLS | ≤ 0.1 | Lighthouse |
+| NFR-04 | Accessibility | WCAG 2.2 AA | axe + manual |
+| NFR-05 | Languages | | |
+| NFR-06 | Headers and CSP per docs/SECURITY.md | complete | curl -sI |
+| NFR-xx | [threat model mitigations] | | |
 
-## 9. Riesgos y supuestos abiertos
+## 9. Open risks and assumptions
 
-| Riesgo o supuesto | Impacto | Quién lo resuelve | Cuándo |
-|-------------------|---------|-------------------|--------|
+| Risk or assumption | Impact | Who resolves it | When |
+|--------------------|--------|-----------------|------|
 | | | | |
 
-## 10. Glosario
+## 10. Glossary
 
-- [Término]: [definición en una línea]
+- [Term]: [one-line definition]
 
-## Historial
+## History
 
-| Versión | Fecha | Cambio | Quién |
-|---------|-------|--------|-------|
-| 0.1 | | borrador inicial | Cooper |
+| Version | Date | Change | Who |
+|---------|------|--------|-----|
+| 0.1 | | initial draft | Cooper |

@@ -1,6 +1,6 @@
-# .github/workflows/ci.yml · web-lab fase 5
-# Corre en cada PR y en main: tipos, lint, pruebas, build, auditoría, secretos y Lighthouse CI
-# contra la preview de Vercel. Ajusta URLS a las páginas clave del sitemap.
+# .github/workflows/ci.yml · web-lab phase 5
+# Runs on every PR and on main: types, lint, tests, build, audit, secrets and Lighthouse CI
+# against the Vercel preview. Adjust the URLs to the sitemap's key pages.
 name: CI
 
 on:
@@ -30,9 +30,9 @@ jobs:
       - run: pnpm lint
       - run: pnpm test -- --run
       - run: pnpm build
-      - name: Dependencias con vulnerabilidades altas o críticas
+      - name: Dependencies with high or critical vulnerabilities
         run: pnpm audit --audit-level=high
-      - name: Secretos en el historial
+      - name: Secrets in history
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,18 +58,18 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
-      - name: Esperar la preview de Vercel
+      - name: Wait for the Vercel preview
         id: preview
         uses: patrickedqvist/wait-for-vercel-preview@v1.3.2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           max_timeout: 600
-      - name: Lighthouse CI con presupuesto
+      - name: Lighthouse CI with budget
         uses: treosh/lighthouse-ci-action@v12
         with:
           urls: |
             ${{ steps.preview.outputs.url }}/
-            ${{ steps.preview.outputs.url }}/contacto
+            ${{ steps.preview.outputs.url }}/contact
           configPath: ./lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true

@@ -1,50 +1,50 @@
-# OWASP ASVS 5.0 · elegir el nivel y usarlo
+# OWASP ASVS 5.0 · choosing the level and using it
 
-ASVS 5.0 (mayo de 2025): 17 capítulos, ~350 requisitos, tres niveles acumulativos. No apliques
-el nivel máximo por defecto: crea trabajo que nadie sostiene. Elige por riesgo real y escríbelo
-en `modelo-de-amenazas.md`.
+ASVS 5.0 (May 2025): 17 chapters, ~350 requirements, three cumulative levels. Do not apply the
+maximum level by default: it creates work nobody sustains. Choose by real risk and write it in
+`threat-model.md`.
 
-## Elegir el nivel
+## Choosing the level
 
-| Nivel | Cuándo | Ejemplos |
-|-------|--------|----------|
-| L1 | sin cuentas; datos personales limitados a contacto; sin pagos; brecha molesta pero reversible | portfolio, marketing, blog, docs |
-| L2 | cuentas, pagos con proveedor, datos personales, contenido de usuarios, panel; brecha con daño real | SaaS, e-commerce, membresías, reservas |
-| L3 | salud, finanzas, menores, datos sensibles masivos; brecha irreversible o con daño físico o legal grave | historial médico, fintech, plataforma para menores |
+| Level | When | Examples |
+|-------|------|----------|
+| L1 | no accounts; personal data limited to contact; no payments; breach annoying but reversible | portfolio, marketing, blog, docs |
+| L2 | accounts, payments via provider, personal data, user content, admin panel; breach with real damage | SaaS, e-commerce, memberships, bookings |
+| L3 | health, finance, minors, mass sensitive data; irreversible breach or serious physical or legal harm | medical records, fintech, platform for minors |
 
-Criterios que suben el nivel: sensibilidad y volumen de datos, impacto financiero y
-reputacional, exposición a internet y autoridad del sistema, obligaciones legales, atractivo
-para un atacante, operaciones irreversibles.
+Criteria that raise the level: data sensitivity and volume, financial and reputational impact,
+internet exposure and system authority, legal obligations, attractiveness to an attacker,
+irreversible operations.
 
-## Capítulos y en qué fase pesan
+## Chapters and where they weigh
 
-| Cap. | Tema | Fase donde se decide | Fase donde se verifica |
-|------|------|----------------------|------------------------|
-| V1 | Codificación y sanitización | 5 | 5, 6 |
-| V2 | Validación y lógica de negocio | 1 (spec), 5 | 5, 6 |
-| V3 | Frontend web (CSP, cabeceras, cookies) | 4, 5 | 6 |
-| V4 | Servicios y APIs | 5 | 6 |
-| V5 | Manejo de archivos | 5 | 6 |
-| V6 | Autenticación | 1 (proveedor), 4 (flujos), 5 | 6 |
-| V7 | Sesiones | 5 | 6 |
-| V8 | Autorización | 1 (roles), 5 | 5 (revisión), 6 (IDOR) |
-| V9 | Tokens autocontenidos | 5 | 6 |
-| V10 | OAuth y OIDC | 1, 5 | 6 |
-| V11 | Criptografía | 5 | 5 |
-| V12 | Comunicación segura | 7 | 7 |
-| V13 | Configuración | 5, 7 | 6, 7 |
-| V14 | Protección de datos | 1 (clasificación), 3 (legales), 5 | 6 |
-| V15 | Código seguro y dependencias | 5 | 6, 8 |
-| V16 | Registro y manejo de errores | 5 | 6, 7 |
-| V17 | WebRTC | solo si aplica | |
+| Ch. | Topic | Phase where decided | Phase where verified |
+|-----|-------|---------------------|----------------------|
+| V1 | Encoding and sanitization | 5 | 5, 6 |
+| V2 | Validation and business logic | 1 (spec), 5 | 5, 6 |
+| V3 | Web frontend (CSP, headers, cookies) | 4, 5 | 6 |
+| V4 | Services and APIs | 5 | 6 |
+| V5 | File handling | 5 | 6 |
+| V6 | Authentication | 1 (provider), 4 (flows), 5 | 6 |
+| V7 | Sessions | 5 | 6 |
+| V8 | Authorization | 1 (roles), 5 | 5 (review), 6 (IDOR) |
+| V9 | Self-contained tokens | 5 | 6 |
+| V10 | OAuth and OIDC | 1, 5 | 6 |
+| V11 | Cryptography | 5 | 5 |
+| V12 | Secure communication | 7 | 7 |
+| V13 | Configuration | 5, 7 | 6, 7 |
+| V14 | Data protection | 1 (classification), 3 (legal), 5 | 6 |
+| V15 | Secure code and dependencies | 5 | 6, 8 |
+| V16 | Logging and error handling | 5 | 6, 7 |
+| V17 | WebRTC | only if applicable | |
 
-## Verificar
+## Verifying
 
-Para cada requisito del nivel elegido que aplica al proyecto: estado (cumple, no cumple,
-parcial, no aplica), evidencia (enlace a código, prueba, configuración o captura), método
-(revisión, automático, manual, configuración), fecha y versión. La palabra del desarrollador no
-es evidencia. Lo que no se evaluó se declara fuera de alcance, no se omite.
+For every requirement of the chosen level that applies to the project: status (met, not met,
+partial, not applicable), evidence (link to code, test, configuration or screenshot), method
+(review, automated, manual, configuration), date and version. The developer's word is not
+evidence. What was not assessed is declared out of scope, not omitted.
 
-En web-lab no se rellena la matriz completa de 350 filas salvo L3: `docs/SEGURIDAD.md` es el
-subconjunto por fase que cubre L1 y la mayor parte de L2; para L2 se añaden los capítulos V6,
-V7, V8 y V14 completos como matriz de evidencia en `docs/06-qa/seguridad.md`.
+In web-lab the full 350-row matrix is not filled except for L3: `docs/SECURITY.md` is the
+per-phase subset that covers L1 and most of L2; for L2, chapters V6, V7, V8 and V14 are added in
+full as an evidence matrix in `docs/06-qa/security.md`.

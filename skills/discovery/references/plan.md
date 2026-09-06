@@ -1,32 +1,32 @@
-# Plan · [nombre del proyecto]
+# Plan · [project name]
 
-Fecha: [aaaa-mm-dd] · Autor: Cooper · Estado: propuesta | aprobado
+Date: [yyyy-mm-dd] · Author: Cooper · Status: proposal | approved
 
-Estimación por fases para este proyecto. Referencia: 4 a 6 semanas un sitio pequeño, 8 a 13
-un sitio con CMS de 10 a 15 páginas, más para una app.
+Phase estimate for this project. Reference: 4 to 6 weeks for a small site, 8 to 13 for a CMS site
+of 10 to 15 pages, more for an app.
 
-| Fase | Rol | Entregables | Duración estimada | Aprueba | Depende de |
-|------|-----|-------------|-------------------|---------|------------|
-| 1 Descubrimiento | Cooper + Schneier | brief, spec, decisión, modelo de amenazas | | | |
-| 2 Estructura | Rosenfeld | sitemap, wireframes, redirects | | | spec aprobada |
-| 3 Contenido | Rosenfeld | plan de contenido, seo, assets | | | sitemap aprobado |
-| 4 Diseño | Frost | tokens, componentes, prototipo | | | contenido aprobado |
-| 5 Desarrollo | Osmani, Hopper, Bellard | código en staging | | | diseño aprobado |
-| 6 QA | Beizer + Schneier | reporte sin bloqueantes | | | staging completo |
-| 7 Lanzamiento | Allspaw + Schneier | checklist, runbook, go-live | | | QA aprobado |
-| 8 Mantenimiento | Allspaw | plan de mantenimiento | | | 30 días post-lanzamiento |
+| Phase | Role | Deliverables | Estimated duration | Approves | Depends on |
+|-------|------|--------------|--------------------|----------|------------|
+| 1 Discovery | Cooper + Schneier | brief, spec, decision, threat model | | | |
+| 2 Structure | Rosenfeld | sitemap, wireframes, redirects | | | approved spec |
+| 3 Content | Rosenfeld | content plan, seo, assets | | | approved sitemap |
+| 4 Design | Frost | tokens, components, prototype | | | approved content |
+| 5 Development | Osmani, Hopper, Bellard | code on staging | | | approved design |
+| 6 QA | Beizer + Schneier | report without blockers | | | complete staging |
+| 7 Launch | Allspaw + Schneier | checklist, runbook, go-live | | | approved QA |
+| 8 Maintenance | Allspaw | maintenance plan | | | 30 days post-launch |
 
-## Riesgos de calendario
+## Schedule risks
 
-| Riesgo | Efecto | Mitigación |
-|--------|--------|------------|
-| Contenido no listo | retrasa fase 4 y 5 | fecha de entrega de textos en el brief, dueño con nombre |
+| Risk | Effect | Mitigation |
+|------|--------|------------|
+| Content not ready | delays phases 4 and 5 | copy delivery date in the brief, named owner |
 | | | |
 
-## Presupuesto de servicios
+## Services budget
 
-| Servicio | Costo mensual estimado | Quién paga | Cuenta a nombre de |
-|----------|------------------------|------------|--------------------|
-| Dominio | | | |
+| Service | Estimated monthly cost | Who pays | Account in the name of |
+|---------|------------------------|----------|------------------------|
+| Domain | | | |
 | Hosting | | | |
 | | | | |

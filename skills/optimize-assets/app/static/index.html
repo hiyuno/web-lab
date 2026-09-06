@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WALO · Optimizador de assets</title>
+<title>WALO · Asset optimizer</title>
 <style>
 :root{--bg:#08090a;--card:#0f1011;--surface:#161718;--fg:#e5e5e6;--muted:#8a8f98;--line:#23252a;--line-strong:#383b3f;--accent:#e4f222;--ok:#27a644;--warn:#d99a00;--crit:#eb5757;--mono:"Berkeley Mono",ui-monospace,SFMono-Regular,Menlo,monospace;color-scheme:dark}
 *{box-sizing:border-box}
@@ -89,40 +89,40 @@ h2 small{text-transform:none;letter-spacing:0;font-weight:400}
 <body>
 <header>
   <div class="top">
-    <h1>WALO · Optimizador de assets</h1>
+    <h1>WALO · Asset optimizer</h1>
     <div class="stats" id="stats"></div>
     <div class="grow"></div>
-    <button id="outBtn" class="outbtn" onclick="openSettings()" title="Carpeta donde se guardan los archivos optimizados">📁 <span id="outPath">…</span></button>
+    <button id="outBtn" class="outbtn" onclick="openSettings()" title="Folder where optimized files are saved">📁 <span id="outPath">…</span></button>
     <span id="queue" class="stats"></span>
-    <button class="primary" id="batch" onclick="batchCritical()">Optimizar todos los críticos</button>
+    <button class="primary" id="batch" onclick="batchCritical()">Optimize all criticals</button>
   </div>
   <div class="bar"><i id="gbar"></i></div>
   <div class="filters">
-    <select id="fPage"><option value="">Todas las páginas</option></select>
-    <select id="fType"><option value="">Imágenes y videos</option><option value="image">Solo imágenes</option><option value="video">Solo videos</option></select>
-    <select id="fSev"><option value="">Cualquier severidad</option><option value="crit">🔴 Críticos</option><option value="warn">🟡 Revisar</option><option value="ok">🟢 OK</option></select>
-    <input type="search" id="fQ" placeholder="Buscar por nombre…">
-    <label class="chk"><input type="checkbox" id="fHide"> Ocultar ya optimizados</label>
+    <select id="fPage"><option value="">All pages</option></select>
+    <select id="fType"><option value="">Images and videos</option><option value="image">Images only</option><option value="video">Videos only</option></select>
+    <select id="fSev"><option value="">Any severity</option><option value="crit">🔴 Critical</option><option value="warn">🟡 Review</option><option value="ok">🟢 OK</option></select>
+    <input type="search" id="fQ" placeholder="Search by name…">
+    <label class="chk"><input type="checkbox" id="fHide"> Hide already optimized</label>
     <span class="grow"></span>
     <span id="count" style="color:var(--muted)"></span>
   </div>
 </header>
-<section class="overview" aria-label="Resumen y auditoría"><div id="pageSummary"></div><div id="auditPanel"></div></section>
-<main id="main"><div class="empty">Cargando…</div></main>
+<section class="overview" aria-label="Summary and audit"><div id="pageSummary"></div><div id="auditPanel"></div></section>
+<main id="main"><div class="empty">Loading…</div></main>
 <div id="st" hidden onclick="if(event.target===this)closeSettings()">
   <div class="lbbox stbox">
-    <div class="lbhead"><span>Carpeta de salida</span><span class="grow"></span><button onclick="closeSettings()">Cerrar ✕</button></div>
+    <div class="lbhead"><span>Output folder</span><span class="grow"></span><button onclick="closeSettings()">Close ✕</button></div>
     <div class="stbody">
-      <p>Los archivos optimizados se guardan aquí, en una subcarpeta por página. Los ya convertidos se quedan donde están.</p>
-      <div class="strow"><input type="text" id="stPath" spellcheck="false" placeholder="/Users/…/carpeta"><button onclick="pickFolder()">Elegir…</button></div>
-      <div class="strow"><button class="primary" onclick="saveSettings()">Guardar</button><button onclick="resetSettings()">Usar la carpeta por defecto</button><span class="grow"></span><button onclick="api('/api/open-out',{})">Abrir en Finder</button></div>
+      <p>Optimized files are saved here, in a subfolder per page. Already converted ones stay where they are.</p>
+      <div class="strow"><input type="text" id="stPath" spellcheck="false" placeholder="/Users/…/folder"><button onclick="pickFolder()">Choose…</button></div>
+      <div class="strow"><button class="primary" onclick="saveSettings()">Save</button><button onclick="resetSettings()">Use the default folder</button><span class="grow"></span><button onclick="api('/api/open-out',{})">Open in Finder</button></div>
       <div id="stMsg" class="stmsg"></div>
     </div>
   </div>
 </div>
 <div id="lb" hidden onclick="if(event.target===this)closeLb()">
   <div class="lbbox">
-    <div class="lbhead"><span id="lbTitle"></span><span class="grow"></span><button onclick="closeLb()">Cerrar ✕</button></div>
+    <div class="lbhead"><span id="lbTitle"></span><span class="grow"></span><button onclick="closeLb()">Close ✕</button></div>
     <div class="lbpanes" id="lbPanes"></div>
   </div>
 </div>
@@ -133,7 +133,7 @@ const IMG = [2560, 2048, 1024], VID = [1080, 720, 480];
 const SEV = { crit: "🔴", warn: "🟡", ok: "🟢" };
 const fmt = (b) => b === 0 ? '0 KB' : b >= 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB";
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const pageName = (f) => f === "_shared" ? "Compartidos (2+ páginas)" : f === "home" ? "Home" : f.replace(/^projects__/, "projects / ").replace(/-/g, " ");
+const pageName = (f) => f === "_shared" ? "Shared (2+ pages)" : f === "home" ? "Home" : f.replace(/^projects__/, "projects / ").replace(/-/g, " ");
 let assets = [], rows = new Map(), polling = null, pageOptionsBuilt = false;
 
 async function api(path, body) {
@@ -183,13 +183,13 @@ function render() {
     groups.get(a.folder).push(a);
   }
   $("#count").textContent = `${n} de ${assets.length} archivos`;
-  if (!n) { main.innerHTML = '<div class="empty">Nada que mostrar con estos filtros.</div>'; return; }
+  if (!n) { main.innerHTML = '<div class="empty">Nothing to show with these filters.</div>'; return; }
   const order = [...groups.keys()].sort((a, b) => (a === "home" ? -1 : b === "home" ? 1 : a === "_shared" ? 1 : b === "_shared" ? -1 : a.localeCompare(b)));
   const sevRank = { crit: 0, warn: 1, ok: 2 };
   main.innerHTML = order.map((f) => {
     const list = groups.get(f).sort((x, y) => sevRank[x.severity] - sevRank[y.severity] || y.bytes - x.bytes);
     const mb = list.reduce((s, a) => s + a.bytes, 0);
-    return `<h2>${esc(pageName(f))} <small>${list.length} archivos · ${fmt(mb)}</small></h2>` + list.map(card).join("");
+    return `<h2>${esc(pageName(f))} <small>${list.length} files · ${fmt(mb)}</small></h2>` + list.map(card).join("");
   }).join("");
   for (const el of main.querySelectorAll(".card")) rows.set(el.dataset.id, el);
   for (const a of assets) if(rows.has(a.id)) {
@@ -253,14 +253,14 @@ function estimate(a) {
 }
 function estimateHtml(a) {
   const retina = selection(a).preset === 'retina' && a.retina;
-  const note = retina ? `<div class="hint">Retina @2x · ${retina.w}×${retina.h} px · ${retina.basis === 'responsive' ? 'Responsive medido: '+retina.viewports.join(', ')+' px' : 'Auditoría original a 1440 px'}${retina.source_limited ? ' · Limitado por el original' : ''}</div>` : '';
+  const note = retina ? `<div class="hint">Retina @2x · ${retina.w}×${retina.h} px · ${retina.basis === 'responsive' ? 'Responsive measured: '+retina.viewports.join(', ')+' px' : 'Original audit at 1440 px'}${retina.source_limited ? ' · Limitado por el original' : ''}</div>` : '';
   const e = estimate(a);
-  if (!e) return '<span class="hint">Peso estimado no disponible para este archivo.</span>';
+  if (!e) return '<span class="hint">Estimated weight not available for this file.</span>';
   if (e.copied) return `<span class="hint">${fmt(e.low)} · SVG: se conserva sin cambios.</span>`;
-  if (e.actual) return `${note}<span class="hint">Peso real con estos ajustes: <b>${fmt(e.low)}</b></span>`;
+  if (e.actual) return `${note}<span class="hint">Actual weight with these settings: <b>${fmt(e.low)}</b></span>`;
   const minSaving = Math.floor((1-e.high/a.bytes)*100), maxSaving = Math.floor((1-e.low/a.bytes)*100);
-  const saving = minSaving > 0 ? `Ahorro estimado: ${minSaving}–${maxSaving}%` : 'Puede no reducir el peso';
-  return `${note}<div title="Estimación orientativa basada en dimensiones, formato y duración. No se ha convertido una muestra; el resultado puede quedar fuera del rango."><b>Aprox.: ${fmt(e.low)}–${fmt(e.high)}</b><div class="hint">${saving}${a.type === 'video' ? ' · Solo video, sin cover' : ''}</div><div class="hint">${e.unchanged ? 'No se amplía: ya es menor o igual al tamaño seleccionado. ' : ''}Orientativo; depende del contenido.</div></div>`;
+  const saving = minSaving > 0 ? `Estimated saving: ${minSaving}–${maxSaving}%` : 'May not reduce weight';
+  return `${note}<div title="Indicative estimate based on dimensions, format and duration. No sample was converted; the result may fall outside the range."><b>Approx.: ${fmt(e.low)}–${fmt(e.high)}</b><div class="hint">${saving}${a.type === 'video' ? ' · Solo video, sin cover' : ''}</div><div class="hint">${e.unchanged ? 'No se amplía: ya es menor o igual al tamaño seleccionado. ' : ''}Orientativo; depende del contenido.</div></div>`;
 }
 function updateEstimate(id) {
   const el = rows.get(id)?.querySelector('.estimate');
@@ -272,21 +272,21 @@ function card(a) {
   const name = a.file.split("/").pop();
   const r = a.rendered;
   const rend = r && r.w ? `${r.w}×${r.h} px en pantalla${a.dpr > 1 ? ` @${a.dpr}x` : ""}` : "";
-  const pages = a.pages.length > 1 ? `<span class="tag">${a.pages.length} páginas</span>` : "";
-  const ext = a.external ? `<span class="tag ext">externo (Cloudflare Stream)</span>` : "";
+  const pages = a.pages.length > 1 ? `<span class="tag">${a.pages.length} pages</span>` : "";
+  const ext = a.external ? `<span class="tag ext">external (Cloudflare Stream)</span>` : "";
   const def = selection(a);
   const opts = isVid ? `<div class="opts">
-      ${a.info && a.info.audio ? `<label><input type="checkbox" class="oAudio" onchange="selectOption('${a.id}','strip_audio',this.checked)" ${def.strip_audio ? "checked" : ""}> quitar audio</label>` : `<span class="tag">sin audio</span>`}
-      <label><input type="checkbox" class="oTrim" onchange="selectOption('${a.id}','trim',this.checked ? 12 : null)" ${def.trim ? "checked" : ""}> recortar a 12 s</label>
+      ${a.info && a.info.audio ? `<label><input type="checkbox" class="oAudio" onchange="selectOption('${a.id}','strip_audio',this.checked)" ${def.strip_audio ? "checked" : ""}> strip audio</label>` : `<span class="tag">no audio</span>`}
+      <label><input type="checkbox" class="oTrim" onchange="selectOption('${a.id}','trim',this.checked ? 12 : null)" ${def.trim ? "checked" : ""}> trim to 12 s</label>
     </div>` : "";
   return `<div class="card ${a.severity}" data-id="${a.id}">
-    <img class="thumb" loading="lazy" src="/thumb/${a.id}" alt="" title="Ver preview" onclick="openLb('${a.id}')" onerror="this.style.visibility='hidden'">
+    <img class="thumb" loading="lazy" src="/thumb/${a.id}" alt="" title="View preview" onclick="openLb('${a.id}')" onerror="this.style.visibility='hidden'">
     <div>
-      <div class="name rename"><span class="dot"></span><input class="export-name" aria-label="Nombre de exportación sin extensión" title="Original: ${esc(name)}" value="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" data-saved-name="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" maxlength="160" oninput="updateNameButton('${a.id}')" onkeydown="if(event.key==='Enter')saveName('${a.id}')"><button class="save-name" onclick="saveName('${a.id}')" aria-label="Guardar nombre" title="Guardar nombre" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8M14 5v2"/></svg></button></div>
-      <div class="hint name-feedback" role="status">Edita el nombre aquí. Se renombrarán también los archivos generados.</div>
+      <div class="name rename"><span class="dot"></span><input class="export-name" aria-label="Export name without extension" title="Original: ${esc(name)}" value="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" data-saved-name="${esc(a.export_name || name.replace(/\.[^.]+$/, ''))}" maxlength="160" oninput="updateNameButton('${a.id}')" onkeydown="if(event.key==='Enter')saveName('${a.id}')"><button class="save-name" onclick="saveName('${a.id}')" aria-label="Save name" title="Save name" disabled><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12l4 4v12a2 2 0 0 1-2 2Z"/><path d="M7 3v6h10V3M7 21v-8h10v8M14 5v2"/></svg></button></div>
+      <div class="hint name-feedback" role="status">Edit the name here. Generated files will be renamed too.</div>
       <div class="meta"><b>${fmt(a.bytes)}</b> <span>${esc(dims(a))}</span> ${rend ? `<span>${esc(rend)}</span>` : ""} ${pages} ${ext}</div>
-      ${a.issues.length ? `<ul class="issues">${a.issues.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : `<div class="meta">Sin problemas detectados</div>`}
-      <div class="asset-tools"><button onclick="openCompare('${a.id}')">Comparar</button><button onclick="openHistory('${a.id}')">Historial</button></div>
+      ${a.issues.length ? `<ul class="issues">${a.issues.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>` : `<div class="meta">No issues detected</div>`}
+      <div class="asset-tools"><button onclick="openCompare('${a.id}')">Compare</button><button onclick="openHistory('${a.id}')">History</button></div>
     </div>
     <div class="actions">
       <div class="presets">${presets.map((p) => `<button data-preset="${p}" aria-pressed="${p === def.preset}" class="${p === def.preset ? "rec" : ""}" onclick="selectPreset('${a.id}',${p === 'retina' ? "'retina'" : p})">${p === 'retina' ? 'Retina' : isVid ? p + "p" : p + " px"}</button>`).join("")}</div>
@@ -303,33 +303,33 @@ function card(a) {
 
 function statusHtml(a) {
   const j = a.job;
-  if (j && j.status === "queued") return `En cola · preset ${j.preset}${a.type === "video" ? "p" : " px"}`;
-  if (j && j.status === "running") return `Convirtiendo… <b>${j.progress}%</b><div class="pbar"><i style="width:${j.progress}%"></i></div>`;
+  if (j && j.status === "queued") return `Queued · preset ${j.preset}${a.type === "video" ? "p" : " px"}`;
+  if (j && j.status === "running") return `Converting… <b>${j.progress}%</b><div class="pbar"><i style="width:${j.progress}%"></i></div>`;
   if (j && j.status === "error") return `<span class="err">Error: ${esc(j.error)}</span>`;
   const res = a.result;
-  if (!res) return `<span>Elige un tamaño para convertir.</span>`;
+  if (!res) return `<span>Pick a size to convert.</span>`;
   const pct = Math.round((1 - res.bytes / res.original_bytes) * 100);
   const d = res.w ? `${res.w}×${res.h}` : "";
   const ext = res.file.split(".").pop();
-  return `<div><b>${a.type === 'video' ? 'Video' : 'Imagen'}:</b></div>${fmt(res.original_bytes)} → <b>${fmt(res.bytes)}</b> <span class="save">${pct >= 0 ? "−" + pct + "%" : "+" + -pct + "%"}</span> · ${d} · ${ext}${res.options && res.options.trim ? " · " + res.options.trim + " s" : ""}`;
+  return `<div><b>${a.type === 'video' ? 'Video' : 'Image'}:</b></div>${fmt(res.original_bytes)} → <b>${fmt(res.bytes)}</b> <span class="save">${pct >= 0 ? "−" + pct + "%" : "+" + -pct + "%"}</span> · ${d} · ${ext}${res.options && res.options.trim ? " · " + res.options.trim + " s" : ""}`;
 }
 
 function coverHtml(a) {
   const c = a.cover;
-  if (!c) return `<span class="hint">El cover se genera al optimizar.</span>`;
+  if (!c) return `<span class="hint">The cover is generated on optimize.</span>`;
   return `<div><b>Cover:</b></div><b>${fmt(c.bytes)}</b> · ${c.w}×${c.h} · ${esc(c.file.split('.').pop())}`;
 }
 
 function downloadHtml(a) {
   if (!a.result || (a.job && ['queued','running'].includes(a.job.status))) return '';
   const url = a.type === 'video' ? `/bundle/${a.id}` : `/result/${a.id}?download=1`;
-  return `<div class="links"><a href="${url}" title="${a.type === 'video' ? 'Descargar video y cover en ZIP' : 'Descargar imagen'}">Descargar</a><button onclick="reveal('${a.id}')">Finder</button></div>`;
+  return `<div class="links"><a href="${url}" title="${a.type === 'video' ? 'Download video and cover as ZIP' : 'Download image'}">Download</a><button onclick="reveal('${a.id}')">Finder</button></div>`;
 }
 
 async function makeCover(id) {
   if (!await saveName(id)) return;
   const el = rows.get(id);
-  if (el) el.querySelector(".cover").innerHTML = "Extrayendo primer frame…";
+  if (el) el.querySelector(".cover").innerHTML = "Extracting first frame…";
   const r = await api("/api/cover", { id });
   const a = assets.find((x) => x.id === id);
   if (r.error) { if (el) el.querySelector(".cover").innerHTML = `<span class="err">Error: ${esc(r.error)}</span>`; return; }
@@ -360,7 +360,7 @@ async function saveName(id) {
     assets.find(a => a.id === id).export_name = r.export_name;
     input.dataset.savedName = r.export_name;
     if (input.value === submittedName) input.value = r.export_name;
-    feedback.textContent = 'Nombre guardado y archivos generados renombrados.';
+    feedback.textContent = 'Name saved and generated files renamed.';
     const latest = await api('/api/assets');
     assets = latest.assets;
     updateOverview(latest);
@@ -383,7 +383,7 @@ async function convert(id) {
     const oa = el.querySelector(".oAudio"), ot = el.querySelector(".oTrim");
     if (oa) options.strip_audio = oa.checked;
     if (ot) options.trim = ot.checked ? 12 : null;
-    el.querySelector(".result").innerHTML = "En cola…";
+    el.querySelector(".result").innerHTML = "Queued…";
   }
   const button = el.querySelector('.optimize');
   button.disabled = true;
@@ -399,8 +399,8 @@ async function convert(id) {
 
 async function batchCritical() {
   const ids = assets.filter((a) => a.severity === "crit" && !a.result && !(a.job && (a.job.status === "queued" || a.job.status === "running"))).map((a) => a.id);
-  if (!ids.length) { alert("No quedan críticos sin optimizar."); return; }
-  if (!confirm(`Se van a convertir ${ids.length} archivos críticos con el preset recomendado. Los videos pueden tardar varios minutos. ¿Seguimos?`)) return;
+  if (!ids.length) { alert("No unoptimized criticals left."); return; }
+  if (!confirm(`${ids.length} critical files will be converted with the recommended preset. Videos may take several minutes. Continue?`)) return;
   await api("/api/convert-batch", { ids });
   startPolling();
 }
@@ -419,7 +419,7 @@ function legacyOpenLb(id) {
   if (!a) return;
   const i = a.info || {};
   const panes = [{ label: `Original · <b>${fmt(a.bytes)}</b>${i.w ? ` · ${i.w}×${i.h}` : ""}`, file: a.file }];
-  if (a.result) panes.push({ label: `Optimizado · <b>${fmt(a.result.bytes)}</b>${a.result.w ? ` · ${a.result.w}×${a.result.h}` : ""} · preset ${a.result.preset}`, file: a.result.file, url: `/result/${a.id}` });
+  if (a.result) panes.push({ label: `Optimized · <b>${fmt(a.result.bytes)}</b>${a.result.w ? ` · ${a.result.w}×${a.result.h}` : ""} · preset ${a.result.preset}`, file: a.result.file, url: `/result/${a.id}` });
   if (a.cover) panes.push({ label: `Cover · <b>${fmt(a.cover.bytes)}</b> · ${a.cover.w}×${a.cover.h}`, file: a.cover.file, url: `/cover/${a.id}` });
   $("#lbTitle").textContent = a.file;
   $("#lbPanes").innerHTML = panes.map((p) => `<figure><figcaption>${p.label}</figcaption>${media(p.file, p.url)}</figure>`).join("");
@@ -435,7 +435,7 @@ function showSettings(s) {
   settings = s;
   const short = s.out_dir.replace(/^\/Users\/[^/]+/, "~");
   $("#outPath").textContent = short + (s.is_default ? " (por defecto)" : "");
-  $("#outBtn").title = "Guardando en " + s.out_dir;
+  $("#outBtn").title = "Saving to " + s.out_dir;
 }
 function openSettings() { $("#stPath").value = settings ? settings.out_dir : ""; $("#stMsg").textContent = ""; $("#stMsg").className = "stmsg"; $("#st").hidden = false; $("#stPath").focus(); }
 function closeSettings() { $("#st").hidden = true; }
@@ -444,14 +444,14 @@ async function saveSettings() {
   const r = await api("/api/settings", { out_dir: $("#stPath").value });
   if (r.error) return msg(r.error, "err");
   showSettings(r);
-  msg("Guardado. Las próximas conversiones se escriben en " + r.out_dir, "ok");
+  msg("Saved. Upcoming conversions will be written to " + r.out_dir, "ok");
 }
 async function resetSettings() { $("#stPath").value = ""; await saveSettings(); $("#stPath").value = settings.out_dir; }
 async function pickFolder() {
-  msg("Elige la carpeta en el diálogo de Finder…");
+  msg("Pick the folder in the Finder dialog…");
   const r = await api("/api/pick-folder", {});
   if (r.error) return msg(r.error, "err");
-  if (!r.out_dir) return msg("Cancelado.");
+  if (!r.out_dir) return msg("Cancelled.");
   $("#stPath").value = r.out_dir;
   await saveSettings();
 }
@@ -462,9 +462,9 @@ function updateStats(d) {
   const before = done.reduce((s, a) => s + a.result.original_bytes, 0);
   const after = done.reduce((s, a) => s + a.result.bytes, 0);
   const crit = assets.filter((a) => a.severity === "crit").length;
-  $("#stats").innerHTML = `<span><b>${assets.length}</b> archivos · <b>${fmt(total)}</b></span>
-    <span><b>${crit}</b> críticos</span>
-    ${done.length ? `<span>optimizados <b>${done.length}</b>: ${fmt(before)} → <b>${fmt(after)}</b> <span class="save">−${Math.round((1 - after / before) * 100)}%</span></span>` : ""}`;
+  $("#stats").innerHTML = `<span><b>${assets.length}</b> files · <b>${fmt(total)}</b></span>
+    <span><b>${crit}</b> critical</span>
+    ${done.length ? `<span>optimized <b>${done.length}</b>: ${fmt(before)} → <b>${fmt(after)}</b> <span class="save">−${Math.round((1 - after / before) * 100)}%</span></span>` : ""}`;
   const active = d.jobs.queued + d.jobs.running, finished = d.jobs.done + d.jobs.error;
   $("#queue").textContent = active ? `${d.jobs.running ? "procesando 1" : ""}${d.jobs.running && d.jobs.queued ? " · " : ""}${d.jobs.queued ? d.jobs.queued + " en cola" : ""}` : (finished ? `${d.jobs.done} listos${d.jobs.error ? " · " + d.jobs.error + " con error" : ""}` : "");
   $("#gbar").style.width = (active + finished) ? Math.round(finished / (active + finished) * 100) + "%" : "0";

@@ -1,173 +1,172 @@
 # web-lab
 
-Herramientas y skills para hacer webs y apps con Claude Code. Cada utilidad vive en su propia
-carpeta con todo lo que necesita; los skills se instalan enlazándolos en `~/.claude/skills`.
+Tools, roles and skills for building websites and apps with Claude Code, from a static site to
+an application. Each utility lives in its own folder with everything it needs; skills are
+installed by linking them into `~/.claude/skills`, roles into `~/.claude/agents`.
 
-## Proceso
+## Process
 
-Las ocho fases para hacer una web, con checkpoints, decisión de arquitectura y estándares
-mínimos, están en [`docs/PROCESO.md`](docs/PROCESO.md). Cada skill del repo cubre una fase.
+The eight phases for building a website, with checkpoints, architecture decision and minimum
+standards, are in [`docs/PROCESS.md`](docs/PROCESS.md). Each skill in the repo covers one
+phase.
 
 ## Roles
 
-Un equipo de subagentes, uno por fase del proceso, más un rol de seguridad que revisa al cierre
-de cada fase y puede bloquear un checkpoint. Claude Code actúa como orquestador siguiendo
-[`CLAUDE.md`](CLAUDE.md); la checklist de seguridad está en
-[`docs/SEGURIDAD.md`](docs/SEGURIDAD.md).
+A team of subagents, one per phase of the process, plus a security role that reviews at the
+close of every phase and can block a checkpoint. Claude Code acts as orchestrator following
+[`CLAUDE.md`](CLAUDE.md); the security checklist is in [`docs/SECURITY.md`](docs/SECURITY.md).
 
-| Fase | Rol | Especialidad |
-|------|-----|--------------|
-| 1 | [`cooper`](agents/cooper.md) | Descubrimiento, spec, decisión de arquitectura, modelo de amenazas |
-| 2 y 3 | [`rosenfeld`](agents/rosenfeld.md) | Arquitectura de información, contenido, SEO, redirects |
-| 4 | [`frost`](agents/frost.md) | Sistema de diseño, componentes, accesibilidad, prototipo |
-| 5 | [`osmani`](agents/osmani.md) | Frontend en Astro o Next.js, rendimiento, CSP y cabeceras |
-| 5 | [`hopper`](agents/hopper.md) | Backend, datos, auth y pagos con proveedor. Solo aplicaciones |
-| 5 y 6 | [`bellard`](agents/bellard.md) | Imágenes y video |
-| 6 | [`beizer`](agents/beizer.md) | QA, accesibilidad, rendimiento, escáneres de seguridad |
-| Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento. Skill `/security` |
-| 7 y 8 | [`allspaw`](agents/allspaw.md) | Despliegue, DNS, monitoreo, backups, mantenimiento |
+| Phase | Role | Specialty |
+|-------|------|-----------|
+| 1 | [`cooper`](agents/cooper.md) | Discovery, spec, architecture decision, threat model |
+| 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, SEO, redirects |
+| 4 | [`frost`](agents/frost.md) | Design system, components, accessibility, prototype |
+| 5 | [`osmani`](agents/osmani.md) | Frontend in Astro or Next.js, performance, CSP and headers |
+| 5 | [`hopper`](agents/hopper.md) | Backend, data, auth and payments with providers. Applications only |
+| 5 and 6 | [`bellard`](agents/bellard.md) | Images and video |
+| 6 | [`beizer`](agents/beizer.md) | QA, accessibility, performance, security scanners |
+| All | [`schneier`](agents/schneier.md) | Security and privacy. Gate at every phase, signs the launch. Skill `/security` |
+| 7 and 8 | [`allspaw`](agents/allspaw.md) | Deployment, DNS, monitoring, backups, maintenance |
 
-## Dependencia: la colección `interfaces`
+## Dependency: the `interfaces` collection
 
-Los roles cargan por nombre los skills de dominio de [jakubkrehel/skills](https://github.com/jakubkrehel/skills)
-(Jakub Krehel, MIT), incluidos como submódulo en `vendor/interfaces`: `better-accessibility`,
+The roles load by name the domain skills from [jakubkrehel/skills](https://github.com/jakubkrehel/skills)
+(Jakub Krehel, MIT), included as a submodule in `vendor/interfaces`: `better-accessibility`,
 `better-layout`, `better-writing`, `better-typography`, `better-colors`, `better-ui`,
-`better-interface`, `interface-review`, `explain-interface`, `break` y `variant`. Nuestros
-skills traen el proceso de cada fase; los suyos, el conocimiento de interfaz, y cada regla vive
-en un solo sitio (tabla de propiedad en [`CLAUDE.md`](CLAUDE.md)). Los pasos 4.1 y 4.8 de
-Frost son adaptaciones de `variant` y `break`.
+`better-interface`, `interface-review`, `explain-interface`, `break` and `variant`. Our skills
+carry each phase's process; theirs carry interface knowledge, and each rule lives in one place
+(ownership table in [`CLAUDE.md`](CLAUDE.md)). Frost's steps 4.1 and 4.8 are adaptations of
+`variant` and `break`.
 
 ```bash
-git submodule update --init            # primera vez
-git submodule update --remote --merge  # traer la última versión
+git submodule update --init            # first time
+git submodule update --remote --merge  # pull the latest version
 ```
 
-## Aprendizaje
+## Learning
 
-Los roles mejoran con cada proyecto. [`learnings/`](learnings/README.md) guarda un archivo por
-rol que se lee al empezar y se alimenta con una retro al cerrar cada fase;
-[`docs/PREFERENCIAS.md`](docs/PREFERENCIAS.md) guarda las preferencias estables del usuario que
-aplican a todos. Lo que se repite tres veces se promueve al rol o al skill.
+Roles improve with every project. [`learnings/`](learnings/README.md) holds one file per role
+that is read on start and fed by a retro at the close of each phase;
+[`docs/PREFERENCES.md`](docs/PREFERENCES.md) holds the user's stable preferences that apply to
+all. Whatever repeats three times is promoted to the role or the skill.
 
 ## Skills
 
 ### `/discovery` · Cooper
 
-Fase 1 del proceso. Arranca un proyecto desde la idea, sin brief: entrevista al usuario en siete
-rondas cortas con checkpoint, investiga sitio actual y competencia, y produce en
-`docs/01-descubrimiento/` del proyecto el brief, la decisión de arquitectura (Astro o
-Next.js), el modelo de amenazas con Schneier, la spec como fuente de verdad y el plan por
-fases.
+Phase 1. Starts a project from the idea, with no brief: interviews the user in seven short
+rounds with checkpoints, researches the current site and competitors, and produces in the
+project's `docs/01-discovery/` the brief, the architecture decision (Astro or Next.js), the
+threat model with Schneier, the spec as source of truth and the phased plan.
 
 - Skill: [`skills/discovery/SKILL.md`](skills/discovery/SKILL.md)
-- Guion de entrevista: [`skills/discovery/references/entrevista.md`](skills/discovery/references/entrevista.md)
-- Plantillas: `skills/discovery/references/` (brief, spec, decisión, modelo de amenazas, plan)
+- Interview script: [`skills/discovery/references/interview.md`](skills/discovery/references/interview.md)
+- Templates: `skills/discovery/references/` (brief, spec, decision, threat model, plan)
 
 ### `/structure` · Rosenfeld
 
-Fase 2 del proceso. Con la spec aprobada define la estructura: inventario y auditoría del sitio
-actual si es rediseño (`scripts/inventory.py`), flujos por tarea, organización y etiquetado
-con card sorting, sitemap con URLs finales y navegación, mapa de redirects 301, wireframes de
-baja fidelidad por plantilla y validación con tree testing. Todo en `docs/02-estructura/`.
+Phase 2. With the approved spec, defines the structure: inventory and audit of the current site
+if it is a redesign (`scripts/inventory.py`), flows per task, organization and labeling with card
+sorting, sitemap with final URLs and navigation, 301 redirect map, low-fidelity wireframes per
+template and validation with tree testing. All in `docs/02-structure/`.
 
 - Skill: [`skills/structure/SKILL.md`](skills/structure/SKILL.md)
-- Inventario: `skills/structure/scripts/inventory.py` (Python stdlib, sin dependencias)
-- Plantillas: `skills/structure/references/` (inventario, flujos, organización, sitemap, redirects, wireframe, validación)
+- Inventory: `skills/structure/scripts/inventory.py` (Python stdlib, no dependencies)
+- Templates: `skills/structure/references/` (inventory, flows, organization, sitemap, redirects, wireframe, validation)
 
 ### `/content` · Rosenfeld
 
-Fase 3 del proceso. Con el sitemap firmado produce el contenido real antes de diseñar: guía de
-voz y tono, mensajes clave con pruebas, brief por página sobre los wireframes, redacción
-concisa y escaneable con microcopia, SEO por página con JSON-LD por plantilla, legales conforme a
-LFPDPPP revisados por Schneier, lista de assets para Bellard y revisión con un aprobador y dos
-rondas. `scripts/content_matrix.py` genera la matriz y los briefs vacíos desde el sitemap.
-Todo en `docs/03-contenido/`.
+Phase 3. With the signed sitemap, produces the real content before design: voice and tone
+guide, key messages with proof, a brief per page over the wireframes, concise and scannable
+writing with microcopy, per-page SEO with JSON-LD per template, legal pages compliant with the
+2025 Mexican data protection law reviewed by Schneier, asset list for Bellard and review with one
+approver and two rounds. `scripts/content_matrix.py` generates the matrix and the empty briefs
+from the sitemap. All in `docs/03-content/`.
 
 - Skill: [`skills/content/SKILL.md`](skills/content/SKILL.md)
-- Plantillas: `skills/content/references/` (guía editorial, mensajes, brief por página, matriz, seo, legales, assets, revisión)
+- Templates: `skills/content/references/` (editorial guide, messages, page brief, matrix, seo, legal, assets, review)
 
 ### `/design-system` · Frost
 
-Fase 4 del proceso. Con el contenido aprobado produce la dirección visual, los tokens en tres
-capas en formato W3C DTCG, los componentes con sus nueve estados, las plantillas en tres anchos,
-la accesibilidad WCAG 2.2 AA como propiedad del sistema, el movimiento, el prototipo en código
-y el QA de diseño con prueba de usabilidad. `scripts/tokens_to_tailwind.py` convierte los
-tokens al bloque `@theme` de Tailwind v4 con modo oscuro y verifica el contraste de cada par
-semántico en ambos modos. Todo en `docs/04-diseno/`.
+Phase 4. With the approved content, produces the visual direction, the three-tier tokens in W3C
+DTCG format, the components with their nine states, the templates at three widths, WCAG 2.2 AA
+accessibility as a system property, motion, the prototype in code and the design QA with
+usability testing. `scripts/tokens_to_tailwind.py` converts the tokens to Tailwind v4's `@theme`
+block with dark mode and verifies the contrast of every semantic pair in both modes. All in
+`docs/04-design/`.
 
 - Skill: [`skills/design-system/SKILL.md`](skills/design-system/SKILL.md)
-- Tokens base: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
-- Plantillas: `skills/design-system/references/` (dirección visual, componente, plantilla, accesibilidad, motion, prueba de usabilidad, QA)
+- Base tokens: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
+- Templates: `skills/design-system/references/` (visual direction, component, template, accessibility, motion, usability test, QA, variants, break)
 
-### `/build` · Osmani y Hopper
+### `/build` · Osmani and Hopper
 
-Fase 5 del proceso. Con el diseño aprobado construye el sitio o la app en Astro 5 o Next.js 16:
-fundación del repo con TypeScript, Tailwind v4 y los tokens de Frost, CI con pruebas, auditoría,
-escaneo de secretos y Lighthouse CI con presupuesto de rendimiento, tareas derivadas de las
-historias de la spec (`scripts/tasks_from_spec.py`), ciclo por tarea con prueba primero y pull
-request con preview. Pista frontend para Osmani y pista backend para Hopper con el patrón de
-capa de acceso a datos: `server-only`, Drizzle, Zod, autorización por recurso, webhooks firmados.
+Phase 5. With the approved design, builds the site or app in Astro 5 or Next.js 16: repo
+foundation with TypeScript, Tailwind v4 and Frost's tokens, CI with tests, audit, secret
+scanning and Lighthouse CI with a performance budget, tasks derived from the spec's stories
+(`scripts/tasks_from_spec.py`), a per-task cycle with tests first and pull requests with preview.
+Frontend track for Osmani and backend track for Hopper with the data access layer pattern:
+`server-only`, Drizzle, Zod, per-resource authorization, signed webhooks.
 
 - Skill: [`skills/build/SKILL.md`](skills/build/SKILL.md)
-- Plantillas: `skills/build/references/` (tarea, definición de terminado, revisión de PR, `lighthouserc.json`, `ci.yml`, cabeceras y CSP para Astro y Next.js, estructura, DAL, frontend, backend)
+- Templates: `skills/build/references/` (task, definition of done, PR review, `lighthouserc.json`, `ci.yml`, headers and CSP for Astro and Next.js, structure, DAL, frontend, backend)
 
 ### `/qa` · Beizer
 
-Fase 6 del proceso. Con staging en CI verde ejecuta el plan de pruebas: rastreo de staging en una
-pasada (`scripts/crawl_check.py`: enlaces, códigos, 404, redirects 301 sin cadenas, metadatos
-contra seo.md, robots, sitemap, HTTP a HTTPS, cabeceras, rutas sensibles), funcional con
-Playwright contra los criterios de la spec, accesibilidad con axe por plantilla y estado más
-guion manual de teclado y lector de pantalla, Lighthouse contra el presupuesto, escaneo de
-seguridad (audit, gitleaks, OWASP ZAP, IDOR, rate limit), regresión visual y matriz de
-dispositivos, reporte con severidades fijadas antes de probar y criterios de salida.
+Phase 6. With staging on green CI, runs the test plan: one-pass staging crawl
+(`scripts/crawl_check.py`: links, status codes, 404, 301 redirects without chains, metadata
+against seo.md, robots, sitemap, HTTP to HTTPS, headers, sensitive paths), functional testing
+with Playwright against the spec's criteria, accessibility with axe per template and state plus a
+manual keyboard and screen reader script, Lighthouse against the budget, security scanning
+(audit, gitleaks, OWASP ZAP, IDOR, rate limit), visual regression and device matrix, a report
+with severities set before testing and exit criteria.
 
 - Skill: [`skills/qa/SKILL.md`](skills/qa/SKILL.md)
-- Playwright: `skills/qa/references/axe.fixture.ts` y `a11y.spec.ts` para copiar al proyecto
-- Plantillas: `skills/qa/references/` (plan, reporte, accesibilidad, seguridad, salida)
+- Playwright: `skills/qa/references/axe.fixture.ts` and `a11y.spec.ts` to copy into the project
+- Templates: `skills/qa/references/` (plan, report, accessibility, security, exit criteria)
 
 ### `/launch` · Allspaw
 
-Fases 7 y 8 del proceso. Con el QA firmado prepara y ejecuta la puesta en producción como una
-ventana de 30 días: cuentas y dominio (2FA, bloqueo, CAA, DNSSEC, snapshot DNS), correo del
-dominio (SPF, DKIM, DMARC), producción en Vercel, monitoreo con alertas a una persona, backups
-y rollback probados, TTL y runbook del día de corte con plazos de rollback, verificación de los
-primeros 60 minutos ordenada por costo de fallo, seguimiento de 30 días, y el plan de
-mantenimiento con runbook de incidentes y post-mortems sin culpa.
+Phases 7 and 8. With QA signed, prepares and runs the production launch as a 30-day window:
+accounts and domain (2FA, lock, CAA, DNSSEC, DNS snapshot), domain email (SPF, DKIM, DMARC),
+production on Vercel, monitoring with alerts to a person, tested backups and rollback, TTL and
+cutover runbook with rollback deadlines, first-60-minutes verification ordered by cost of
+failure, 30-day follow-up, and the maintenance plan with incident runbook and blameless
+post-mortems.
 
 - Skill: [`skills/launch/SKILL.md`](skills/launch/SKILL.md)
-- Scripts: `domain_check.py` (NS, CAA, DNSSEC, MX, SPF, DKIM, DMARC, expiraciones, HSTS) y `launch_check.py` (rastreo de producción reutilizando el de QA más continuidad de URLs viejas)
-- Plantillas: `skills/launch/references/` (dominio, checklist, runbook de corte, monitoreo, incidentes, post-mortem, mantenimiento)
+- Scripts: `domain_check.py` (NS, CAA, DNSSEC, MX, SPF, DKIM, DMARC, expirations, HSTS) and `launch_check.py` (production crawl reusing QA's plus old-URL continuity)
+- Templates: `skills/launch/references/` (domain, checklist, cutover runbook, monitoring, incidents, post-mortem, maintenance)
 
 ### `/security` · Schneier
 
-Transversal a las ocho fases. Fija el nivel OWASP ASVS 5.0 según datos e impacto, hace el modelo
-de amenazas (cuatro preguntas, STRIDE por interacción, LINDDUN GO para privacidad), revisa
-diseño, revisa código por fronteras de confianza, interpreta el QA de seguridad, firma el
-lanzamiento y revisa accesos y secretos. Califica cada hallazgo con la metodología de riesgo de
-OWASP (`scripts/risk_rating.py`), emite veredicto y mantiene el registro de riesgos aceptados.
-Incluye la nota de la ley mexicana de datos personales vigente desde marzo de 2025.
+Cross-cutting across the eight phases. Sets the OWASP ASVS 5.0 level by data and impact, builds
+the threat model (four questions, STRIDE per interaction, LINDDUN GO for privacy), reviews
+design, reviews code by trust boundaries, interprets the security QA, signs the launch and
+reviews access and secrets. Rates every finding with the OWASP risk rating methodology
+(`scripts/risk_rating.py`), issues a verdict and keeps the accepted-risk register. Includes the
+note on the Mexican data protection law in force since March 2025.
 
 - Skill: [`skills/security/SKILL.md`](skills/security/SKILL.md)
-- Plantillas: `skills/security/references/` (ASVS, guion de modelo de amenazas, legal MX, revisión de diseño, revisión de código, riesgo, veredicto, registro de riesgos)
+- Templates: `skills/security/references/` (ASVS, threat model script, legal MX, design review, code review, risk, verdict, risk register)
 
 ### `/optimize-assets` · Bellard
 
-Auditoría y optimización de imágenes y video de un sitio publicado o de una carpeta local.
-Saca el sitemap, inventaría los assets página por página con el navegador, los descarga a una
-carpeta por página, los analiza (peso, dimensiones vs. tamaño en pantalla, formato, códec,
-bitrate) y levanta una app local en `localhost:8770` para convertirlos con un clic: WebP,
-H.264 MP4, covers del primer frame, comparador, historial de versiones y carpeta de salida
-configurable.
+Audit and optimization of images and video for a published site or a local folder. Pulls the
+sitemap, inventories assets page by page with the browser, downloads them into a folder per
+page, analyzes them (weight, dimensions vs. on-screen size, format, codec, bitrate) and starts a
+local app on `localhost:8770` to convert them with one click: WebP, H.264 MP4, first-frame
+covers, comparator, version history and configurable output folder.
 
 - Skill: [`skills/optimize-assets/SKILL.md`](skills/optimize-assets/SKILL.md)
-- Agente: [`agents/bellard.md`](agents/bellard.md), especialista en medios para web
-- App: `skills/optimize-assets/app/` (Python stdlib + Pillow + ffmpeg, sin dependencias npm)
-- Umbrales del análisis: `skills/optimize-assets/references/thresholds.md`
+- Agent: [`agents/bellard.md`](agents/bellard.md), web media specialist
+- App: `skills/optimize-assets/app/` (Python stdlib + Pillow + ffmpeg, no npm dependencies)
+- Analysis thresholds: `skills/optimize-assets/references/thresholds.md`
 
-Requisitos en la Mac: `python3` con Pillow, `ffmpeg`/`ffprobe` (`brew install ffmpeg`), y
-Node con Playwright solo para la auditoría responsive opcional.
+Mac requirements: `python3` with Pillow, `ffmpeg`/`ffprobe` (`brew install ffmpeg`), and Node
+with Playwright only for the optional responsive audit.
 
-## Instalar
+## Install
 
 ```bash
 git clone https://github.com/hiyuno/web-lab.git ~/Documents/GitSync/web-lab
@@ -177,11 +176,11 @@ cd ~/Documents/GitSync/web-lab && git submodule update --init
 for d in ~/Documents/GitSync/web-lab/vendor/interfaces/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
 ```
 
-Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
-`/security` y `/optimize-assets` aparecen en Claude Code junto con los once skills de
-`interfaces`, y los nueve roles quedan disponibles como subagentes.
+With that, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
+`/security` and `/optimize-assets` appear in Claude Code along with the eleven `interfaces`
+skills, and the nine roles are available as subagents.
 
-## Pruebas de la app
+## App tests
 
 ```bash
 cd skills/optimize-assets/app && python3 -m unittest discover -s . -p 'test_*.py' -v

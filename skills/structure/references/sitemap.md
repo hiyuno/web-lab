@@ -1,55 +1,55 @@
-# Sitemap · [proyecto]
+# Sitemap · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Rosenfeld · Revisó: Schneier · Estado: propuesta | firmado el [fecha]
+Date: [yyyy-mm-dd] · Author: Rosenfeld · Reviewed by: Schneier · Status: proposal | signed on [date]
 
-## Jerarquía
+## Hierarchy
 
 ```mermaid
 flowchart TD
-  H[/ Home] --> A[/categoria-a]
-  H --> B[/categoria-b]
-  H --> C[/contacto]
-  A --> A1[/categoria-a/pagina-1]
-  A --> A2[/categoria-a/pagina-2]
-  H -.-> L1[/aviso-de-privacidad]
-  H -.-> L2[/terminos]
+  H[/ Home] --> A[/category-a]
+  H --> B[/category-b]
+  H --> C[/contact]
+  A --> A1[/category-a/page-1]
+  A --> A2[/category-a/page-2]
+  H -.-> L1[/privacy-notice]
+  H -.-> L2[/terms]
   H -.-> E[404]
 ```
 
-## Páginas
+## Pages
 
-Una fila por página. Profundidad = clics desde la home. Datos = qué pide la página al visitante.
+One row per page. Depth = clicks from the home. Data = what the page asks the visitor for.
 
-| URL | Intención en una frase | Plantilla | Profundidad | Keyword principal | Historias | Datos que pide | Prioridad |
-|-----|------------------------|-----------|-------------|-------------------|-----------|----------------|-----------|
-| / | | home | 0 | | | ninguno | 1 |
-| /aviso-de-privacidad | | legal | 1 | | | ninguno | 3 |
-| /terminos | | legal | 1 | | | ninguno | 3 |
-| 404 | orientar y devolver a la home | legal | | | | ninguno | 3 |
+| URL | One-sentence intent | Template | Depth | Primary keyword | Stories | Data requested | Priority |
+|-----|---------------------|----------|-------|-----------------|---------|----------------|----------|
+| / | | home | 0 | | | none | 1 |
+| /privacy-notice | | legal | 1 | | | none | 3 |
+| /terms | | legal | 1 | | | none | 3 |
+| 404 | orient and send back to the home | legal | | | | none | 3 |
 
-Si hay cuenta, añade: /login, /recuperar, /cuenta, /cuenta/baja.
+If there are accounts, add: /login, /recover, /account, /account/delete.
 
-## Plantillas
+## Templates
 
-| Plantilla | Páginas que la usan | Wireframe |
-|-----------|---------------------|-----------|
+| Template | Pages that use it | Wireframe |
+|----------|-------------------|-----------|
 | home | / | wireframes/home.md |
 | interior | | wireframes/interior.md |
-| listado | | wireframes/listado.md |
-| detalle | | wireframes/detalle.md |
-| formulario | | wireframes/formulario.md |
+| listing | | wireframes/listing.md |
+| detail | | wireframes/detail.md |
+| form | | wireframes/form.md |
 | legal | | wireframes/legal.md |
 
-## Sistemas de navegación
+## Navigation systems
 
-- **Global** (menú, máximo 7): [ ]
-- **Local** (dentro de sección): [ ]
-- **Contextual** (enlaces en el contenido, hub ↔ satélites): [ ]
-- **Pie de página**: [ ] incluye legales y contacto
-- **Breadcrumbs**: sí / no (sí si hay más de dos niveles)
-- **Búsqueda**: sí / no (sí si hay más de ~50 páginas)
-- **Idiomas**: [ ]
+- **Global** (menu, at most 7): [ ]
+- **Local** (within a section): [ ]
+- **Contextual** (links in content, hub ↔ satellites): [ ]
+- **Footer**: [ ] includes legal pages and contact
+- **Breadcrumbs**: yes / no (yes if more than two levels)
+- **Search**: yes / no (yes if more than ~50 pages)
+- **Languages**: [ ]
 
-## Cambios respecto al sitio actual (rediseños)
+## Changes versus the current site (redesigns)
 
-Páginas nuevas: [ ] · Fusionadas: [ ] · Eliminadas: [ ] · Ver `redirects.md`.
+New pages: [ ] · Merged: [ ] · Removed: [ ] · See `redirects.md`.

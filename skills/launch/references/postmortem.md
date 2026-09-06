@@ -1,52 +1,52 @@
-# Post-mortem · [título corto del incidente]
+# Post-mortem · [short incident title]
 
-Fecha del incidente: [aaaa-mm-dd hh:mm a hh:mm] · Severidad: SEV[n] · Duración: [ ] · Escrito el: [aaaa-mm-dd, ≤ 72 h] · Autor: Allspaw
+Incident date: [yyyy-mm-dd hh:mm to hh:mm] · Severity: SEV[n] · Duration: [ ] · Written on: [yyyy-mm-dd, ≤ 72 h] · Author: Allspaw
 
-Sin culpa. Describimos qué pasó y qué lo permitió, nunca quién. Las personas actuaron con la
-información que tenían; el sistema es lo que cambia.
+Blameless. We describe what happened and what allowed it, never who. People acted with the
+information they had; the system is what changes.
 
-## Resumen en tres frases
+## Three-sentence summary
 
-[Qué falló, a quién afectó, cómo se resolvió.]
+[What failed, who it affected, how it was resolved.]
 
-## Impacto
+## Impact
 
-- Usuarios afectados: [ ] · Duración visible: [ ] · Transacciones perdidas: [ ] · Datos afectados: [ninguno | cuáles]
+- Users affected: [ ] · Visible duration: [ ] · Lost transactions: [ ] · Data affected: [none | which]
 
-## Línea de tiempo (hora local)
+## Timeline (local time)
 
-| Hora | Qué pasó / qué se vio / qué se hizo |
-|------|-------------------------------------|
-| | primer síntoma |
-| | detección (¿monitor o usuario?) |
-| | declaración de severidad |
-| | acciones |
-| | resolución |
+| Time | What happened / what was seen / what was done |
+|------|-----------------------------------------------|
+| | first symptom |
+| | detection (monitor or user?) |
+| | severity declared |
+| | actions |
+| | resolution |
 
-Tiempo hasta detección: [ ] · hasta mitigación: [ ] · hasta resolución: [ ]
+Time to detection: [ ] · to mitigation: [ ] · to resolution: [ ]
 
-## Qué lo permitió
+## What allowed it
 
-Causas contribuyentes, no "la causa". Preguntar "¿por qué?" hasta llegar al sistema.
+Contributing causes, not "the cause". Ask "why?" until you reach the system.
 
 1. [ ]
 2. [ ]
 3. [ ]
 
-## Qué funcionó
+## What worked
 
-- [ ] (lo que detectó, lo que mitigó, lo que evitó algo peor)
+- [ ] (what detected it, what mitigated it, what prevented something worse)
 
-## Qué cambia
+## What changes
 
-| Acción | Dueño | Fecha | Estado |
-|--------|-------|-------|--------|
+| Action | Owner | Date | Status |
+|--------|-------|------|--------|
 | | | | |
 
-## Cambios al runbook de incidentes
+## Changes to the incident runbook
 
 - [ ]
 
-## Aprendizajes para web-lab
+## Learnings for web-lab
 
-Lo que aplica a otros proyectos va a `<web-lab>/learnings/allspaw.md`.
+What applies to other projects goes to `<web-lab>/learnings/allspaw.md`.

@@ -1,54 +1,54 @@
-# Frontend · [proyecto]
+# Frontend · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Osmani · Framework: Astro 5 | Next.js 16 · Hosting: Vercel
+Date: [yyyy-mm-dd] · Author: Osmani · Framework: Astro 5 | Next.js 16 · Hosting: Vercel
 
-## Cómo correrlo
+## How to run it
 
 ```bash
 pnpm install
-cp .env.example .env.local   # pide los valores al dueño del proyecto; nunca los pegues en el chat
+cp .env.example .env.local   # ask the project owner for the values; never paste them in the chat
 pnpm dev
 pnpm test && pnpm test:e2e
 ```
 
-## Decisiones
+## Decisions
 
-| Qué | Decisión | Por qué | Alternativa descartada |
-|-----|----------|---------|------------------------|
-| Framework | | decision-arquitectura.md | |
-| Estilos | Tailwind v4 + tokens.css | | |
-| Componentes base | shadcn/ui / Astro | | |
-| Fuentes | locales, subconjunto, swap | | |
-| Analítica | | sin cookies / con consentimiento | |
+| What | Decision | Why | Alternative discarded |
+|------|----------|-----|-----------------------|
+| Framework | | architecture-decision.md | |
+| Styling | Tailwind v4 + tokens.css | | |
+| Base components | shadcn/ui / Astro | | |
+| Fonts | local, subset, swap | | |
+| Analytics | | cookieless / with consent | |
 
-## Presupuesto de rendimiento (móvil)
+## Performance budget (mobile)
 
-| Métrica | Objetivo | Staging | Fecha |
-|---------|----------|---------|-------|
+| Metric | Target | Staging | Date |
+|--------|--------|---------|------|
 | LCP | ≤ 2.5 s | | |
 | INP | ≤ 200 ms | | |
 | CLS | ≤ 0.1 | | |
-| JS inicial | ≤ 150 KB gz | | |
-| Lighthouse rendimiento | ≥ 90 | | |
+| Initial JS | ≤ 150 KB gz | | |
+| Lighthouse performance | ≥ 90 | | |
 
-## Cabeceras
+## Headers
 
-Verificado con `curl -sI` el [fecha]: [pegar resultado].
+Verified with `curl -sI` on [date]: [paste result].
 
-## Mapa de componentes
+## Component map
 
-| Componente (Frost) | Archivo | Estados implementados | Pruebas |
-|--------------------|---------|-----------------------|---------|
+| Component (Frost) | File | States implemented | Tests |
+|-------------------|------|--------------------|-------|
 | | | 9/9 | |
 
-## Mapa de plantillas
+## Template map
 
-| Plantilla | Layout / ruta | Páginas | Estado |
-|-----------|---------------|---------|--------|
+| Template | Layout / route | Pages | Status |
+|----------|----------------|-------|--------|
 | | | | |
 
-## Deuda y pendientes
+## Debt and pending
 
-| Qué | Por qué se pospuso | Cuándo |
-|-----|--------------------|--------|
+| What | Why postponed | When |
+|------|---------------|------|
 | | | |

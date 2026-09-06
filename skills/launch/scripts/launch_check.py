@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Fase 7, paso 7.7: verificación de los primeros 60 minutos contra producción.
+"""Phase 7, step 7.7: first-60-minutes verification against production.
 
-Reutiliza skills/qa/scripts/crawl_check.py (rastreo, 404, redirects, metadatos, robots, sitemap,
-HTTPS, cabeceras, rutas sensibles) y añade lo que solo importa el día del corte, ordenado por
-costo de fallo: acceso (robots/noindex, certificado), identidad (200/404/canonical) y
-continuidad (toda URL del sitio viejo responde 200 o 301 directo, nunca 404).
+Reuses skills/qa/scripts/crawl_check.py (crawl, 404, redirects, metadata, robots, sitemap,
+HTTPS, headers, sensitive paths) and adds what only matters on cutover day, ordered by cost of
+failure: access (robots/noindex, certificate), identity (200/404/canonical) and continuity
+(every old-site URL responds 200 or a direct 301, never 404).
 
-Uso:
-  launch_check.py https://ejemplo.mx --redirects docs/02-estructura/redirects.md \
-      --seo docs/03-contenido/seo.md --old-urls docs/02-estructura/pages.json > docs/07-lanzamiento/verificacion-60min.md
+Usage:
+  launch_check.py https://example.mx --redirects docs/02-structure/redirects.md \
+      --seo docs/03-content/seo.md --old-urls docs/02-structure/pages.json > docs/07-launch/first-60-minutes.md
 """
 import argparse, datetime as dt, json, os, subprocess, sys, urllib.parse, urllib.request, urllib.error
 
@@ -36,7 +36,7 @@ def main():
     ap.add_argument("base")
     ap.add_argument("--redirects")
     ap.add_argument("--seo")
-    ap.add_argument("--old-urls", help="pages.json del sitio viejo (fase 2) o txt con una URL por línea")
+    ap.add_argument("--old-urls", help="pages.json of the old site (phase 2) or txt with one URL per line")
     ap.add_argument("--max", type=int, default=300)
     a = ap.parse_args()
     base = a.base if a.base.startswith("http") else "https://" + a.base
@@ -56,13 +56,13 @@ def main():
             dom = json.loads(out)
         except Exception:
             dom = {}
-        has_http = any("http responde" in f["what"].lower() for f in findings)
+        has_http = any("http responds" in f["what"].lower() for f in findings)
         for x in dom.get("findings", []):
             if has_http and "http://" in x["what"].lower():
-                continue  # ya lo reportó el rastreo
+                continue  # already reported by the crawl
             findings.append({"sev": x["sev"], "where": host, "what": x["what"], "fix": x["fix"]})
 
-    # continuidad: URLs del sitio viejo
+    # continuity: old-site URLs
     cont = []
     if a.old_urls and os.path.exists(a.old_urls):
         txt = open(a.old_urls, encoding="utf-8").read()
@@ -78,36 +78,36 @@ def main():
                 ok = ok and st2 == 200
             cont.append({"path": path, "status": st, "location": loc, "ok": ok and not chain})
             if not ok or chain:
-                findings.append({"sev": "crítico", "where": path, "what": f"URL del sitio viejo responde {st}" + (" con cadena" if chain else ""), "fix": "301 directo a su equivalente; nunca 404 el día del corte"})
+                findings.append({"sev": "critical", "where": path, "what": f"old-site URL responds {st}" + (" with a chain" if chain else ""), "fix": "direct 301 to its equivalent; never 404 on cutover day"})
 
-    # clasificación por costo de fallo
+    # classification by cost of failure
     def tier(f):
-        w = f["what"].lower()  # solo el texto del hallazgo, no la URL
-        if any(k in w for k in ("sitio viejo", "cadena", "redirect", "sitemap")): return "3 Continuidad"
-        if any(k in w for k in ("canonical", "h1", "<title>", "título", "responde 4", "responde 5")): return "2 Identidad"
-        if any(k in w for k in ("noindex", "robots", "disallow", "certificado", "tls", "http responde", "http://", "hsts", "sitemap", "csp")): return "1 Acceso"
-        return "4 Mejora"
+        w = f["what"].lower()  # only the finding text, not the URL
+        if any(k in w for k in ("old-site", "chain", "redirect", "sitemap")): return "3 Continuity"
+        if any(k in w for k in ("canonical", "h1", "<title>", "title", "responds 4", "responds 5")): return "2 Identity"
+        if any(k in w for k in ("noindex", "robots", "disallow", "certificate", "tls", "http responds", "http://", "hsts", "csp")): return "1 Access"
+        return "4 Improvement"
     for f in findings: f["tier"] = tier(f)
-    order = {"bloqueante": 0, "crítico": 1, "mayor": 2, "menor": 3, "trivial": 4}
+    order = {"blocker": 0, "critical": 1, "major": 2, "minor": 3, "trivial": 4}
     findings.sort(key=lambda f: (f["tier"], order.get(f["sev"], 5)))
 
     now = dt.datetime.now().strftime("%Y-%m-%d %H:%M")
-    print(f"# Verificación de los primeros 60 minutos · {base} · {now}\n")
-    blockers = [f for f in findings if f["tier"] in ("1 Acceso", "3 Continuidad") and f["sev"] in ("bloqueante", "crítico")]
-    print(f"**Decisión**: {'ROLLBACK si no se arregla en minutos: ' + str(len(blockers)) + ' hallazgo(s) de acceso o continuidad críticos' if blockers else 'seguir; sin críticos de acceso ni continuidad'}\n")
-    print(f"Páginas rastreadas: {len(crawl.get('pages', []))} · URLs viejas verificadas: {len(cont)} · Hallazgos: {len(findings)}\n")
-    print("## Hallazgos por costo de fallo\n\n| Nivel | Severidad | Dónde | Qué | Arreglo |\n|---|---|---|---|---|")
+    print(f"# First-60-minutes verification · {base} · {now}\n")
+    blockers = [f for f in findings if f["tier"] in ("1 Access", "3 Continuity") and f["sev"] in ("blocker", "critical")]
+    print(f"**Decision**: {'ROLLBACK if not fixed in minutes: ' + str(len(blockers)) + ' critical access or continuity finding(s)' if blockers else 'continue; no access or continuity criticals'}\n")
+    print(f"Pages crawled: {len(crawl.get('pages', []))} · Old URLs verified: {len(cont)} · Findings: {len(findings)}\n")
+    print("## Findings by cost of failure\n\n| Tier | Severity | Where | What | Fix |\n|---|---|---|---|---|")
     for f in findings:
         print(f"| {f['tier']} | {f['sev']} | {f['where']} | {f['what'].replace('|', '/')} | {f['fix']} |")
     if not findings:
-        print("| — | — | — | sin hallazgos | — |")
+        print("| — | — | — | no findings | — |")
     if cont:
-        print("\n## Continuidad · URLs del sitio viejo\n\n| Ruta | Código | Location | Ok |\n|---|---|---|---|")
+        print("\n## Continuity · old-site URLs\n\n| Path | Code | Location | Ok |\n|---|---|---|---|")
         for c in cont:
-            print(f"| {c['path']} | {c['status']} | {c['location']} | {'sí' if c['ok'] else 'NO'} |")
-    print("\n## Manual en la primera hora\n")
-    for item in ("Formulario principal enviado y recibido", "Login y recuperación (si hay) con usuario de prueba", "Analítica: evento de página y conversión disparan una vez, respetan consentimiento",
-                 "Sitemap enviado a Search Console y Bing; indexación de la home solicitada", "Errores en Sentry: cero nuevos en 60 min", "Disponibilidad: sin alertas", "Anotación de lanzamiento en analítica"):
+            print(f"| {c['path']} | {c['status']} | {c['location']} | {'yes' if c['ok'] else 'NO'} |")
+    print("\n## Manual in the first hour\n")
+    for item in ("Main form submitted and received", "Login and recovery (if any) with a test user", "Analytics: page and conversion events fire once, respect consent",
+                 "Sitemap submitted to Search Console and Bing; home indexing requested", "Sentry errors: zero new in 60 min", "Availability: no alerts", "Launch annotation in analytics"):
         print(f"- [ ] {item}")
     sys.exit(1 if blockers else 0)
 

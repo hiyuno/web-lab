@@ -1,24 +1,24 @@
-# SEO por página · [proyecto]
+# Per-page SEO · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Rosenfeld · Lo implementa Osmani en la fase 5; lo valida Beizer en la 6.
+Date: [yyyy-mm-dd] · Author: Rosenfeld · Implemented by Osmani in phase 5; validated by Beizer in phase 6.
 
-## Tabla por página
+## Per-page table
 
-| URL | Título (50-60) | Meta description (120-160) | H1 | Keyword | Canonical | Schema | OG image |
-|-----|----------------|----------------------------|----|---------|-----------|--------|----------|
+| URL | Title (50-60) | Meta description (120-160) | H1 | Keyword | Canonical | Schema | OG image |
+|-----|---------------|----------------------------|----|---------|-----------|--------|----------|
 | / | | | | | / | Organization, WebSite | og/home.jpg |
 
-## Reglas
+## Rules
 
-- Título único por página, keyword al inicio, marca al final si cabe: "Keyword · Marca".
-- Meta description con llamada a la acción. No influye en ranking; influye en el clic.
-- Un H1 por página. H2 como las preguntas que haría el lector. Sin saltos de nivel.
-- Enlaces internos pilar ↔ satélites con anclas descriptivas. Ninguna página huérfana.
-- Canonical en todas. `hreflang` si hay idiomas. `robots` solo para excluir legales o gracias si se decide.
+- Unique title per page, keyword first, brand last if it fits: "Keyword · Brand".
+- Meta description with a call to action. It does not affect ranking; it affects the click.
+- One H1 per page. H2s as the questions the reader would ask. No level skipping.
+- Internal links pillar ↔ satellites with descriptive anchors. No orphan page.
+- Canonical on all. `hreflang` if there are languages. `robots` only to exclude legal or thank-you pages if decided.
 - Open Graph: `og:title`, `og:description`, `og:image` (1200 × 630), `og:type`, `og:url`. Twitter card `summary_large_image`.
-- JSON-LD solo con datos visibles en la página. Validar en la fase 6 con la prueba de resultados enriquecidos de Google.
+- JSON-LD only with data visible on the page. Validate in phase 6 with Google's rich results test.
 
-## JSON-LD por plantilla
+## JSON-LD per template
 
 Home: Organization + WebSite.
 
@@ -28,40 +28,40 @@ Home: Organization + WebSite.
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://ejemplo.mx/#org",
-      "name": "[Razón social o marca]",
-      "url": "https://ejemplo.mx/",
-      "logo": "https://ejemplo.mx/logo.png",
-      "contactPoint": { "@type": "ContactPoint", "email": "hola@ejemplo.mx", "contactType": "customer service" },
-      "sameAs": ["https://www.instagram.com/ejemplo"]
+      "@id": "https://example.mx/#org",
+      "name": "[Legal name or brand]",
+      "url": "https://example.mx/",
+      "logo": "https://example.mx/logo.png",
+      "contactPoint": { "@type": "ContactPoint", "email": "hello@example.mx", "contactType": "customer service" },
+      "sameAs": ["https://www.instagram.com/example"]
     },
     {
       "@type": "WebSite",
-      "@id": "https://ejemplo.mx/#site",
-      "url": "https://ejemplo.mx/",
-      "name": "[Nombre del sitio]",
-      "publisher": { "@id": "https://ejemplo.mx/#org" },
+      "@id": "https://example.mx/#site",
+      "url": "https://example.mx/",
+      "name": "[Site name]",
+      "publisher": { "@id": "https://example.mx/#org" },
       "inLanguage": "es-MX"
     }
   ]
 }
 ```
 
-Interior con más de un nivel: BreadcrumbList.
+Interior with more than one level: BreadcrumbList.
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://ejemplo.mx/" },
-    { "@type": "ListItem", "position": 2, "name": "[Sección]", "item": "https://ejemplo.mx/seccion" },
-    { "@type": "ListItem", "position": 3, "name": "[Página]" }
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://example.mx/" },
+    { "@type": "ListItem", "position": 2, "name": "[Section]", "item": "https://example.mx/section" },
+    { "@type": "ListItem", "position": 3, "name": "[Page]" }
   ]
 }
 ```
 
-Artículo o entrada de blog: Article.
+Article or blog post: Article.
 
 ```json
 {
@@ -69,57 +69,57 @@ Artículo o entrada de blog: Article.
   "@type": "Article",
   "headline": "[H1]",
   "description": "[meta description]",
-  "image": "https://ejemplo.mx/og/articulo.jpg",
-  "author": { "@type": "Person", "name": "[Nombre]", "url": "https://ejemplo.mx/sobre" },
-  "publisher": { "@id": "https://ejemplo.mx/#org" },
+  "image": "https://example.mx/og/article.jpg",
+  "author": { "@type": "Person", "name": "[Name]", "url": "https://example.mx/about" },
+  "publisher": { "@id": "https://example.mx/#org" },
   "datePublished": "2026-09-05",
   "dateModified": "2026-09-05",
-  "mainEntityOfPage": "https://ejemplo.mx/blog/slug"
+  "mainEntityOfPage": "https://example.mx/blog/slug"
 }
 ```
 
-Producto o servicio con precio visible: Product.
+Product or service with a visible price: Product.
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "[Nombre]",
-  "description": "[Descripción visible]",
-  "image": "https://ejemplo.mx/img/producto.jpg",
-  "brand": { "@type": "Brand", "name": "[Marca]" },
-  "offers": { "@type": "Offer", "price": "900", "priceCurrency": "MXN", "availability": "https://schema.org/InStock", "url": "https://ejemplo.mx/producto" }
+  "name": "[Name]",
+  "description": "[Visible description]",
+  "image": "https://example.mx/img/product.jpg",
+  "brand": { "@type": "Brand", "name": "[Brand]" },
+  "offers": { "@type": "Offer", "price": "900", "priceCurrency": "MXN", "availability": "https://schema.org/InStock", "url": "https://example.mx/product" }
 }
 ```
 
-Preguntas frecuentes visibles en la página: FAQPage.
+Frequently asked questions visible on the page: FAQPage.
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    { "@type": "Question", "name": "[Pregunta tal como aparece]", "acceptedAnswer": { "@type": "Answer", "text": "[Respuesta tal como aparece]" } }
+    { "@type": "Question", "name": "[Question as it appears]", "acceptedAnswer": { "@type": "Answer", "text": "[Answer as it appears]" } }
   ]
 }
 ```
 
-Negocio con dirección física: LocalBusiness (o subtipo: Restaurant, Dentist, Store).
+Business with a physical address: LocalBusiness (or a subtype: Restaurant, Dentist, Store).
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "[Nombre]",
-  "image": "https://ejemplo.mx/img/local.jpg",
-  "url": "https://ejemplo.mx/",
+  "name": "[Name]",
+  "image": "https://example.mx/img/venue.jpg",
+  "url": "https://example.mx/",
   "telephone": "+52 55 0000 0000",
-  "address": { "@type": "PostalAddress", "streetAddress": "[Calle y número]", "addressLocality": "[Ciudad]", "addressRegion": "[Estado]", "postalCode": "[CP]", "addressCountry": "MX" },
+  "address": { "@type": "PostalAddress", "streetAddress": "[Street and number]", "addressLocality": "[City]", "addressRegion": "[State]", "postalCode": "[ZIP]", "addressCountry": "MX" },
   "openingHoursSpecification": [ { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "09:00", "closes": "18:00" } ]
 }
 ```
 
-## Idiomas (si aplica)
+## Languages (if applicable)
 
 | URL es | URL en | hreflang |
 |--------|--------|----------|

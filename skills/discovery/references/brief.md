@@ -1,50 +1,50 @@
-# Brief · [nombre del proyecto]
+# Brief · [project name]
 
-Fecha: [aaaa-mm-dd] · Autor: Cooper · Estado: borrador | aprobado el [fecha]
+Date: [yyyy-mm-dd] · Author: Cooper · Status: draft | approved on [date]
 
-## Problema u oportunidad
+## Problem or opportunity
 
-[Un párrafo en presente. Quién tiene el problema, qué pasa hoy, qué cambia si lo resolvemos.]
+[One paragraph in present tense. Who has the problem, what happens today, what changes if we solve it.]
 
-## Objetivos de negocio
+## Business goals
 
-| Prioridad | Objetivo | Métrica | Línea base | Meta a 12 meses |
-|-----------|----------|---------|------------|-----------------|
+| Priority | Goal | Metric | Baseline | 12-month target |
+|----------|------|--------|----------|-----------------|
 | 1 | | | | |
 | 2 | | | | |
 
-## Audiencias
+## Audiences
 
-| Audiencia | Quién es | Tareas principales | Qué usa hoy | Qué le molesta |
-|-----------|----------|--------------------|-------------|----------------|
-| Primaria | | | | |
-| Secundaria | | | | |
+| Audience | Who they are | Main tasks | What they use today | What bothers them |
+|----------|--------------|------------|---------------------|-------------------|
+| Primary | | | | |
+| Secondary | | | | |
 
-## Contexto
+## Context
 
-- Proyecto nuevo o rediseño: [ ]
-- Existe: dominio, marca, contenido, sitio, analítica, redes: [ ]
-- Competencia directa: [tres sitios y una línea de qué hacen bien y mal]
-- Referencias que admira y por qué: [ ]
+- New project or redesign: [ ]
+- Exists: domain, brand, content, site, analytics, social: [ ]
+- Direct competitors: [three sites and one line on what they do well and badly]
+- References admired and why: [ ]
 
-## Restricciones
+## Constraints
 
-- Plazo y qué lo fija: [ ]
-- Presupuesto de herramientas y servicios: [ ]
-- Quién aprueba, quién desempata: [ ]
-- Quién produce textos e imágenes y para cuándo: [ ]
-- Idiomas, accesibilidad obligatoria, marca: [ ]
+- Deadline and what sets it: [ ]
+- Budget for tools and services: [ ]
+- Who approves, who breaks ties: [ ]
+- Who produces copy and images and by when: [ ]
+- Languages, mandatory accessibility, brand: [ ]
 
-## Supuestos que hay que probar
+## Assumptions to test
 
-| Supuesto | Riesgo si es falso | Cómo lo probamos | Cuándo |
-|----------|--------------------|------------------|--------|
+| Assumption | Risk if false | How we test it | When |
+|------------|---------------|----------------|------|
 | | | | |
 
-## Fuera de alcance de esta versión
+## Out of scope for this version
 
 - [ ]
 
-## No negociables
+## Non-negotiables
 
 - [ ]

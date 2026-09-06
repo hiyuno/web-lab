@@ -1,21 +1,21 @@
-# Capa de acceso a datos (DAL) · patrón para Next.js
+# Data access layer (DAL) · pattern for Next.js
 
-La única frontera de seguridad. `import 'server-only'` arriba de cada archivo. Es la única que
-lee `process.env` y usa el cliente de base de datos. Cada función: autentica, autoriza por
-recurso, valida, devuelve un DTO mínimo. Las server actions son delgadas y delegan aquí.
+The only security boundary. `import 'server-only'` at the top of every file. It is the only layer
+that reads `process.env` and uses the database client. Every function: authenticates, authorizes
+per resource, validates, returns a minimal DTO. Server actions are thin and delegate here.
 
 ## `src/data/auth.ts`
 
 ```ts
 import 'server-only'
 import { cache } from 'react'
-import { auth } from '@clerk/nextjs/server' // o Better Auth / Auth.js
+import { auth } from '@clerk/nextjs/server' // or Better Auth / Auth.js
 
 export class Viewer {
   constructor(readonly id: string, readonly orgId: string | null, readonly role: 'member' | 'admin') {}
 }
 
-// cache(): un solo cálculo por petición, sin pasar el usuario de componente en componente
+// cache(): computed once per request, no passing the user from component to component
 export const getViewer = cache(async (): Promise<Viewer | null> => {
   const { userId, orgId, sessionClaims } = await auth()
   if (!userId) return null
@@ -39,7 +39,7 @@ import { projects } from '@/db/schema'
 import { requireViewer } from './auth'
 import { projectInput } from '@/lib/validators'
 
-// DTO: solo lo que la interfaz necesita. Nunca el registro completo.
+// DTO: only what the UI needs. Never the full record.
 export type ProjectDTO = { id: string; name: string; updatedAt: string }
 
 const toDTO = (r: typeof projects.$inferSelect): ProjectDTO =>
@@ -47,7 +47,7 @@ const toDTO = (r: typeof projects.$inferSelect): ProjectDTO =>
 
 export async function listProjects(): Promise<ProjectDTO[]> {
   const v = await requireViewer()
-  // autorización EN la consulta: solo lo del dueño
+  // authorization IN the query: only the owner's
   const rows = await db.select().from(projects).where(eq(projects.ownerId, v.id))
   return rows.map(toDTO)
 }
@@ -55,13 +55,13 @@ export async function listProjects(): Promise<ProjectDTO[]> {
 export async function getProject(id: string): Promise<ProjectDTO | null> {
   const v = await requireViewer()
   const [row] = await db.select().from(projects)
-    .where(and(eq(projects.id, id), eq(projects.ownerId, v.id))) // no basta el id
+    .where(and(eq(projects.id, id), eq(projects.ownerId, v.id))) // the id is not enough
   return row ? toDTO(row) : null
 }
 
 export async function createProject(raw: unknown): Promise<ProjectDTO> {
   const v = await requireViewer()
-  const input = projectInput.parse(raw) // Zod: los tipos se borran; el esquema no
+  const input = projectInput.parse(raw) // Zod: types are erased; the schema is not
   const [row] = await db.insert(projects).values({ ...input, ownerId: v.id }).returning()
   return toDTO(row)
 }
@@ -71,7 +71,7 @@ export async function deleteProject(id: string): Promise<void> {
   const res = await db.delete(projects)
     .where(and(eq(projects.id, id), eq(projects.ownerId, v.id)))
     .returning({ id: projects.id })
-  if (res.length === 0) throw new Error('FORBIDDEN') // no existe o no es suyo: misma respuesta
+  if (res.length === 0) throw new Error('FORBIDDEN') // missing or not theirs: same answer
 }
 ```
 
@@ -87,23 +87,23 @@ export type ActionState = { ok: true } | { ok: false; error: string }
 
 export async function createProjectAction(_: ActionState, formData: FormData): Promise<ActionState> {
   try {
-    await rateLimit('create-project') // Upstash o el del hosting
+    await rateLimit('create-project') // Upstash or the hosting's
     await createProject(Object.fromEntries(formData))
     revalidatePath('/projects')
     return { ok: true }
   } catch (e) {
-    console.error('createProject', { code: (e as Error).message }) // sin datos del usuario
-    return { ok: false, error: 'No se pudo crear el proyecto. Revisa los datos e intenta de nuevo.' }
+    console.error('createProject', { code: (e as Error).message }) // no user data
+    return { ok: false, error: 'Could not create the project. Check the data and try again.' }
   }
 }
 
 export async function deleteProjectAction(id: string): Promise<ActionState> {
   try {
-    await deleteProject(id) // auth + authz dentro de la DAL
+    await deleteProject(id) // auth + authz inside the DAL
     revalidatePath('/projects')
     return { ok: true }
   } catch {
-    return { ok: false, error: 'No se pudo eliminar.' } // genérico: no revela si existe
+    return { ok: false, error: 'Could not delete.' } // generic: does not reveal existence
   }
 }
 ```
@@ -119,14 +119,14 @@ export const projectInput = z.object({
 export const idParam = z.string().uuid()
 ```
 
-## Pruebas por función de la DAL y por acción
+## Tests per DAL function and per action
 
-| Caso | Qué comprueba |
-|------|---------------|
-| Feliz | crea / lee / borra lo propio y devuelve el DTO |
-| Inválido | entrada que no pasa Zod → error, sin tocar la BD |
-| Sin permiso | id de otro usuario → FORBIDDEN, misma respuesta que inexistente |
-| Sin sesión | UNAUTHENTICATED |
+| Case | What it checks |
+|------|----------------|
+| Happy | creates / reads / deletes their own and returns the DTO |
+| Invalid | input that fails Zod → error, without touching the DB |
+| Forbidden | another user's id → FORBIDDEN, same answer as nonexistent |
+| No session | UNAUTHENTICATED |
 
 ## Webhooks · `src/app/api/webhooks/stripe/route.ts`
 
@@ -136,21 +136,21 @@ import { headers } from 'next/headers'
 import { handleStripeEvent } from '@/data/billing'
 
 export async function POST(req: Request) {
-  const body = await req.text() // crudo, antes de parsear
+  const body = await req.text() // raw, before parsing
   const sig = (await headers()).get('stripe-signature')
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!) // process.env solo aquí o en data/
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!) // process.env only here or in data/
   let event: Stripe.Event
   try {
     event = stripe.webhooks.constructEvent(body, sig!, process.env.STRIPE_WEBHOOK_SECRET!)
   } catch {
     return new Response('bad signature', { status: 400 })
   }
-  await handleStripeEvent(event) // idempotente por event.id
+  await handleStripeEvent(event) // idempotent by event.id
   return new Response('ok')
 }
 ```
 
-## Auditoría rápida (Schneier)
+## Quick audit (Schneier)
 
 ```bash
 grep -rn "process.env" src --include=*.ts --include=*.tsx | grep -v "src/data/" | grep -v NEXT_PUBLIC_
@@ -158,4 +158,4 @@ grep -rln "from '@/data/db'" src | grep -v "src/data/"
 grep -rn "dangerouslySetInnerHTML" src
 ```
 
-Las tres deben salir vacías (la primera puede mostrar `proxy.ts` y `route.ts` de webhooks).
+All three should come back empty (the first may show `proxy.ts` and webhook `route.ts`).

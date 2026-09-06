@@ -1,40 +1,40 @@
-# Movimiento · [proyecto]
+# Motion · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Frost · Tokens: duration.*, ease.* · Referencia: skills apple-design, emil-design-eng
+Date: [yyyy-mm-dd] · Author: Frost · Tokens: duration.*, ease.* · Reference: apple-design, emil-design-eng skills
 
-## Principios
+## Principles
 
-- El movimiento explica un cambio de estado o de lugar. Si no explica nada, no se anima.
-- Interrumpible: el usuario puede cambiar de idea a mitad de camino.
-- Rápido: 150 a 300 ms para interfaz; resortes solo para gestos y elementos que se arrastran.
-- Nada esencial depende del movimiento. Bajo `prefers-reduced-motion: reduce`, transiciones a 0 ms o fundidos de opacidad.
+- Motion explains a change of state or place. If it explains nothing, it does not animate.
+- Interruptible: the user can change their mind halfway.
+- Fast: 150 to 300 ms for interface; springs only for gestures and dragged elements.
+- Nothing essential depends on motion. Under `prefers-reduced-motion: reduce`, transitions at 0 ms or opacity fades.
 
-## Qué se anima
+## What animates
 
-| Elemento | Propiedad | Duración | Curva | Reduced motion |
-|----------|-----------|----------|-------|----------------|
-| Hover de botón | color de fondo | duration.fast | ease.out | igual (no es movimiento) |
-| Aparición de menú / popover | opacity + translateY 4 px | duration.normal | ease.out | solo opacity |
-| Hoja o modal | translateY / scale 0.98 → 1 | duration.slow | ease.spring | solo opacity |
-| Cambio de página | opacity | duration.page | ease.in-out | ninguno |
-| Acordeón | height (grid-template-rows) | duration.normal | ease.out | instantáneo |
-| Toast | translateY + opacity | duration.normal | ease.out | solo opacity |
-| Esqueletos de carga | pulso de opacidad | 1.5 s loop | linear | estático |
+| Element | Property | Duration | Curve | Reduced motion |
+|---------|----------|----------|-------|----------------|
+| Button hover | background color | duration.fast | ease.out | same (it is not motion) |
+| Menu / popover appear | opacity + translateY 4 px | duration.normal | ease.out | opacity only |
+| Sheet or modal | translateY / scale 0.98 → 1 | duration.slow | ease.spring | opacity only |
+| Page change | opacity | duration.page | ease.in-out | none |
+| Accordion | height (grid-template-rows) | duration.normal | ease.out | instant |
+| Toast | translateY + opacity | duration.normal | ease.out | opacity only |
+| Loading skeletons | opacity pulse | 1.5 s loop | linear | static |
 
-## Qué no se anima
+## What does not animate
 
-- Texto mientras se lee. Layout que empuja contenido (causa CLS).
-- Nada en bucle infinito salvo indicadores de carga.
-- Parallax y efectos al hacer scroll salvo decisión explícita del usuario.
+- Text while it is being read. Layout that pushes content (causes CLS).
+- Nothing in an infinite loop except loading indicators.
+- Parallax and scroll effects unless the user explicitly decides so.
 
-## Gestos (solo aplicaciones)
+## Gestures (applications only)
 
-| Gesto | Dónde | Física | Cancelación |
-|-------|-------|--------|-------------|
-| Arrastrar hoja para cerrar | hoja móvil | resorte ease.spring | vuelve si < 40 % |
-| Alternativa de un clic (WCAG 2.5.7) | botón cerrar visible | | |
+| Gesture | Where | Physics | Cancellation |
+|---------|-------|---------|--------------|
+| Drag sheet to close | mobile sheet | ease.spring | returns if < 40 % |
+| One-click alternative (WCAG 2.5.7) | visible close button | | |
 
-## Implementación (para Osmani)
+## Implementation (for Osmani)
 
-- CSS `transition` con tokens; View Transitions para cambio de página (skill `react-view-transitions` en Next.js).
-- `@media (prefers-reduced-motion: reduce)` global que reduce duraciones a 0.01 ms salvo opacidad.
+- CSS `transition` with tokens; View Transitions for page changes (`react-view-transitions` skill on Next.js).
+- Global `@media (prefers-reduced-motion: reduce)` that reduces durations to 0.01 ms except opacity.

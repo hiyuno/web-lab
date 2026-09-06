@@ -1,60 +1,60 @@
-# Backend · [proyecto]
+# Backend · [project]
 
-Fecha: [aaaa-mm-dd] · Autora: Hopper · Solo aplicaciones
+Date: [yyyy-mm-dd] · Author: Hopper · Applications only
 
 ## Stack
 
-| Qué | Decisión |
-|-----|----------|
-| Base de datos | Postgres en Neon |
-| ORM y migraciones | Drizzle, `drizzle/` |
-| Identidad | Clerk / Better Auth / Auth.js |
-| Pagos | Stripe / Mercado Pago |
+| What | Decision |
+|------|----------|
+| Database | Postgres on Neon |
+| ORM and migrations | Drizzle, `drizzle/` |
+| Identity | Clerk / Better Auth / Auth.js |
+| Payments | Stripe / Mercado Pago |
 | Rate limiting | Upstash |
-| Archivos | Vercel Blob |
-| Correo | Resend |
+| Files | Vercel Blob |
+| Email | Resend |
 
-## Modelo de datos
+## Data model
 
 ```mermaid
 erDiagram
   USERS ||--o{ PROJECTS : owns
 ```
 
-| Tabla | Dueño | Clase de datos | Retención | on delete |
-|-------|-------|----------------|-----------|-----------|
-| | | pública / interna / personal / sensible | | |
+| Table | Owner | Data class | Retention | on delete |
+|-------|-------|------------|-----------|-----------|
+| | | public / internal / personal / sensitive | | |
 
-## Permisos
+## Permissions
 
-| Recurso | Visitante | Miembro | Admin |
-|---------|-----------|---------|-------|
-| | | propio | todos |
+| Resource | Visitor | Member | Admin |
+|----------|---------|--------|-------|
+| | | own | all |
 
-## Acciones y rutas
+## Actions and routes
 
-| Acción / ruta | Valida | Autoriza | Rate limit | Devuelve | Pruebas |
-|---------------|--------|----------|------------|----------|---------|
-| | Zod | propiedad | | DTO | feliz / inválido / sin permiso |
+| Action / route | Validates | Authorizes | Rate limit | Returns | Tests |
+|----------------|-----------|------------|------------|---------|-------|
+| | Zod | ownership | | DTO | happy / invalid / forbidden |
 
-## Variables de entorno (nombres, nunca valores)
+## Environment variables (names, never values)
 
-| Nombre | Para qué | Dónde vive | Quién la rota |
-|--------|----------|------------|---------------|
+| Name | For what | Where it lives | Who rotates it |
+|------|----------|----------------|----------------|
 | DATABASE_URL | | Vercel | |
 
-## Migraciones
+## Migrations
 
 ```bash
 pnpm drizzle-kit generate && pnpm drizzle-kit migrate
 ```
 
-## Backups y restauración
+## Backups and restore
 
-Automático en [proveedor], retención [n] días. Restauración probada el [fecha] en [entorno].
+Automatic at [provider], retention [n] days. Restore tested on [date] in [environment].
 
-## Deuda y pendientes
+## Debt and pending
 
-| Qué | Por qué | Cuándo |
-|-----|---------|--------|
+| What | Why | When |
+|------|-----|------|
 | | | |

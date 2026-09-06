@@ -1,27 +1,27 @@
-# Mapa de redirects · [proyecto]
+# Redirect map · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Rosenfeld · Se convierte al formato del hosting en la fase 7 (Allspaw)
+Date: [yyyy-mm-dd] · Author: Rosenfeld · Converted to the hosting's format in phase 7 (Allspaw)
 
-Reglas: una fila por URL actual que cambia. Uno a uno hacia la página más afín. Nunca en masa a
-la home. Sin cadenas. Todo 301. Los enlaces internos del sitio nuevo apuntan a la URL nueva.
+Rules: one row per current URL that changes. One to one toward the closest page. Never en masse
+to the home. No chains. All 301. Internal links on the new site point to the new URL.
 
-| URL actual | URL destino | Tipo | Motivo | Tráfico 90d | Posiciones | Backlinks | Responsable | Probado |
-|------------|-------------|------|--------|-------------|------------|-----------|-------------|---------|
-| /vieja | /nueva | 301 | fusionar / renombrar / eliminar | | | | | [ ] |
+| Current URL | Target URL | Type | Reason | Traffic 90d | Rankings | Backlinks | Owner | Tested |
+|-------------|------------|------|--------|-------------|----------|-----------|-------|--------|
+| /old | /new | 301 | merge / rename / remove | | | | | [ ] |
 
-## Patrones (si hay muchas URLs con la misma forma)
+## Patterns (if many URLs share a shape)
 
-| Patrón actual | Patrón destino | Ejemplo |
-|---------------|----------------|---------|
-| /blog/2023/:slug | /blog/:slug | /blog/2023/hola → /blog/hola |
+| Current pattern | Target pattern | Example |
+|-----------------|----------------|---------|
+| /blog/2023/:slug | /blog/:slug | /blog/2023/hello → /blog/hello |
 
-## URLs que se conservan sin cambio
+## URLs kept unchanged
 
-[ ] (no necesitan redirect; se listan para verificar que siguen respondiendo 200 tras el lanzamiento)
+[ ] (no redirect needed; listed to verify they still return 200 after launch)
 
-## Verificación tras el lanzamiento (Allspaw y Beizer)
+## Post-launch verification (Allspaw and Beizer)
 
-- [ ] Cada fila devuelve 301 a su destino y el destino devuelve 200.
-- [ ] Ninguna cadena de más de un salto.
-- [ ] Rastreo del sitio nuevo sin enlaces internos a URLs viejas.
-- [ ] Search Console sin errores de cobertura nuevos a los 7 y 30 días.
+- [ ] Every row returns 301 to its target and the target returns 200.
+- [ ] No chain longer than one hop.
+- [ ] New-site crawl with no internal links to old URLs.
+- [ ] Search Console with no new coverage errors at 7 and 30 days.

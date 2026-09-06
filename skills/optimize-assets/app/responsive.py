@@ -66,7 +66,7 @@ class Responsive:
         try:
             node = shutil.which('node')
             if not node:
-                raise RuntimeError('Node.js no está disponible para medir la web.')
+                raise RuntimeError('Node.js is not available to measure the site.')
             process = subprocess.Popen([node, os.path.join(os.path.dirname(__file__),'responsive.cjs'), self.state.audit], env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             process.stdin.write(json.dumps({'password':password}))
             process.stdin.close()

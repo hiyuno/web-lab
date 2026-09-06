@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
-"""Fase 4, paso 4.2: tokens DTCG → CSS para Tailwind v4, con verificación de contraste.
+"""Phase 4, step 4.2: DTCG tokens → CSS for Tailwind v4, with contrast verification.
 
-Entrada: tokens.tokens.json en formato W3C DTCG (grupos anidados, $value, $type, alias
-"{grupo.token}"). Convención web-lab:
-  - Grupos de primer nivel primitivos: color, spacing, text, leading, tracking, font, radius,
-    shadow, ease, duration, breakpoint → van a @theme como --<grupo>-<ruta>.
-  - Grupo "semantic": tokens de decisión → variables en :root (modo claro) con sobreescritura
-    en $extensions.web-lab.dark, y alias en @theme inline (--color-<nombre> para colores).
-  - $extensions.web-lab.contrast: lista de pares {fg, bg, min} a verificar en claro y oscuro.
+Input: tokens.tokens.json in W3C DTCG format (nested groups, $value, $type, "{group.token}"
+aliases). web-lab convention:
+  - Top-level primitive groups: color, spacing, text, leading, tracking, font, radius, shadow,
+    ease, duration, breakpoint → go to @theme as --<group>-<path>.
+  - "semantic" group: decision tokens → variables in :root (light mode) with an override from
+    $extensions.web-lab.dark, and aliases in @theme inline (--color-<name> for colors).
+  - $extensions.web-lab.contrast: list of {fg, bg, min} pairs verified in light and dark.
 
-Uso:
-  tokens_to_tailwind.py tokens.tokens.json                  # CSS en stdout + reporte en stderr
-  tokens_to_tailwind.py tokens.tokens.json --css tokens.css # escribe el CSS
-  tokens_to_tailwind.py tokens.tokens.json --check          # solo el reporte de contraste
-Sale con código 1 si algún par de contraste falla.
+Usage:
+  tokens_to_tailwind.py tokens.tokens.json                  # CSS to stdout + report to stderr
+  tokens_to_tailwind.py tokens.tokens.json --css tokens.css # write the CSS
+  tokens_to_tailwind.py tokens.tokens.json --check          # contrast report only
+Exits with code 1 if any contrast pair fails.
 """
 import argparse, json, math, re, sys
 
@@ -41,13 +41,13 @@ ALIAS = re.compile(r"^\{([^}]+)\}$")
 
 def resolve(tokens, value, depth=0):
     if depth > 20:
-        raise ValueError(f"alias circular: {value}")
+        raise ValueError(f"circular alias: {value}")
     if isinstance(value, str):
         m = ALIAS.match(value.strip())
         if m:
             ref = m.group(1)
             if ref not in tokens:
-                raise KeyError(f"alias a token inexistente: {ref}")
+                raise KeyError(f"alias to a missing token: {ref}")
             return resolve(tokens, tokens[ref]["value"], depth + 1)
     if isinstance(value, list):
         return ", ".join(str(resolve(tokens, v, depth + 1)) for v in value)
@@ -74,11 +74,11 @@ def oklch_to_rgb(L, C, h):
     r = 4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s
     g = -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s
     bb = -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s
-    return tuple(min(1.0, max(0.0, x)) for x in (r, g, bb))  # lineal, recortado al gamut
+    return tuple(min(1.0, max(0.0, x)) for x in (r, g, bb))  # linear, clipped to gamut
 
 
 def parse_color(s):
-    """Devuelve (r, g, b) lineal en 0..1 o None si no se puede interpretar."""
+    """Returns linear (r, g, b) in 0..1 or None if it cannot be parsed."""
     s = str(s).strip().lower()
     m = re.match(r"^#([0-9a-f]{3}|[0-9a-f]{6})$", s)
     if m:
@@ -107,7 +107,7 @@ def contrast(c1, c2):
     return (hi + 0.05) / (lo + 0.05)
 
 
-# ---------- generación ----------
+# ---------- generation ----------
 
 def build(tokens):
     theme, root_light, root_dark, inline = [], [], [], []
@@ -122,7 +122,7 @@ def build(tokens):
             if "dark" in tok["ext"]:
                 dark = resolve(tokens, tok["ext"]["dark"])
                 root_dark.append(f"  {var}: {as_css_ref(tok['ext']['dark'], dark)};")
-            # un alias a otro semántico hereda su modo oscuro a través de var(), no necesita fila
+            # an alias to another semantic inherits its dark mode through var(); no row needed
             ns = {"color": "color", "spacing": "spacing", "radius": "radius", "shadow": "shadow",
                   "text": "text", "font": "font", "duration": "duration", "ease": "ease"}.get(kind)
             if ns:
@@ -130,13 +130,13 @@ def build(tokens):
         elif parts[0] in THEME_GROUPS:
             theme.append(f"  {css_name(path)}: {resolve(tokens, tok['value'])};")
         elif parts[0] == "component":
-            # tokens de componente: --button-height, --input-height; referencian semantic o primitivos
+            # component tokens: --button-height, --input-height; reference semantic or primitives
             root_light.append(f"  --{'-'.join(parts[1:])}: {as_css_ref(tok['value'], resolve(tokens, tok['value']))};")
         else:
             root_light.append(f"  {css_name(path)}: {as_css_ref(tok['value'], resolve(tokens, tok['value']))};")
 
     css = ['@import "tailwindcss";', "",
-           "/* Generado por web-lab · skills/design-system/scripts/tokens_to_tailwind.py. No editar a mano: edita tokens.tokens.json. */",
+           "/* Generated by web-lab · skills/design-system/scripts/tokens_to_tailwind.py. Do not edit by hand: edit tokens.tokens.json. */",
            "", "@theme {", *theme, "}", ""]
     if inline:
         css += ["@theme inline {", *inline, "}", ""]
@@ -149,7 +149,7 @@ def build(tokens):
 
 
 def as_css_ref(raw, resolved):
-    """Alias a primitivo → var(--color-x); alias a semántico → var(--nombre-semantico)."""
+    """Alias to a primitive → var(--color-x); alias to a semantic → var(--semantic-name)."""
     if isinstance(raw, str):
         m = ALIAS.match(raw.strip())
         if m:
@@ -164,10 +164,10 @@ def as_css_ref(raw, resolved):
 def check_contrast(tokens, data):
     pairs = data.get("$extensions", {}).get("web-lab", {}).get("contrast", [])
     if not pairs:
-        print("[contraste] sin pares declarados en $extensions.web-lab.contrast", file=sys.stderr)
+        print("[contrast] no pairs declared in $extensions.web-lab.contrast", file=sys.stderr)
         return True
     ok = True
-    print(f"{'par':44} {'mín':>5} {'claro':>6} {'oscuro':>7}  resultado", file=sys.stderr)
+    print(f"{'pair':44} {'min':>5} {'light':>6} {'dark':>7}  result", file=sys.stderr)
     for p in pairs:
         fg, bg, mn = p["fg"], p["bg"], float(p.get("min", 4.5))
         res = []
@@ -178,20 +178,20 @@ def check_contrast(tokens, data):
                 c1, c2 = parse_color(resolve(tokens, fv)), parse_color(resolve(tokens, bv))
                 res.append(contrast(c1, c2) if c1 and c2 else None)
             except KeyError as e:
-                print(f"[contraste] {e}", file=sys.stderr); res.append(None)
+                print(f"[contrast] {e}", file=sys.stderr); res.append(None)
         fail = any(r is None or r < mn for r in res)
         ok &= not fail
         fmt = lambda r: f"{r:6.2f}" if r is not None else "   n/a"
         label = f"{fg.replace('semantic.color.', '')} / {bg.replace('semantic.color.', '')}"
-        print(f"{label:44} {mn:>5} {fmt(res[0])} {fmt(res[1]):>7}  {'FALLA' if fail else 'ok'}", file=sys.stderr)
+        print(f"{label:44} {mn:>5} {fmt(res[0])} {fmt(res[1]):>7}  {'FAIL' if fail else 'ok'}", file=sys.stderr)
     return ok
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("tokens")
-    ap.add_argument("--css", metavar="OUT", help="escribe el CSS en OUT")
-    ap.add_argument("--check", action="store_true", help="solo verifica contraste")
+    ap.add_argument("--css", metavar="OUT", help="write the CSS to OUT")
+    ap.add_argument("--check", action="store_true", help="contrast check only")
     a = ap.parse_args()
     data = json.load(open(a.tokens, encoding="utf-8"))
     tokens = flatten(data)
@@ -200,7 +200,7 @@ def main():
         css = build(tokens)
         if a.css:
             open(a.css, "w", encoding="utf-8").write(css)
-            print(f"[css] {a.css}: {len(css.splitlines())} líneas", file=sys.stderr)
+            print(f"[css] {a.css}: {len(css.splitlines())} lines", file=sys.stderr)
         else:
             print(css)
     sys.exit(0 if ok else 1)

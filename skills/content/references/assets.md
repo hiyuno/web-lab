@@ -1,28 +1,28 @@
-# Lista de assets · [proyecto]
+# Asset list · [project]
 
-Fecha: [aaaa-mm-dd] · Autor: Rosenfeld · Los prepara y optimiza Bellard en la fase 5.
+Date: [yyyy-mm-dd] · Author: Rosenfeld · Prepared and optimized by Bellard in phase 5.
 
-Una fila por bloque de wireframe que necesita imagen, video, icono o ilustración. Dimensiones
-destino según el wireframe en escritorio; Bellard decide variantes. Alt text previsto aquí;
-si es decorativa, se marca y va con `alt=""`.
+One row per wireframe block that needs an image, video, icon or illustration. Target dimensions
+per the desktop wireframe; Bellard decides variants. Planned alt text here; if decorative, mark
+it and it ships with `alt=""`.
 
-| # | Página | Bloque | Tipo | Para qué sirve | Dimensiones destino | Alt text previsto / decorativa | Origen | Licencia | Responsable | Entrega | Estado |
-|---|--------|--------|------|----------------|---------------------|--------------------------------|--------|----------|-------------|---------|--------|
-| 1 | / | hero | foto | | 1600 × 900 | | propia, banco, ilustración, captura | | | | pendiente |
+| # | Page | Block | Type | Purpose | Target dimensions | Planned alt text / decorative | Source | License | Owner | Due | Status |
+|---|------|-------|------|---------|-------------------|-------------------------------|--------|---------|-------|-----|--------|
+| 1 | / | hero | photo | | 1600 × 900 | | own, stock, illustration, screenshot | | | | pending |
 
-## Assets globales
+## Global assets
 
-| Asset | Especificación | Responsable | Estado |
-|-------|----------------|-------------|--------|
-| Logo | SVG, versiones claro/oscuro, mínimo 24 px de alto | | |
-| Favicon | SVG + PNG 180 y 512, `manifest` | | |
-| Imagen social por defecto | 1200 × 630, texto legible en móvil | | |
-| Imagen social por página | 1200 × 630, ver seo.md | | |
-| Iconos | set único (Lucide, Phosphor o propio), trazo consistente | | |
+| Asset | Specification | Owner | Status |
+|-------|---------------|-------|--------|
+| Logo | SVG, light/dark versions, minimum 24 px tall | | |
+| Favicon | SVG + PNG 180 and 512, `manifest` | | |
+| Default social image | 1200 × 630, text legible on mobile | | |
+| Social image per page | 1200 × 630, see seo.md | | |
+| Icons | one set (Lucide, Phosphor or own), consistent stroke | | |
 
-## Reglas
+## Rules
 
-- Fotos con personas reales del negocio antes que banco de imágenes. Si es banco, licencia anotada.
-- Video: sin audio si va de fondo, 8 a 15 s en loop, con poster. Bellard lo comprime.
-- Nada de texto dentro de imágenes salvo logos; el texto va en HTML.
-- Alt text describe función e intención, no keywords. Máximo una frase.
+- Photos of the business's real people before stock. If stock, license noted.
+- Video: no audio if background, 8 to 15 s loop, with poster. Bellard compresses it.
+- No text inside images except logos; text goes in HTML.
+- Alt text describes function and intent, not keywords. One sentence at most.

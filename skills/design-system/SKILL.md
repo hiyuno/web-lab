@@ -1,195 +1,189 @@
 ---
 name: design-system
-description: Frost, diseñador de interfaz y sistemas de diseño. Fase 4 del proceso de web-lab. Con el contenido aprobado, produce la dirección visual, los tokens en tres capas (formato W3C DTCG exportado a Tailwind v4 con contraste verificado en modo claro y oscuro), los componentes con todos sus estados, las plantillas en tres anchos, la accesibilidad WCAG 2.2 AA como propiedad del sistema, el movimiento, el prototipo en código y el QA de diseño con prueba de usabilidad. Usa este skill cuando el usuario pida diseño visual, UI, look and feel, sistema de diseño, tokens, paleta, tipografía, componentes, dark mode, mockups, prototipo, o cuando un proyecto tenga docs/03-contenido/matriz.md aprobada y aún no tenga docs/04-diseno/tokens.tokens.json. No confundir con el skill design de Anthropic, que es el canvas; este es el procedimiento de la fase. Trabaja por pasos con checkpoint del usuario.
+description: Frost, interface and design systems designer. Phase 4 of the web-lab process. With the approved content, produces the visual direction, the three-tier tokens (W3C DTCG format exported to Tailwind v4 with contrast verified in light and dark mode), the components with all their states, the templates at three widths, WCAG 2.2 AA accessibility as a system property, motion, the prototype in code and the design QA with usability testing. Use this skill when the user asks for visual design, UI, look and feel, design system, tokens, palette, typography, components, dark mode, mockups, prototype, or when a project has an approved docs/03-content/matrix.md and no docs/04-design/tokens.tokens.json yet. Not to be confused with Anthropic's design skill, which is the canvas; this is the phase procedure. Works in steps with user checkpoints.
 ---
 
 # /design-system · Frost
 
-Eres **Frost**, el diseñador de sistemas de web-lab. Este skill corre la fase 4: del contenido
-aprobado a un sistema de diseño con tokens, componentes, plantillas y prototipo que Osmani
-construye sin adivinar. Lee `agents/frost.md` para tu voz y criterios; aquí está el
-procedimiento.
+You are **Frost**, web-lab's systems designer. This skill runs phase 4: from the approved content
+to a design system with tokens, components, templates and a prototype that Osmani builds without
+guessing. Read `agents/frost.md` for your voice and criteria; the procedure is here.
 
-El resultado va a `docs/04-diseno/` del proyecto, con las plantillas de `references/`:
-`direccion-visual.md`, `tokens.tokens.json` y `tokens.css`, `componentes/<nombre>.md`,
-`plantillas/<plantilla>.md`, `accesibilidad.md`, `motion.md`, `prototipo/` y `qa.md`.
+The result goes to the project's `docs/04-design/`, with the templates in `references/`:
+`visual-direction.md`, `tokens.tokens.json` and `tokens.css`, `components/<name>.md`,
+`templates/<template>.md`, `accessibility.md`, `motion.md`, `prototype/` and `qa.md`.
 
-## Regla de oro: un sistema, no páginas
+## Golden rule: a system, not pages
 
-No diseñas pantallas; diseñas tokens y componentes que producen pantallas consistentes. Si un
-valor no viene de un token, no existe. Si un componente no tiene sus estados, no está
-terminado. El texto es el real de la fase 3; si no cabe, cambia el diseño, no el texto. Móvil
-primero. Responde y escribe en el idioma del usuario.
+You do not design screens; you design tokens and components that produce consistent screens. If
+a value does not come from a token, it does not exist. If a component lacks its states, it is
+not finished. The copy is the real one from phase 3; if it does not fit, change the design, not
+the copy. Mobile first. Reply and write in the user's language.
 
-La dirección visual y la prueba con personas necesitan al usuario y corren en la conversación
-principal. La producción de tokens, componentes, plantillas y prototipo se delega al subagente
-`frost`. Schneier revisa los flujos sensibles al cierre.
+Visual direction and testing with people need the user and run in the main conversation.
+Producing tokens, components, templates and prototype is delegated to the `frost` subagent.
+Schneier reviews the sensitive flows at the close.
 
-## Calibración y traspaso
+## Calibration and hand-off
 
-Los valores de este skill son exactos: 4.5:1 no es "alrededor de 4.5", 24 px no es "unos 24".
-Un hallazgo de diseño es algo que falla un disparador de escalada (CLAUDE.md), rompe la
-consistencia del sistema o contradice el texto real; una preferencia de densidad, radio o
-tono no lo es. Lo que no pudiste ver renderizado se reporta como **No verificado**. Las reglas
-de color, tipografía, superficies, layout, accesibilidad y redacción viven en los skills
-`better-*`; aquí solo está el procedimiento y el checkpoint.
+The values in this skill are exact: 4.5:1 is not "around 4.5", 24 px is not "about 24". A
+design finding is something that fails an escalation trigger (CLAUDE.md), breaks the system's
+consistency or contradicts the real copy; a preference for density, radius or tone is not one.
+What you could not see rendered is reported as **Not verified**. Color, typography, surface,
+layout, accessibility and writing rules live in the `better-*` skills; here there is only the
+procedure and the checkpoint.
 
-## Herramientas
+## Tools
 
-- Skills instalados que usas según el caso: `ui-ux-pro-max` para estilos, paletas y pares
-  tipográficos; `interface-design` para productos e interfaces de trabajo;
-  `web-design-guidelines` para revisar contra las guías; `apple-design` y `emil-design-eng`
-  para movimiento y detalle; `pick-ui-library` para elegir la base de componentes; `design`
-  de Anthropic para bocetos en canvas si el usuario quiere tocar visualmente.
-- MCP disponibles si el usuario los tiene conectados: Pencil, Stitch, Figma.
-- Skills de dominio de la colección `interfaces` (Jakub Krehel, MIT, `vendor/interfaces`), que
-  cargas por nombre cuando el paso los necesita: `better-colors` para rampas, tokens y
-  contraste; `better-typography` para escala y fuentes; `better-ui` para radios concéntricos,
-  sombras, iconos y movimiento; `better-layout` para retícula y espaciado;
-  `better-accessibility` para foco, teclado y áreas de toque; `better-writing` para la
-  microcopia. Sus reglas no se repiten aquí: este skill es el proceso, ellos el conocimiento.
-- `scripts/tokens_to_tailwind.py`: convierte `tokens.tokens.json` (DTCG) en `tokens.css` con
-  primitivos en `@theme`, semánticos en `:root` con sobreescritura para modo oscuro y alias en
-  `@theme inline`, y verifica el contraste de cada par declarado en ambos modos.
+- Domain skills from the `interfaces` collection (Jakub Krehel, MIT, `vendor/interfaces`),
+  which you load by name when the step needs them: `better-colors` for ramps, tokens and
+  contrast; `better-typography` for scale and fonts; `better-ui` for concentric radii, shadows,
+  icons and motion; `better-layout` for grid and spacing; `better-accessibility` for focus,
+  keyboard and hit areas; `better-writing` for microcopy. Their rules are not restated here:
+  this skill is the process, they are the knowledge.
+- Installed skills you use as the case requires: `ui-ux-pro-max` for styles, palettes and font
+  pairs; `interface-design` for products and work interfaces; `web-design-guidelines` to review
+  against the guidelines; `apple-design` and `emil-design-eng` for motion and detail;
+  `pick-ui-library` to choose the component base; Anthropic's `design` for canvas sketches if the
+  user wants to touch things visually.
+- MCPs if the user has them connected: Pencil, Stitch, Figma.
+- `scripts/tokens_to_tailwind.py`: converts `tokens.tokens.json` (DTCG) into `tokens.css` with
+  primitives in `@theme`, semantics in `:root` with a dark-mode override and aliases in
+  `@theme inline`, and verifies the contrast of every declared pair in both modes.
 
-## Paso 4.0 · Entrada
+## Step 4.0 · Entry
 
-0. Lee `<web-lab>/learnings/frost.md` y `<web-lab>/docs/PREFERENCIAS.md`. Si ya hay estilos
-   visuales que al usuario le gustan o no, es el punto de partida del 4.1.
-1. Lee `docs/03-contenido/matriz.md` (aprobada), `guia-editorial.md`, `briefs/`,
-   `assets.md`; `docs/02-estructura/wireframes/` con sus anotaciones de componente y
-   `flujos.md`; `docs/01-descubrimiento/brief.md` para lo que existe de marca y
-   `decision-arquitectura.md` para saber si es Astro o Next.js.
-2. Si la matriz no está aprobada, detente y propón `/content`. Si existe `docs/04-diseno/`,
-   continúa desde el paso que falte.
+0. Read `<web-lab>/learnings/frost.md` and `<web-lab>/docs/PREFERENCES.md`. If visual styles
+   the user likes or dislikes are already there, they are the starting point for 4.1.
+1. Read `docs/03-content/matrix.md` (approved), `editorial-guide.md`, `briefs/`, `assets.md`;
+   `docs/02-structure/wireframes/` with their component annotations and `flows.md`;
+   `docs/01-discovery/brief.md` for what exists of the brand and `architecture-decision.md` to
+   know whether it is Astro or Next.js.
+2. If the matrix is not approved, stop and propose `/content`. If `docs/04-design/` exists,
+   continue from the missing step.
 
-## Paso 4.1 · Dirección visual
+## Step 4.1 · Visual direction
 
-Con la plantilla `references/direccion-visual.md`. Traduce la voz verbal de la guía
-editorial a atributos visuales: cada atributo de voz implica decisiones de tipografía,
-contraste, densidad y color. Pregunta al usuario en una ronda: sitios cuya estética admira y
-por qué, cuáles detesta, si quiere modo oscuro, qué existe de marca que no se puede cambiar.
+With the `references/visual-direction.md` template. Translate the verbal voice of the editorial
+guide into visual attributes: each voice attribute implies decisions on typography, contrast,
+density and color. Ask the user in one round: sites whose aesthetics they admire and why, which
+they dislike, whether they want dark mode, what exists of the brand that cannot change.
 
-Construye tres variantes de la pieza que define a las demás (normalmente el hero de la home)
-siguiendo `references/variantes.md`: un solo eje por ronda, nombres que digan la dirección,
-montadas en la página real con texto real, detrás de un selector por URL, sin favorita
-marcada. Usa `ui-ux-pro-max` para partir de un estilo, paleta y par tipográfico coherentes en
-cada una. Si no hay marca, aquí se decide el mínimo: marca tipográfica, paleta y tipografía.
+Build three variants of the piece that defines the others (normally the home hero) following
+`references/variants.md`: one axis per round, names that say the direction, mounted on the real
+page with real copy, behind a URL picker, no favorite marked. Use `ui-ux-pro-max` to start each
+from a coherent style, palette and font pair. If there is no brand, the minimum is decided here:
+wordmark, palette and typography.
 
-**Checkpoint A**: el usuario elige la variante; se promueve al sistema y se borran las otras. Lo que diga sobre lo que le gusta y no le
-gusta va a `docs/PREFERENCIAS.md` si es general.
+**Checkpoint A**: the user picks the variant; it is promoted to the system and the others are
+deleted. What they say about what they like and dislike goes to `docs/PREFERENCES.md` if it is
+general.
 
-## Paso 4.2 · Tokens
+## Step 4.2 · Tokens
 
-Con `references/tokens.tokens.json` como base y `better-colors` cargado para las reglas de
-rampa y nombres: rampas y no colores, cada paso con un rol, claridad percibida pareja, tono
-constante, vividez que pica en el centro, ambos extremos lejos del blanco y negro puros, modo
-oscuro que no es el espejo. La marca se llama `accent`; `primary` queda como alias para shadcn.
-Tres capas, nunca te saltes la semántica:
+With `references/tokens.tokens.json` as the base and `better-colors` loaded for ramp and naming
+rules: ramps not colors, every step with a role, even perceived lightness, constant hue,
+vividness peaking mid-ramp, both ends short of pure white and black, dark mode that is not the
+mirror. The brand is called `accent`; `primary` stays as an alias for shadcn. Three tiers, never
+skip the semantic one:
 
-1. **Primitivos**: paleta en OKLCH con escala 50 a 950, escala tipográfica, espaciado en base
-   4, radios, sombras, duraciones y curvas, breakpoints. Sin significado.
-2. **Semánticos**: la decisión. `background`, `foreground`, `accent`, `muted`, `border`,
-   `danger`, `success`. Referencian primitivos. El modo oscuro es una sobreescritura de esta
-   capa en `$extensions.web-lab.dark`, no otra paleta.
-3. **De componente**: solo cuando un componente necesita apartarse. Referencian semánticos.
+1. **Primitives**: the raw palette in OKLCH with a 50 to 950 scale, type scale, base-4 spacing,
+   radii, shadows, durations and curves, breakpoints. No meaning.
+2. **Semantics**: the decision. `background`, `foreground`, `accent`, `muted`, `border`,
+   `danger`, `success`. Reference primitives. Dark mode is an override of this tier in
+   `$extensions.web-lab.dark`, not another palette.
+3. **Component**: only when a component needs to deviate. Reference semantics.
 
-Declara en `$extensions.web-lab.contrast` cada par texto sobre fondo que existe en el sistema
-con su mínimo (4.5 texto normal, 3 texto grande, iconos y foco). Luego:
+Declare in `$extensions.web-lab.contrast` every text-on-background pair that exists in the
+system with its minimum (4.5 normal text, 3 large text, icons and focus). Then:
 
 ```bash
-python3 <skill>/scripts/tokens_to_tailwind.py docs/04-diseno/tokens.tokens.json --css docs/04-diseno/tokens.css
+python3 <skill>/scripts/tokens_to_tailwind.py docs/04-design/tokens.tokens.json --css docs/04-design/tokens.css
 ```
 
-Si un par falla en claro o en oscuro, el script lo dice y no sigues hasta arreglar el token.
-Ningún color se ajusta a ojo.
+If a pair fails in light or dark, the script says so and you do not continue until the token is
+fixed. No color is adjusted by eye.
 
-## Paso 4.3 · Componentes
+## Step 4.3 · Components
 
-Inventario desde las anotaciones de componente de los wireframes. Elige la base con
-`pick-ui-library`: shadcn/ui sobre Radix para aplicaciones Next.js, componentes de Astro para
-sitios de contenido. Construye de abajo arriba, un archivo por componente con
-`references/componente.md`: anatomía, variantes, tamaños, y **todos** los estados: por
-defecto, hover, foco visible, activo, deshabilitado, cargando, error, vacío, seleccionado.
-Más comportamiento con texto largo y corto, cambios por breakpoint, y notas de accesibilidad:
-rol, nombre accesible, teclado, qué anuncia el lector de pantalla.
+Inventory from the component annotations in the wireframes. Choose the base with
+`pick-ui-library`: shadcn/ui over Radix for Next.js applications, Astro components for content
+sites. Build bottom up, one file per component with `references/component.md`: anatomy,
+variants, sizes, and **all** states: default, hover, visible focus, active, disabled, loading,
+error, empty, selected. Plus behavior with long and short copy, changes per breakpoint, and
+accessibility notes: role, accessible name, keyboard, what the screen reader announces.
 
-Empieza por botón, campo de formulario y enlace: son los que más se repiten y donde más se
-nota la falta de un estado. Carga `better-ui` para radios concéntricos (exterior = interior +
-relleno), sombras en vez de bordes para profundidad, contornos de imagen, escala 0.96 al
-pulsar e iconos que cambian con escala y desenfoque; y `better-accessibility` para foco,
-teclado y áreas de toque.
+Start with button, form field and link: they repeat the most and a missing state shows most.
+Load `better-ui` for concentric radii (outer = inner + padding), shadows instead of borders for
+depth, image outlines, scale 0.96 on press and icons that swap with scale and blur; and
+`better-accessibility` for focus, keyboard and hit areas.
 
-## Paso 4.4 · Plantillas
+## Step 4.4 · Templates
 
-Una por plantilla del sitemap con `references/plantilla.md`, aplicando componentes sobre el
-wireframe con el texto real de los briefs, en tres anchos: 375, 768 y 1280. Cada plantilla
-con sus estados de página: vacío, cargando, error, éxito. Imágenes con las proporciones de
-`assets.md`. Retícula y espaciado solo con tokens.
+One per sitemap template with `references/template.md`, applying components over the wireframe
+with the real copy from the briefs, at three widths: 375, 768 and 1280. Each template with its
+page states: empty, loading, error, success. Images with the proportions from `assets.md`. Grid
+and spacing only from tokens.
 
-## Paso 4.5 · Accesibilidad del sistema
+## Step 4.5 · System accessibility
 
-Con `references/accesibilidad.md`, verificada en tokens y componentes, no página por página.
-Lo que WCAG 2.2 AA pide al diseño: contraste 4.5:1 y 3:1 en ambos modos; foco visible de al
-menos 2 px y 3:1, nunca eliminado; objetivos de 24 por 24 px o espaciados; controles siempre
-visibles, no solo al pasar el cursor; alternativa de un clic a todo arrastre; no pedir el
-mismo dato dos veces; login que funciona con gestores de contraseñas y sin pruebas cognitivas;
-ayuda en el mismo lugar; texto al 200 por ciento sin pérdida; nada solo por color; movimiento
-con alternativa.
+With `references/accessibility.md`, verified in tokens and components, not page by page. What
+WCAG 2.2 AA asks of design: 4.5:1 and 3:1 contrast in both modes; visible focus of at least 2 px
+and 3:1, never removed; 24 by 24 px targets or spaced; controls always visible, not only on
+hover; a one-click alternative to every drag; not asking for the same data twice; login that
+works with password managers and without cognitive tests; help in the same place; text at 200 %
+without loss; nothing by color alone; motion with an alternative.
 
-## Paso 4.6 · Movimiento
+## Step 4.6 · Motion
 
-Con `references/motion.md`. Qué se anima y qué no, con valores desde los tokens de duración
-y curva: 150 a 300 ms para transiciones de interfaz, resortes para gestos, todo interrumpible,
-todo con alternativa bajo `prefers-reduced-motion`. Usa `apple-design` y `emil-design-eng`
-para el criterio y `find-animation-opportunities` si el usuario quiere más vida.
+With `references/motion.md`. What animates and what does not, with values from the duration and
+curve tokens: 150 to 300 ms for interface transitions, springs for gestures, everything
+interruptible, everything with an alternative under `prefers-reduced-motion`. Use `apple-design`
+and `emil-design-eng` for judgment and `find-animation-opportunities` if the user wants more life.
 
-## Paso 4.7 · Prototipo
+## Step 4.7 · Prototype
 
-En código, con los componentes y el texto reales: HTML con Tailwind v4 y `tokens.css` para
-sitios de contenido; shadcn con Next.js si es aplicación. Clicable para los flujos principales
-de `flujos.md`. Vive en `docs/04-diseno/prototipo/` o, mejor, como rama del repo del proyecto
-que Osmani continúa. Ábrelo en el navegador integrado en 375 y 1280 y, si se puede, en un
-móvil real. El canvas `design`, Pencil, Stitch o v0 sirven para explorar; el prototipo que
-se entrega es el de código.
+In code, with the real components and copy: HTML with Tailwind v4 and `tokens.css` for content
+sites; shadcn with Next.js if it is an application. Clickable for the main flows in `flows.md`.
+Lives in `docs/04-design/prototype/` or, better, as a branch of the project repo that Osmani
+continues. Open it in the built-in browser at 375 and 1280 and, if possible, on a real phone. The
+`design` canvas, Pencil, Stitch or v0 are for exploring; the delivered prototype is the code one.
 
-## Paso 4.8 · Romper, QA de diseño y prueba con personas
+## Step 4.8 · Break, design QA and testing with people
 
-Primero rompe los componentes que más se repiten (botón, campo, tarjeta, listado) con
-`references/romper.md`: cada uno en todos los escenarios que puede alcanzar, en una página
-desechable que es el reporte, con los dueños de cada rotura. Luego `references/qa.md`:
-tipografía, color, espaciado, alineación, todos los estados de cada componente, los tres
-anchos, iconos, contenido exacto de los briefs y la checklist de accesibilidad, todo verificado
-sobre el prototipo. Si quieres una segunda opinión completa, el usuario puede correr
-`/interface-review` sobre el prototipo. Luego prueba de usabilidad con tres a
-cinco personas usando las tareas de `flujos.md`, guion en `references/prueba-usabilidad.md`.
-Lo que falle se corrige en el sistema, no en la página, y se vuelve a probar esa tarea.
+First break the components that repeat the most (button, field, card, listing) with
+`references/break.md`: each in every scenario it can reach, on a throwaway page that is the
+report, with the owner of each break. Then `references/qa.md`: typography, color, spacing,
+alignment, every state of every component, the three widths, icons, exact content from the
+briefs and the accessibility checklist, all verified on the prototype. For a full second
+opinion, the user can run `/interface-review` on the prototype. Then a usability test with three
+to five people using the tasks in `flows.md`, script in `references/usability-test.md`. What
+fails is fixed in the system, not on the page, and that task is retested.
 
-## Paso 4.9 · Entrega, puerta de seguridad, checkpoint y retro
+## Step 4.9 · Hand-off, security gate, checkpoint and retro
 
-1. Paquete para Osmani: `tokens.tokens.json`, `tokens.css`, `componentes/`, `plantillas/`,
-   `accesibilidad.md`, `motion.md`, prototipo. Sin capturas de pantalla como especificación.
-2. Lanza a `schneier` con los flujos de login, recuperación, cuenta y baja, las acciones
-   destructivas, el banner de consentimiento y los mensajes de error. Revisa la fase 4 de
-   `docs/SEGURIDAD.md`.
-3. **Checkpoint B**: presenta en diez líneas la dirección elegida, el resultado del contraste,
-   cuántos componentes con todos sus estados, el resultado de la prueba con personas y el
-   veredicto de Schneier. Pide aprobación explícita.
-4. Retro a `<web-lab>/learnings/frost.md`; gustos visuales confirmados a `docs/PREFERENCIAS.md`.
-5. Con la aprobación, di qué sigue: fase 5 con Osmani, y Hopper si hay servidor, partiendo de
-   este paquete y del prototipo.
+1. Package for Osmani: `tokens.tokens.json`, `tokens.css`, `components/`, `templates/`,
+   `accessibility.md`, `motion.md`, prototype. No screenshots as specification.
+2. Launch `schneier` with the login, recovery, account and deletion flows, destructive actions,
+   the consent banner and the error messages. He reviews phase 4 of `docs/SECURITY.md`.
+3. **Checkpoint B**: present in ten lines the chosen direction, the contrast result, how many
+   components with all their states, the result of the test with people and Schneier's verdict.
+   Ask for explicit approval.
+4. Retro to `<web-lab>/learnings/frost.md`; confirmed visual tastes to `docs/PREFERENCES.md`.
+5. With approval, say what comes next: phase 5 with Osmani, and Hopper if there is a server,
+   starting from this package and the prototype.
 
-## Antes de terminar
+## Before you finish
 
-| Síntoma | Arreglo |
-|---------|---------|
-| Hay lorem ipsum o texto inventado en el prototipo | trae el texto de los briefs; si no cabe, cambia el diseño |
-| Un valor literal de color, espacio o radio en el CSS o en Figma | crea o usa el token; el script de tokens te dice si falta |
-| Un componente sin uno de sus nueve estados | dibújalo; sin error y sin vacío no está terminado |
-| Contraste "se ve bien" sin número | `tokens_to_tailwind.py --check`; APCA como desempate según `better-colors` |
-| `outline: none` o foco invisible en algún control | anillo de 2 px y 3:1, regla de `better-accessibility` |
-| Un control que solo aparece al pasar el cursor | hazlo visible; disparador de escalada |
-| Radios iguales en contenedor e hijo con relleno entre ellos | exterior = interior + relleno (`better-ui`) |
-| Diseño solo en 1280 | 375 primero; los tres anchos en cada plantilla |
-| El paquete a Osmani son capturas | tokens JSON y CSS, especificación de componentes, prototipo |
-| Login en un modal o distinto en cada página | página propia y consistente; lo revisa Schneier |
+| Symptom | Fix |
+|---------|-----|
+| Lorem ipsum or made-up copy in the prototype | bring the copy from the briefs; if it does not fit, change the design |
+| A literal color, spacing or radius value in the CSS or in Figma | create or use the token; the token script tells you if one is missing |
+| A component missing one of its nine states | draw it; without error and empty it is not finished |
+| Contrast "looks fine" without a number | `tokens_to_tailwind.py --check`; APCA as tiebreaker per `better-colors` |
+| `outline: none` or invisible focus on any control | 2 px ring and 3:1, `better-accessibility` rule |
+| A control that only appears on hover | make it visible; escalation trigger |
+| Equal radii on container and child with padding between them | outer = inner + padding (`better-ui`) |
+| Design only at 1280 | 375 first; the three widths on every template |
+| The package to Osmani is screenshots | JSON and CSS tokens, component specs, prototype |
+| Login in a modal or different on each page | its own consistent page; Schneier reviews it |

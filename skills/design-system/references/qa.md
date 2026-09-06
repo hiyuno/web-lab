@@ -1,58 +1,58 @@
-# QA de diseño · [proyecto]
+# Design QA · [project]
 
-Fecha: [aaaa-mm-dd] · Revisa: Frost · Sobre: prototipo en [URL o rama] · Estado: [ ] aprobado
+Date: [yyyy-mm-dd] · Reviewer: Frost · On: prototype at [URL or branch] · Status: [ ] approved
 
-Se verifica sobre el prototipo en código, en 375, 768 y 1280, en modo claro y oscuro si existe.
+Verified on the code prototype, at 375, 768 and 1280, in light and dark mode if it exists.
 
 ## Tokens
 
-- [ ] Ningún color, espacio, radio, sombra o duración fuera de `tokens.css` (buscar valores literales en el CSS)
-- [ ] `tokens_to_tailwind.py --check` sin fallos de contraste
-- [ ] Modo oscuro: solo sobreescritura semántica; nada hardcodeado
+- [ ] No color, spacing, radius, shadow or duration outside `tokens.css` (search for literal values in the CSS)
+- [ ] `tokens_to_tailwind.py --check` with no contrast failures
+- [ ] Dark mode: semantic override only; nothing hardcoded
 
-## Tipografía
+## Typography
 
-- [ ] Familia, tamaño, line-height y tracking de la escala en cada elemento
-- [ ] Jerarquía visible: se distingue H1, H2, cuerpo y nota sin leer
-- [ ] Longitud de línea 45 a 75 caracteres en cuerpo
-- [ ] Texto real de los briefs, sin truncados ni desbordes
+- [ ] Family, size, line-height and tracking from the scale on every element
+- [ ] Visible hierarchy: H1, H2, body and note are told apart without reading
+- [ ] Line length 45 to 75 characters in body
+- [ ] Real copy from the briefs, no truncation or overflow
 
-## Componentes
+## Components
 
-- [ ] Cada componente del inventario tiene los 9 estados en el prototipo
-- [ ] Foco visible en todos; objetivos ≥ 24 px; nada solo-hover
-- [ ] Mismo componente se ve igual en todas las plantillas
-- [ ] Textos largos y cortos probados
+- [ ] Every component in the inventory has its 9 states in the prototype
+- [ ] Visible focus on all; targets ≥ 24 px; nothing hover-only
+- [ ] The same component looks the same across all templates
+- [ ] Long and short copy tested
 
-## Plantillas y responsive
+## Templates and responsive
 
-- [ ] 375: sin scroll horizontal, menú accesible, imágenes con proporción
-- [ ] 768 y 1280: retícula respetada, ancho máximo de contenido
-- [ ] Estados de página: cargando sin saltos, vacío, error, éxito
-- [ ] Imágenes con el asset y proporción de assets.md; la del hero marcada como prioridad
+- [ ] 375: no horizontal scroll, accessible menu, images with ratio
+- [ ] 768 and 1280: grid respected, max content width
+- [ ] Page states: loading without shift, empty, error, success
+- [ ] Images with the asset and ratio from assets.md; the hero one marked as priority
 
-## Accesibilidad
+## Accessibility
 
-- [ ] Checklist de `accesibilidad.md` completa
-- [ ] Recorrido con teclado de los flujos principales
-- [ ] Zoom 200 % y reflow 320 px
-- [ ] Reduced motion activado: nada esencial se pierde
+- [ ] `accessibility.md` checklist complete
+- [ ] Keyboard walkthrough of the main flows
+- [ ] 200 % zoom and 320 px reflow
+- [ ] Reduced motion on: nothing essential is lost
 
-## Movimiento
+## Motion
 
-- [ ] Solo lo listado en `motion.md`, con tokens de duración y curva
-- [ ] Nada empuja el layout
+- [ ] Only what is listed in `motion.md`, with duration and curve tokens
+- [ ] Nothing pushes the layout
 
-## Contenido y seguridad
+## Content and security
 
-- [ ] Copy exacto de los briefs, incluidos microcopy y errores
-- [ ] Login en página propia, `autocomplete`, ver contraseña, error genérico
-- [ ] Acciones destructivas con confirmación y separadas
-- [ ] Consentimiento: rechazar tan visible como aceptar
-- [ ] Sesión visible en pantallas autenticadas
+- [ ] Exact copy from the briefs, including microcopy and errors
+- [ ] Login on its own page, `autocomplete`, show password, generic error
+- [ ] Destructive actions with confirmation and separated
+- [ ] Consent: reject as visible as accept
+- [ ] Session visible on authenticated screens
 
-## Hallazgos
+## Findings
 
-| # | Dónde | Qué | Severidad | Arreglo en | Estado |
-|---|-------|-----|-----------|------------|--------|
-| | | | bloqueante / mayor / menor | token / componente / plantilla | |
+| # | Where | What | Severity | Fix in | Status |
+|---|-------|------|----------|--------|--------|
+| | | | blocker / major / minor | token / component / template | |

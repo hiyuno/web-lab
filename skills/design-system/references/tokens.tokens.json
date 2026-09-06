@@ -1,6 +1,6 @@
 {
   "$schema": "https://tr.designtokens.org/format/",
-  "$description": "Tokens base de web-lab en formato W3C DTCG. Tres capas: primitivos (color, spacing, text, font, radius, shadow, ease, duration, breakpoint), semantic (decisiones, con modo oscuro en $extensions.web-lab.dark) y component (solo cuando hace falta). Edita los valores, no la estructura.",
+  "$description": "web-lab base tokens in W3C DTCG format. Three tiers: primitives (color, spacing, text, font, radius, shadow, ease, duration, breakpoint), semantic (decisions, with dark mode in $extensions.web-lab.dark) and component (only when needed). Edit the values, not the structure.",
   "color": {
     "$type": "color",
     "gray":  { "50": {"$value": "oklch(98.5% 0.002 250)"}, "100": {"$value": "oklch(96.5% 0.003 250)"}, "200": {"$value": "oklch(92% 0.005 250)"}, "300": {"$value": "oklch(86% 0.007 250)"}, "400": {"$value": "oklch(70% 0.01 250)"}, "500": {"$value": "oklch(55% 0.012 250)"}, "600": {"$value": "oklch(45% 0.012 250)"}, "700": {"$value": "oklch(36% 0.012 250)"}, "800": {"$value": "oklch(26% 0.012 250)"}, "900": {"$value": "oklch(20% 0.012 250)"}, "950": {"$value": "oklch(14% 0.012 250)"} },
@@ -13,12 +13,12 @@
   },
   "spacing": {
     "$type": "dimension",
-    "$description": "Base 4. Tailwind genera p-*, m-*, gap-* con estas claves.",
+    "$description": "Base 4. Tailwind generates p-*, m-*, gap-* from these keys.",
     "0": {"$value": "0px"}, "1": {"$value": "0.25rem"}, "2": {"$value": "0.5rem"}, "3": {"$value": "0.75rem"}, "4": {"$value": "1rem"}, "5": {"$value": "1.25rem"}, "6": {"$value": "1.5rem"}, "8": {"$value": "2rem"}, "10": {"$value": "2.5rem"}, "12": {"$value": "3rem"}, "16": {"$value": "4rem"}, "20": {"$value": "5rem"}, "24": {"$value": "6rem"}, "32": {"$value": "8rem"}
   },
   "text": {
     "$type": "dimension",
-    "$description": "Escala tipográfica. Tailwind genera text-*.",
+    "$description": "Type scale. Tailwind generates text-*.",
     "xs": {"$value": "0.75rem"}, "sm": {"$value": "0.875rem"}, "base": {"$value": "1rem"}, "lg": {"$value": "1.125rem"}, "xl": {"$value": "1.25rem"}, "2xl": {"$value": "1.5rem"}, "3xl": {"$value": "1.875rem"}, "4xl": {"$value": "2.25rem"}, "5xl": {"$value": "3rem"}, "6xl": {"$value": "3.75rem"}
   },
   "leading": { "$type": "number", "tight": {"$value": "1.2"}, "snug": {"$value": "1.35"}, "normal": {"$value": "1.5"}, "relaxed": {"$value": "1.65"} },
@@ -46,7 +46,7 @@
   "breakpoint": { "$type": "dimension", "sm": {"$value": "40rem"}, "md": {"$value": "48rem"}, "lg": {"$value": "64rem"}, "xl": {"$value": "80rem"} },
 
   "semantic": {
-    "$description": "Decisiones. Solo alias a primitivos. Modo oscuro en $extensions.web-lab.dark.",
+    "$description": "Decisions. Aliases to primitives only. Dark mode in $extensions.web-lab.dark.",
     "color": {
       "$type": "color",
       "background":          {"$value": "{color.white}",     "$extensions": {"web-lab": {"dark": "{color.gray.950}"}}},
@@ -57,8 +57,8 @@
       "border":              {"$value": "{color.gray.200}",  "$extensions": {"web-lab": {"dark": "{color.gray.800}"}}},
       "accent":              {"$value": "{color.brand.600}", "$extensions": {"web-lab": {"dark": "{color.brand.400}"}}},
       "accent-foreground":   {"$value": "{color.white}",     "$extensions": {"web-lab": {"dark": "{color.gray.950}"}}},
-      "primary":             {"$value": "{semantic.color.accent}", "$description": "alias para shadcn; la marca es accent"},
-      "primary-foreground":  {"$value": "{semantic.color.accent-foreground}", "$description": "alias para shadcn"},
+      "primary":             {"$value": "{semantic.color.accent}", "$description": "alias for shadcn; the brand is accent"},
+      "primary-foreground":  {"$value": "{semantic.color.accent-foreground}", "$description": "alias for shadcn"},
       "danger":              {"$value": "{color.red.600}",   "$extensions": {"web-lab": {"dark": "{color.red.300}"}}},
       "success":             {"$value": "{color.green.600}", "$extensions": {"web-lab": {"dark": "{color.green.300}"}}},
       "warning":             {"$value": "{color.amber.700}", "$extensions": {"web-lab": {"dark": "{color.amber.300}"}}},
@@ -70,14 +70,14 @@
   },
 
   "component": {
-    "$description": "Solo cuando un componente se aparta del semántico. Referencian semantic.*",
+    "$description": "Only when a component deviates from the semantic tier. Reference semantic.*",
     "button": { "$type": "dimension", "height": {"$value": "{spacing.10}"}, "padding-x": {"$value": "{spacing.4}"} },
     "input":  { "$type": "dimension", "height": {"$value": "{spacing.10}"} }
   },
 
   "$extensions": {
     "web-lab": {
-      "$description": "Pares texto sobre fondo a verificar en claro y oscuro. 4.5 texto normal, 3 texto grande, iconos y foco. Los bordes decorativos no tienen requisito WCAG; 1.2 solo garantiza que se distingan. Si el borde es la única señal de un control (input sin fondo ni etiqueta), sube ese par a 3.",
+      "$description": "Text-on-background pairs to verify in light and dark. 4.5 normal text, 3 large text, icons and focus. Decorative borders have no WCAG requirement; 1.2 only guarantees they are distinguishable. If the border is the only cue of a control (input with no background or label), raise that pair to 3.",
       "contrast": [
         {"fg": "semantic.color.foreground",         "bg": "semantic.color.background", "min": 4.5},
         {"fg": "semantic.color.muted-foreground",   "bg": "semantic.color.background", "min": 4.5},
