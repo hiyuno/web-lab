@@ -29,13 +29,22 @@ if (opt('from')) {
 } else {
   const p = PRESETS[opt('preset') ?? 'Minimal']
   if (!p) { console.error(`Unknown preset. Options: ${Object.keys(PRESETS).join(', ')}`); process.exit(1) }
-  k = { accent: p.accent, pin: false, tint: p.tint, customDark: false, darkAccent: p.accent, darkSurface: 'deep', radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border, font: p.font, ratio: p.ratio, base: p.base, leading: p.leading, space: p.space, width: p.width, duration: p.duration, ease: 'out' }
+  k = { accent: p.accent, pin: false, tint: p.tint, customDark: false, darkAccent: p.accent, darkSurface: 'deep', radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border, font: p.font, ratio: p.ratio, base: p.base, leading: p.leading, space: p.space, width: p.width, fast: p.fast, normal: p.normal, slow: p.slow, ease: 'out' }
 }
 if (opt('accent')) k.accent = opt('accent')!
 // Defaults for files saved before these knobs existed.
 k.customDark = k.customDark ?? false
 k.darkAccent = k.darkAccent ?? k.accent
 k.darkSurface = k.darkSurface ?? 'deep'
+// Backward compatibility: files saved before fast/normal/slow existed only have a single
+// "duration" knob (old normal speed). Derive the three from it the same way App.tsx does.
+const legacy = k as unknown as { duration?: number }
+if (legacy.duration != null && (k as unknown as { fast?: number }).fast == null) {
+  const d = legacy.duration
+  k.fast = Math.round(d * 0.75)
+  k.normal = d
+  k.slow = Math.round(d * 1.5)
+}
 if (opt('dark-accent')) { k.darkAccent = opt('dark-accent')!; k.customDark = true }
 if (opt('dark-surface')) k.darkSurface = opt('dark-surface') as Knobs['darkSurface']
 

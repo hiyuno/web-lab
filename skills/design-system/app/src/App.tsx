@@ -66,7 +66,9 @@ const CONFIG = {
     width: [P.width, 48, 96, 4] as [number, number, number, number],
   },
   motion: {
-    duration: [P.duration, 0, 500, 10] as [number, number, number, number],
+    fast: [150, 0, 400, 10] as [number, number, number, number],
+    normal: [200, 0, 600, 10] as [number, number, number, number],
+    slow: [300, 0, 900, 10] as [number, number, number, number],
     ease: { type: 'select' as const, options: ['out', 'in-out', 'spring'], default: 'out' },
     reduced: false,
   },
@@ -166,7 +168,8 @@ export default function App() {
     customDark: colorKit.values.customDark, darkAccent: colorKit.values.darkAccent, darkSurface: colorKit.values.darkSurface as Knobs['darkSurface'],
     radius: shapeKit.values.radius, corner: shapeKit.values.corner as Knobs['corner'], shadow: shapeKit.values.shadow as Knobs['shadow'], border: shapeKit.values.border,
     font: typeKit.values.font, ratio: typeKit.values.ratio, base: typeKit.values.base, leading: typeKit.values.leading,
-    space: spaceKit.values.unit, width: spaceKit.values.width, duration: motionKit.values.duration, ease: motionKit.values.ease,
+    space: spaceKit.values.unit, width: spaceKit.values.width,
+    fast: motionKit.values.fast, normal: motionKit.values.normal, slow: motionKit.values.slow, ease: motionKit.values.ease,
   })
   const k = useMemo(knobs, [colorKit.values, shapeKit.values, typeKit.values, spaceKit.values, motionKit.values])
   const built = useMemo(
@@ -193,7 +196,7 @@ export default function App() {
       shapeKit.setValues({ radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border })
       typeKit.setValues({ font: p.font, ratio: p.ratio, base: p.base, leading: p.leading })
       spaceKit.setValues({ unit: p.space, width: p.width })
-      motionKit.setValues({ duration: p.duration, ease: 'out' })
+      motionKit.setValues({ fast: p.fast, normal: p.normal, slow: p.slow, ease: 'out' })
       exportKit.setValues({ presetName: name })
       return
     }
@@ -204,7 +207,12 @@ export default function App() {
     shapeKit.setValues({ radius: l.radius, corner: l.corner, shadow: l.shadow, border: l.border })
     typeKit.setValues({ font: l.font, ratio: l.ratio, base: l.base, leading: l.leading })
     spaceKit.setValues({ unit: l.space, width: l.width })
-    motionKit.setValues({ duration: l.duration, ease: l.ease ?? 'out' })
+    // Saved presets from before fast/normal/slow existed only have "duration" (the old
+    // normal speed). Derive the three the same way the CLI's backward-compat path does.
+    const fast = l.fast ?? Math.round(l.duration * 0.75)
+    const normal = l.normal ?? l.duration
+    const slow = l.slow ?? Math.round(l.duration * 1.5)
+    motionKit.setValues({ fast, normal, slow, ease: l.ease ?? 'out' })
     if (l.copy) copyKit.setValues(l.copy)
     exportKit.setValues({ presetName: sp.name })
   }
@@ -271,7 +279,7 @@ export default function App() {
       case 'shape': return <Shape k={k} />
       case 'elevation': return <Elevation k={k} />
       case 'spacing': return <Spacing k={k} />
-      case 'motion': return <Motion k={k} reduced={motionKit.values.reduced} />
+      case 'motion': return <Motion k={k} reduced={motionKit.values.reduced} onReset={() => motionKit.resetValues()} />
       case 'buttons': return <Buttons copy={copy} />
       case 'forms': return <FormControls />
       case 'cards': return <Cards k={k} copy={copy} />
@@ -325,7 +333,16 @@ export default function App() {
           </div>
         </div>
         <aside className="lab-panel" aria-label="Settings" ref={panelRef}>
-          <div className="lab-panel-title">Settings · <span>{activeLabel}</span></div>
+          <div className="lab-panel-title">
+            Settings · <span>{activeLabel}</span>
+            <button
+              className="lab-panel-reset"
+              title="Reset the visible settings to their defaults"
+              onClick={() => visiblePanels.forEach((name) => controllers[name]?.resetValues())}
+            >
+              Reset
+            </button>
+          </div>
           {onlyExportVisible && (
             <p className="small muted">Save the current settings as a preset. Copy and colors are edited in their sections.</p>
           )}

@@ -2,7 +2,7 @@
 export interface Preset {
   name: string; accent: string; tint: number; radius: number; corner: 'round' | 'squircle' | 'sharp'
   shadow: 'none' | 'soft' | 'hard' | 'border'; border: number; font: string; ratio: number
-  base: number; leading: number; space: number; width: number; duration: number
+  base: number; leading: number; space: number; width: number; fast: number; normal: number; slow: number
 }
 
 export const FONTS: Record<string, { sans: string; display: string; mono: string }> = {
@@ -16,10 +16,10 @@ export const FONTS: Record<string, { sans: string; display: string; mono: string
 }
 
 export const PRESETS: Record<string, Preset> = {
-  Minimal: { name: 'Minimal', accent: '#1d4ed8', tint: 0.006, radius: 6, corner: 'round', shadow: 'border', border: 1, font: 'Inter / Inter', ratio: 1.2, base: 16, leading: 1.5, space: 4, width: 72, duration: 150 },
-  Editorial: { name: 'Editorial', accent: '#9a3412', tint: 0.01, radius: 2, corner: 'round', shadow: 'none', border: 1, font: 'Source Serif / Inter', ratio: 1.333, base: 17, leading: 1.6, space: 4, width: 64, duration: 200 },
-  Playful: { name: 'Playful', accent: '#db2777', tint: 0.012, radius: 16, corner: 'squircle', shadow: 'soft', border: 0, font: 'Space Grotesk / IBM Plex Sans', ratio: 1.25, base: 16, leading: 1.5, space: 5, width: 72, duration: 250 },
-  Corporate: { name: 'Corporate', accent: '#0f766e', tint: 0.004, radius: 4, corner: 'round', shadow: 'soft', border: 1, font: 'IBM Plex Serif / IBM Plex Sans', ratio: 1.2, base: 16, leading: 1.5, space: 4, width: 80, duration: 150 },
-  Brutalist: { name: 'Brutalist', accent: '#111111', tint: 0, radius: 0, corner: 'sharp', shadow: 'hard', border: 2, font: 'Space Grotesk / IBM Plex Sans', ratio: 1.414, base: 16, leading: 1.4, space: 4, width: 72, duration: 0 },
-  Soft: { name: 'Soft', accent: '#7c3aed', tint: 0.015, radius: 12, corner: 'squircle', shadow: 'soft', border: 0, font: 'Playfair / Manrope', ratio: 1.25, base: 16, leading: 1.6, space: 5, width: 68, duration: 250 },
+  Minimal: { name: 'Minimal', accent: '#1d4ed8', tint: 0.006, radius: 6, corner: 'round', shadow: 'border', border: 1, font: 'Inter / Inter', ratio: 1.2, base: 16, leading: 1.5, space: 4, width: 72, fast: 120, normal: 150, slow: 240 },
+  Editorial: { name: 'Editorial', accent: '#9a3412', tint: 0.01, radius: 2, corner: 'round', shadow: 'none', border: 1, font: 'Source Serif / Inter', ratio: 1.333, base: 17, leading: 1.6, space: 4, width: 64, fast: 150, normal: 200, slow: 320 },
+  Playful: { name: 'Playful', accent: '#db2777', tint: 0.012, radius: 16, corner: 'squircle', shadow: 'soft', border: 0, font: 'Space Grotesk / IBM Plex Sans', ratio: 1.25, base: 16, leading: 1.5, space: 5, width: 72, fast: 180, normal: 250, slow: 400 },
+  Corporate: { name: 'Corporate', accent: '#0f766e', tint: 0.004, radius: 4, corner: 'round', shadow: 'soft', border: 1, font: 'IBM Plex Serif / IBM Plex Sans', ratio: 1.2, base: 16, leading: 1.5, space: 4, width: 80, fast: 120, normal: 150, slow: 240 },
+  Brutalist: { name: 'Brutalist', accent: '#111111', tint: 0, radius: 0, corner: 'sharp', shadow: 'hard', border: 2, font: 'Space Grotesk / IBM Plex Sans', ratio: 1.414, base: 16, leading: 1.4, space: 4, width: 72, fast: 0, normal: 0, slow: 0 },
+  Soft: { name: 'Soft', accent: '#7c3aed', tint: 0.015, radius: 12, corner: 'squircle', shadow: 'soft', border: 0, font: 'Playfair / Manrope', ratio: 1.25, base: 16, leading: 1.6, space: 5, width: 68, fast: 180, normal: 250, slow: 400 },
 }

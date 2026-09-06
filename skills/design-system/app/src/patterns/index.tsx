@@ -4,16 +4,16 @@ import type { Ramps, Semantic } from '../engine/color'
 import { STEPS, hex } from '../engine/color'
 import type { PairResult } from '../engine/contrast'
 import type { Knobs } from '../engine/tokens'
-import { typeScale, TEXT_STEPS, SPACE_KEYS, spacing } from '../engine/tokens'
+import { typeScale, TEXT_STEPS, SPACE_KEYS, spacing, EASES } from '../engine/tokens'
 import { PRESETS } from '../engine/presets'
 
 export interface Copy { brand: string; title: string; lede: string; cta: string; cta2: string }
 
 export interface SavedPresetSummary { slug: string; name: string; accent?: string; font?: string; updated: string }
 
-const Pattern = ({ n, title, note, children }: { n: number; title: string; note: string; children: React.ReactNode }) => (
+const Pattern = ({ n, title, note, actions, children }: { n: number; title: string; note: string; actions?: React.ReactNode; children: React.ReactNode }) => (
   <section className="pattern" aria-labelledby={`p${n}`}>
-    <header><h2 id={`p${n}`}>{title}</h2><span className="n">{String(n).padStart(2, '0')} · {note}</span></header>
+    <header><h2 id={`p${n}`}>{title}</h2><span className="n">{String(n).padStart(2, '0')} · {note}</span>{actions}</header>
     {children}
   </section>
 )
@@ -242,29 +242,67 @@ export function Spacing({ k }: { k: Knobs }) {
   )
 }
 
-export function Motion({ k, reduced }: { k: Knobs; reduced: boolean }) {
-  const rows = ['fast', 'normal', 'slow'] as const
-  const [moved, setMoved] = useState<Record<string, boolean>>({ fast: false, normal: false, slow: false })
-  function replay(r: string) {
-    setMoved((m) => ({ ...m, [r]: false }))
-    requestAnimationFrame(() => requestAnimationFrame(() => setMoved((m) => ({ ...m, [r]: true }))))
-  }
+type TrackState = { on: boolean; snap: boolean }
+const TRACK_IDLE: TrackState = { on: false, snap: false }
+
+/** A 240px track whose dot makes the same left-to-right trip every time it is replayed: it
+ * first snaps back to the start with no transition (two rAFs so the browser commits that
+ * frame), then animates to the end with the given duration and easing. */
+function Track({ state, duration, easingValue, reduced }: { state: TrackState; duration: string; easingValue: string; reduced: boolean }) {
   return (
-    <Pattern n={6} title="Motion" note={`${k.duration} ms · ease ${k.ease}`}>
+    <div className="track">
+      <span className="dot" style={{
+        translate: state.on ? '216px 0' : '0 0',
+        transitionProperty: 'translate',
+        transitionDuration: reduced || state.snap ? '0.01ms' : duration,
+        transitionTimingFunction: easingValue,
+      }} />
+    </div>
+  )
+}
+
+const SPEED_KEYS = ['fast', 'normal', 'slow'] as const
+const EASE_KEYS = ['out', 'in-out', 'spring'] as const
+
+export function Motion({ k, reduced, onReset }: { k: Knobs; reduced: boolean; onReset: () => void }) {
+  const [speed, setSpeed] = useState<Record<(typeof SPEED_KEYS)[number], TrackState>>({ fast: TRACK_IDLE, normal: TRACK_IDLE, slow: TRACK_IDLE })
+  const [ease, setEase] = useState<Record<(typeof EASE_KEYS)[number], TrackState>>({ out: TRACK_IDLE, 'in-out': TRACK_IDLE, spring: TRACK_IDLE })
+
+  function replay<K extends string>(setState: React.Dispatch<React.SetStateAction<Record<K, TrackState>>>, name: K) {
+    setState((m) => ({ ...m, [name]: { on: false, snap: true } }))
+    requestAnimationFrame(() => requestAnimationFrame(() => setState((m) => ({ ...m, [name]: { on: true, snap: false } }))))
+  }
+  function replayAll() {
+    SPEED_KEYS.forEach((name) => replay(setSpeed, name))
+  }
+
+  const speedMs: Record<(typeof SPEED_KEYS)[number], number> = { fast: k.fast, normal: k.normal, slow: k.slow }
+
+  return (
+    <Pattern n={6} title="Motion" note={`${k.fast} · ${k.normal} · ${k.slow} ms · ease ${k.ease}`} actions={<button className="btn secondary sm" onClick={onReset}>Reset to defaults</button>}>
       <div className="stack">
-        {rows.map((r) => (
-          <div className="row" key={r} style={{ alignItems: 'center' }}>
-            <span className="state-label" style={{ minWidth: 56 }}>{r}</span>
-            <button className="btn secondary sm" onClick={() => replay(r)}>Replay</button>
-            <div className="dot" style={{
-              translate: moved[r] ? '160px 0' : '0 0',
-              transitionProperty: 'translate',
-              transitionDuration: reduced ? '0.01ms' : `var(--duration-${r})`,
-              transitionTimingFunction: 'var(--ease-ui)',
-            }} />
-          </div>
-        ))}
-        <p className="small muted">150 to 300 ms for interface transitions, interruptible, with a static cue left behind. Under reduced motion everything snaps.</p>
+        <p className="small muted">Three named durations the whole system uses: fast for hover and color, normal for menus and toggles, slow for sheets and dialogs. Change each one in the Motion panel on the right; the dots replay the same 240 px trip so you can compare them.</p>
+        <div className="row"><button className="btn secondary sm" onClick={replayAll}>Replay all</button></div>
+        <div className="stack" style={{ gap: 'var(--spacing-3)' }}>
+          {SPEED_KEYS.map((key) => (
+            <div className="row" key={key} style={{ alignItems: 'center' }}>
+              <span className="k mono" style={{ minWidth: 100 }}>{key} · {speedMs[key]} ms</span>
+              <Track state={speed[key]} duration={`var(--duration-${key})`} easingValue="var(--ease-ui)" reduced={reduced} />
+              <button className="btn ghost sm" onClick={() => replay(setSpeed, key)}>Replay</button>
+            </div>
+          ))}
+        </div>
+        <div className="stack" style={{ gap: 'var(--spacing-3)' }}>
+          <h3>Easing</h3>
+          <p className="small muted">Same normal duration ({k.normal} ms), three curves: out for entrances, in-out for things that move both ways, spring for a physical settle.</p>
+          {EASE_KEYS.map((name) => (
+            <div className="row" key={name} style={{ alignItems: 'center' }}>
+              <span className="k mono" style={{ minWidth: 100 }}>{name}{k.ease === name && <span className="tag accent" style={{ marginLeft: 'var(--spacing-2)' }}>current</span>}</span>
+              <Track state={ease[name]} duration="var(--duration-normal)" easingValue={EASES[name]} reduced={reduced} />
+              <button className="btn ghost sm" onClick={() => replay(setEase, name)}>Replay</button>
+            </div>
+          ))}
+        </div>
       </div>
     </Pattern>
   )
@@ -418,9 +456,9 @@ export function Dialog({ k, reduced }: { k: Knobs; reduced: boolean }) {
   const [open, setOpen] = useState(true)
   const [sheetOpen, setSheetOpen] = useState(false)
   const [tick, setTick] = useState(0)
-  const d = reduced ? 0 : Math.max(k.duration, 0) / 1000
+  const d = reduced ? 0 : Math.max(k.normal, 0) / 1000
   return (
-    <Pattern n={14} title="Dialog and sheet" note={`${k.duration} ms · ease ${k.ease} · ${reduced ? 'reduced motion on' : 'interruptible transitions'}`}>
+    <Pattern n={14} title="Dialog and sheet" note={`${k.normal} ms · ease ${k.ease} · ${reduced ? 'reduced motion on' : 'interruptible transitions'}`}>
       <div className="stack">
         <div className="dialog-stage">
           {!open && <button className="btn primary" onClick={() => setOpen(true)}>Open dialog</button>}
