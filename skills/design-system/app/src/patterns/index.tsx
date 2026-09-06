@@ -90,18 +90,47 @@ export function Typography({ k, copy }: { k: Knobs; copy: Copy }) {
   )
 }
 
+const MODE_SWATCHES = ['background', 'card', 'muted', 'border', 'accent', 'danger', 'success', 'warning'] as const
+
 export function Color({ ramps, sem, pairs, pinned }: { ramps: Ramps; sem: Semantic; pairs: PairResult[]; pinned: number | null }) {
   const fails = pairs.filter((p) => !p.ok).length
   const semList = Object.entries(sem)
+  const hasDarkAccent = !!ramps['brand-dark']
   return (
-    <Pattern n={1} title="Color" note={`accent ${pinned ? `pinned on ${pinned}` : 'snapped to the ramp'} · ${fails ? `${fails} pair(s) fail` : 'all pairs pass'}`}>
+    <Pattern n={1} title="Color" note={`accent ${pinned ? `pinned on ${pinned}` : 'snapped to the ramp'} · ${fails ? `${fails} pair(s) fail` : 'all pairs pass'}${hasDarkAccent ? ' · custom dark accent' : ''}`}>
       <div className="stack">
-        {(Object.keys(ramps) as (keyof Ramps)[]).map((g) => (
-          <div key={g}>
-            <div className="ramp-name">{g}</div>
-            <div className="ramp">{STEPS.map((s) => <div key={s} style={{ background: ramps[g][s] }} title={`${g}-${s} · ${ramps[g][s]} · ${hex(ramps[g][s])}`}><span style={{ color: s >= 500 ? '#fff' : '#000', opacity: 0.7 }}>{s}</span></div>)}</div>
+        <div className="stack">
+          <h3>Both modes</h3>
+          <p className="small muted">Both palettes at once, from the concrete token values (not the live theme toggle above).</p>
+          <div className="grid">
+            {(['light', 'dark'] as const).map((mode) => (
+              <div
+                key={mode}
+                style={{ background: sem.background[mode], border: `1px solid ${sem.border[mode]}`, borderRadius: 'var(--radius-lg)', padding: 'var(--spacing-4)' }}
+              >
+                <div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ color: sem.foreground[mode], fontWeight: 600, textTransform: 'capitalize' }}>{mode}</span>
+                </div>
+                <p style={{ color: sem.foreground[mode], margin: 'var(--spacing-2) 0' }}>The quick brown fox jumps over the lazy dog.</p>
+                <div className="row" style={{ gap: 'var(--spacing-2)', flexWrap: 'wrap' }}>
+                  {MODE_SWATCHES.map((n) => (
+                    <span key={n} className="tag" style={{ background: sem[n][mode], color: sem.foreground[mode], border: `1px solid ${sem.border[mode]}` }}>{n}</span>
+                  ))}
+                  <span className="tag" style={{ background: sem.accent[mode], color: sem['accent-foreground'][mode] }}>Primary button</span>
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+        {(Object.keys(ramps) as (keyof Ramps)[]).map((g) => {
+          const r = ramps[g]!
+          return (
+            <div key={g}>
+              <div className="ramp-name">{g}</div>
+              <div className="ramp">{STEPS.map((s) => <div key={s} style={{ background: r[s] }} title={`${g}-${s} · ${r[s]} · ${hex(r[s])}`}><span style={{ color: s >= 500 ? '#fff' : '#000', opacity: 0.7 }}>{s}</span></div>)}</div>
+            </div>
+          )
+        })}
         <div className="row" style={{ gap: 'var(--spacing-2)' }}>
           {(Object.keys(sem) as (keyof Semantic)[]).map((n) => (
             <span key={n} className="tag" style={{ background: `var(--${n})`, color: n.endsWith('foreground') || n === 'background' || n === 'card' || n === 'muted' || n === 'border' ? 'var(--foreground)' : n === 'accent' ? 'var(--accent-foreground)' : '#fff', border: '1px solid var(--border)' }}>{n}</span>

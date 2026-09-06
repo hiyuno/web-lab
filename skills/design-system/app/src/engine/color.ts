@@ -83,9 +83,9 @@ export type SemanticName =
 
 export type Semantic = Record<SemanticName, { light: string; dark: string; lightRef: string; darkRef: string }>
 
-export interface Ramps { brand: Ramp; gray: Ramp; red: Ramp; green: Ramp; amber: Ramp }
+export interface Ramps { brand: Ramp; gray: Ramp; red: Ramp; green: Ramp; amber: Ramp; 'brand-dark'?: Ramp }
 
-export function buildRamps(accent: string, pin: boolean, tint: number, hues: { danger: number; success: number; warning: number }): { ramps: Ramps; pinned: Step | null } {
+export function buildRamps(accent: string, pin: boolean, tint: number, hues: { danger: number; success: number; warning: number }, dark?: { accent?: string }): { ramps: Ramps; pinned: Step | null } {
   const a = oklchOf(accent)
   const { ramp: brand, pinned } = accentRamp(accent, pin)
   const ramps: Ramps = {
@@ -95,32 +95,50 @@ export function buildRamps(accent: string, pin: boolean, tint: number, hues: { d
     green: buildRamp(statusHue(hues.success, a.h ?? 0), 0.16),
     amber: buildRamp(statusHue(hues.warning, a.h ?? 0), 0.15),
   }
+  // A separately tuned dark accent, when the automatic derivation from `brand` is not good
+  // enough for the dark side. Never pinned: it only ever supplies dark-mode steps.
+  if (dark?.accent && dark.accent !== accent) {
+    ramps['brand-dark'] = accentRamp(dark.accent, false).ramp
+  }
   return { ramps, pinned }
 }
 
 /** Semantic tokens per better-colors: swap roles for dark, then reduce vividness at the dark end. */
-export function buildSemantic(r: Ramps): Semantic {
+export function buildSemantic(r: Ramps, opts?: { darkSurface?: 'deep' | 'soft' }): Semantic {
   const ref = (g: keyof Ramps, s: Step) => `{color.${g}.${s}}`
-  const S = (lg: keyof Ramps, ls: Step, dg: keyof Ramps, ds: Step) =>
-    ({ light: r[lg][ls], dark: r[dg][ds], lightRef: ref(lg, ls), darkRef: ref(dg, ds) })
-  const accentFgDark = onColor(r.brand[400], r.gray[950])
+  const S = (lg: keyof Ramps, ls: Step, dg: keyof Ramps, ds: Step) => {
+    const lightRamp = r[lg] as Ramp, darkRamp = r[dg] as Ramp
+    return { light: lightRamp[ls], dark: darkRamp[ds], lightRef: ref(lg, ls), darkRef: ref(dg, ds) }
+  }
+  // A custom dark accent (see buildRamps) overrides accent, accent-foreground and ring on the
+  // dark side only; the light side and every other token keep referencing `brand`.
+  const darkGroup: keyof Ramps = r['brand-dark'] ? 'brand-dark' : 'brand'
+  const darkAccentRamp = r[darkGroup] as Ramp
+  // Dark surface depth: 'deep' (default) keeps background/card/muted/border at 950/900/900/800;
+  // 'soft' lifts them one step to 900/800/800/700. Only these dark refs move.
+  const surface = opts?.darkSurface ?? 'deep'
+  const bgStep: Step = surface === 'soft' ? 900 : 950
+  const cardStep: Step = surface === 'soft' ? 800 : 900
+  const mutedStep: Step = cardStep
+  const borderStep: Step = surface === 'soft' ? 700 : 800
+  const accentFgDark = onColor(darkAccentRamp[400], r.gray[950])
   // Status text on the light background: the first step from 600 that clears 4.5:1 against
   // white. Fix contrast by moving lightness, never hue (better-colors). Hues like green and
   // amber are perceptually lighter, so they land a step deeper than red.
-  const textStep = (g: keyof Ramps, from: Step[] = [600, 700, 800]): Step => from.find((st) => wcag(r[g][st], '#ffffff') >= 4.5) ?? 800
+  const textStep = (g: keyof Ramps, from: Step[] = [600, 700, 800]): Step => from.find((st) => wcag((r[g] as Ramp)[st], '#ffffff') >= 4.5) ?? 800
   const dangerL = textStep('red'), successL = textStep('green'), warningL = textStep('amber', [700, 800])
   // The accent doubles as link text and as the primary fill, so its light step must clear 4.5:1
   // against white too (a teal or yellow brand lands on 700 instead of 600).
   const accentL = textStep('brand')
   const accentFgLight = onColor(r.brand[accentL], r.gray[950])
   return {
-    background: { light: '#ffffff', dark: r.gray[950], lightRef: '{color.white}', darkRef: ref('gray', 950) },
+    background: { light: '#ffffff', dark: r.gray[bgStep], lightRef: '{color.white}', darkRef: ref('gray', bgStep) },
     foreground: S('gray', 900, 'gray', 50),
-    muted: S('gray', 100, 'gray', 900),
+    muted: S('gray', 100, 'gray', mutedStep),
     'muted-foreground': S('gray', 600, 'gray', 400),
-    card: { light: '#ffffff', dark: r.gray[900], lightRef: '{color.white}', darkRef: ref('gray', 900) },
-    border: S('gray', 200, 'gray', 800),
-    accent: S('brand', accentL, 'brand', 400),
+    card: { light: '#ffffff', dark: r.gray[cardStep], lightRef: '{color.white}', darkRef: ref('gray', cardStep) },
+    border: S('gray', 200, 'gray', borderStep),
+    accent: S('brand', accentL, darkGroup, 400),
     'accent-foreground': {
       light: accentFgLight, dark: accentFgDark,
       lightRef: accentFgLight === '#ffffff' ? '{color.white}' : ref('gray', 950),
@@ -129,6 +147,6 @@ export function buildSemantic(r: Ramps): Semantic {
     danger: S('red', dangerL, 'red', 300),
     success: S('green', successL, 'green', 300),
     warning: S('amber', warningL, 'amber', 300),
-    ring: S('brand', accentL, 'brand', 300),
+    ring: S('brand', accentL, darkGroup, 300),
   }
 }

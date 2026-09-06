@@ -28,3 +28,10 @@ npx tsx src/cli.ts --saved "Template A" --json tokens.tokens.json --css tokens.c
 Open the lab, pick the preset under "Saved in web-lab", tune, and save again with the same name
 to overwrite. "Delete" removes the file. Never store client secrets or personal data here; a
 preset is design decisions only.
+
+## Light and dark
+
+Every preset carries both modes in one file; everything is shared except colors. Dark is
+derived automatically, and can be tuned with "Custom dark" (own dark accent) and "Dark surface"
+(deep or soft) in the Color folder of the panel. Both palettes are visible side by side in the
+Color section.

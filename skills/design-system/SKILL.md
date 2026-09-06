@@ -119,7 +119,8 @@ skip the semantic one:
    radii, shadows, durations and curves, breakpoints. No meaning.
 2. **Semantics**: the decision. `background`, `foreground`, `accent`, `muted`, `border`,
    `danger`, `success`. Reference primitives. Dark mode is an override of this tier in
-   `$extensions.web-lab.dark`, not another palette.
+   `$extensions.web-lab.dark`, not another palette. The lab derives it and lets you tune a
+   separate dark accent and surface depth; everything except colors stays shared between modes.
 3. **Component**: only when a component needs to deviate. Reference semantics.
 
 Declare in `$extensions.web-lab.contrast` every text-on-background pair that exists in the

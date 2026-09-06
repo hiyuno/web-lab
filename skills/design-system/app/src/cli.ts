@@ -29,12 +29,18 @@ if (opt('from')) {
 } else {
   const p = PRESETS[opt('preset') ?? 'Minimal']
   if (!p) { console.error(`Unknown preset. Options: ${Object.keys(PRESETS).join(', ')}`); process.exit(1) }
-  k = { accent: p.accent, pin: false, tint: p.tint, radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border, font: p.font, ratio: p.ratio, base: p.base, leading: p.leading, space: p.space, width: p.width, duration: p.duration, ease: 'out' }
+  k = { accent: p.accent, pin: false, tint: p.tint, customDark: false, darkAccent: p.accent, darkSurface: 'deep', radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border, font: p.font, ratio: p.ratio, base: p.base, leading: p.leading, space: p.space, width: p.width, duration: p.duration, ease: 'out' }
 }
 if (opt('accent')) k.accent = opt('accent')!
+// Defaults for files saved before these knobs existed.
+k.customDark = k.customDark ?? false
+k.darkAccent = k.darkAccent ?? k.accent
+k.darkSurface = k.darkSurface ?? 'deep'
+if (opt('dark-accent')) { k.darkAccent = opt('dark-accent')!; k.customDark = true }
+if (opt('dark-surface')) k.darkSurface = opt('dark-surface') as Knobs['darkSurface']
 
-const { ramps } = buildRamps(k.accent, k.pin, k.tint, { danger: 27, success: 150, warning: 75 })
-const sem = buildSemantic(ramps)
+const { ramps } = buildRamps(k.accent, k.pin, k.tint, { danger: 27, success: 150, warning: 75 }, { accent: k.customDark ? k.darkAccent : undefined })
+const sem = buildSemantic(ramps, { darkSurface: k.darkSurface })
 const pairs = checkPairs(sem)
 const fails = pairs.filter((p) => !p.ok)
 for (const p of pairs) console.error(`${p.label.padEnd(24)} min ${String(p.min).padStart(4)}  light ${p.light.toFixed(2).padStart(6)}  dark ${p.dark.toFixed(2).padStart(6)}  ${p.ok ? 'ok' : 'FAIL'}`)

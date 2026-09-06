@@ -42,6 +42,9 @@ const CONFIG = {
     accent: P.accent,
     pin: false,
     tint: [P.tint, 0, 0.03, 0.001] as [number, number, number, number],
+    customDark: false,
+    darkAccent: '#a5b4fc',
+    darkSurface: { type: 'select' as const, options: ['deep', 'soft'], default: 'deep' },
     danger: [27, 0, 360, 1] as [number, number, number, number],
     success: [150, 0, 360, 1] as [number, number, number, number],
     warning: [75, 0, 360, 1] as [number, number, number, number],
@@ -131,15 +134,19 @@ export default function App() {
 
   const knobs = (): Knobs => ({
     accent: v.color.accent, pin: v.color.pin, tint: v.color.tint,
+    customDark: v.color.customDark, darkAccent: v.color.darkAccent, darkSurface: v.color.darkSurface as Knobs['darkSurface'],
     radius: v.shape.radius, corner: v.shape.corner as Knobs['corner'], shadow: v.shape.shadow as Knobs['shadow'], border: v.shape.border,
     font: v.type.font, ratio: v.type.ratio, base: v.type.base, leading: v.type.leading,
     space: v.space.unit, width: v.space.width, duration: v.motion.duration, ease: v.motion.ease,
   })
   const k = useMemo(knobs, [v])
-  const built = useMemo(() => buildRamps(k.accent, k.pin, k.tint, { danger: v.color.danger, success: v.color.success, warning: v.color.warning }), [k.accent, k.pin, k.tint, v.color.danger, v.color.success, v.color.warning])
+  const built = useMemo(
+    () => buildRamps(k.accent, k.pin, k.tint, { danger: v.color.danger, success: v.color.success, warning: v.color.warning }, { accent: k.customDark ? k.darkAccent : undefined }),
+    [k.accent, k.pin, k.tint, k.customDark, k.darkAccent, v.color.danger, v.color.success, v.color.warning],
+  )
   const rampsAll = built.ramps
   const ramps = () => rampsAll
-  const semantic = useMemo(() => buildSemantic(rampsAll), [rampsAll])
+  const semantic = useMemo(() => buildSemantic(rampsAll, { darkSurface: k.darkSurface }), [rampsAll, k.darkSurface])
   const sem = () => semantic
   const pairs = useMemo(() => checkPairs(semantic), [semantic])
   const vars = useMemo(() => cssVars(k, rampsAll, semantic, dark), [k, rampsAll, semantic, dark])
@@ -154,7 +161,7 @@ export default function App() {
     const p = PRESETS[name]
     if (p) {
       kit.setValues({
-        color: { accent: p.accent, tint: p.tint, pin: false },
+        color: { accent: p.accent, tint: p.tint, pin: false, customDark: false, darkSurface: 'deep' },
         shape: { radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border },
         type: { font: p.font, ratio: p.ratio, base: p.base, leading: p.leading },
         space: { unit: p.space, width: p.width },
@@ -167,7 +174,7 @@ export default function App() {
     if (!sp) return
     const l = sp.lab
     kit.setValues({
-      color: { accent: l.accent, tint: l.tint, pin: !!l.pin },
+      color: { accent: l.accent, tint: l.tint, pin: !!l.pin, customDark: !!l.customDark, darkAccent: l.darkAccent ?? l.accent, darkSurface: l.darkSurface ?? 'deep' },
       shape: { radius: l.radius, corner: l.corner, shadow: l.shadow, border: l.border },
       type: { font: l.font, ratio: l.ratio, base: l.base, leading: l.leading },
       space: { unit: l.space, width: l.width },
