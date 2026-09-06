@@ -20,6 +20,10 @@ explicitly. Every line carries the date it was confirmed.
 - 2026-09-05 · Review method: evidence not taste, "Not verified" instead of assuming, one-word
   verdict, escalation triggers, cheapest fix first.
 
+- 2026-09-06 · Small, well-specified changes (remove a button, rename, move a block) are not done
+  by the orchestrator: delegate them to a subagent with the cheapest model that can do the task
+  (Haiku), with the exact file, the exact change and the check to run. The orchestrator verifies.
+
 ## Stack and tools
 
 - 2026-09-04 · Astro for content sites, Next.js for applications, Tailwind v4 with tokens,

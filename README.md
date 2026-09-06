@@ -97,6 +97,7 @@ block with dark mode and verifies the contrast of every semantic pair in both mo
 
 - Skill: [`skills/design-system/SKILL.md`](skills/design-system/SKILL.md)
 - Style lab: `skills/design-system/app/` (Vite + React + DialKit + culori + apca-w3). `npm install && npm run dev`, then `http://localhost:8771`; or `preview_start name=style-lab` from the repo root. Pick an accent, tune shape, type, space and motion on ten real patterns, verify contrast live (WCAG and APCA) and export `tokens.tokens.json` and `tokens.css`. Headless: `npx tsx src/cli.ts --preset Playful --json tokens.tokens.json`.
+- Saved presets: `skills/design-system/presets/` ("Save preset to web-lab" in the lab; then "use Template A" in any project)
 - Base tokens: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
 - Templates: `skills/design-system/references/` (visual direction, component, template, accessibility, motion, usability test, QA, variants, break)
 

@@ -25,6 +25,9 @@ available:
 3. **Resume a project in progress** → read the project's `docs/`, say which phase it is in and
    what is missing for the next checkpoint.
 
+If the user names a saved style preset ("use Template A"), note it and pass it to Frost: the
+presets live in `skills/design-system/presets/` and Frost's skill starts phase 4 from them.
+
 If the user already said what they want, do not ask: route directly. If an existing project
 has no `docs/01-discovery/spec.md` and the task is to design or build, propose a short discovery
 with `/discovery` first.

@@ -1,6 +1,7 @@
 // Headless export: the same tokens the lab shows, from a preset or a saved lab JSON, without a browser.
 //   npx tsx src/cli.ts --preset Playful --json tokens.tokens.json --css tokens.css
 //   npx tsx src/cli.ts --from docs/04-design/tokens.tokens.json --css tokens.css   (re-reads $extensions.web-lab.lab)
+//   npx tsx src/cli.ts --saved "Template A" --json tokens.tokens.json --css tokens.css   (a preset saved from the lab)
 import { readFileSync, writeFileSync } from 'node:fs'
 import { buildRamps, buildSemantic } from './engine/color'
 import { checkPairs } from './engine/contrast'
@@ -12,6 +13,15 @@ const args = process.argv.slice(2)
 const opt = (name: string) => { const i = args.indexOf(`--${name}`); return i >= 0 ? args[i + 1] : undefined }
 
 let k: Knobs
+const savedName = opt('saved')
+if (savedName) {
+  const dir = new URL('../../presets/', import.meta.url)
+  const { readdirSync } = await import('node:fs')
+  const slug = savedName.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+  const file = readdirSync(dir).find((f) => f === `${slug}.tokens.json`)
+  if (!file) { console.error(`No saved preset "${savedName}" in skills/design-system/presets/`); process.exit(1) }
+  args.push('--from', new URL(file, dir).pathname)
+}
 if (opt('from')) {
   const lab = JSON.parse(readFileSync(opt('from')!, 'utf8'))?.$extensions?.['web-lab']?.lab
   if (!lab) { console.error('No $extensions.web-lab.lab in that file'); process.exit(1) }

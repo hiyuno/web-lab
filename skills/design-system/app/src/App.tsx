@@ -10,6 +10,8 @@ import type { Copy } from './patterns'
 
 const P = PRESETS.Minimal
 
+interface SavedPreset { slug: string; name: string; accent?: string; font?: string; updated: string; lab: Record<string, any> }
+
 const CONFIG = {
   color: {
     accent: P.accent,
@@ -48,6 +50,8 @@ const CONFIG = {
     cta2: 'See the schedule',
   },
   export: {
+    presetName: 'Template A',
+    savePreset: { type: 'action' as const, label: 'Save preset to web-lab' },
     tokensJson: { type: 'action' as const, label: 'Download tokens.tokens.json' },
     tokensCss: { type: 'action' as const, label: 'Download tokens.css' },
     copyJson: { type: 'action' as const, label: 'Copy tokens JSON' },
@@ -67,6 +71,9 @@ export default function App() {
   const [width, setWidth] = useState<'auto' | '375' | '768' | '1280'>('auto')
   const [presetName, setPresetName] = useState(() => { try { return localStorage.getItem('style-lab:preset') || 'Minimal' } catch { return 'Minimal' } })
   const [toast, setToast] = useState('')
+  const [saved, setSaved] = useState<SavedPreset[]>([])
+  const refreshSaved = () => fetch('/api/presets').then((r) => r.json()).then(setSaved).catch(() => setSaved([]))
+  useEffect(() => { void refreshSaved() }, [])
 
   const kit = useDialKitController('Style lab', CONFIG, {
     id: 'style-lab',
@@ -76,6 +83,14 @@ export default function App() {
       if (action.endsWith('tokensJson')) download('tokens.tokens.json', JSON.stringify(buildTokens(k, r, s), null, 2))
       if (action.endsWith('tokensCss')) download('tokens.css', tokensCss(k, r, s), 'text/css')
       if (action.endsWith('copyJson')) navigator.clipboard.writeText(JSON.stringify(buildTokens(k, r, s), null, 2)).then(() => flash('Tokens JSON copied'))
+      if (action.endsWith('savePreset')) {
+        const name = String(kit.getValues().export.presetName || '').trim()
+        const tokens = buildTokens(k, r, s) as Record<string, unknown> & { $extensions: { 'web-lab': { lab: Record<string, unknown> } } }
+        tokens.$extensions['web-lab'].lab.copy = kit.getValues().copy
+        fetch('/api/presets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, tokens }) })
+          .then((res) => res.json()).then((j) => { if (j.error) flash(j.error); else { flash(`Saved: ${j.file}`); setPresetName(name); void refreshSaved() } })
+          .catch(() => flash('Could not save (is the dev server running?)'))
+      }
     },
   })
   const v = kit.values
@@ -100,16 +115,38 @@ export default function App() {
   function flash(msg: string) { setToast(msg); setTimeout(() => setToast(''), 1800) }
 
   function applyPreset(name: string) {
-    const p = PRESETS[name]; if (!p) return
     setPresetName(name)
     try { localStorage.setItem('style-lab:preset', name) } catch { /* private mode */ }
+    const p = PRESETS[name]
+    if (p) {
+      kit.setValues({
+        color: { accent: p.accent, tint: p.tint, pin: false },
+        shape: { radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border },
+        type: { font: p.font, ratio: p.ratio, base: p.base, leading: p.leading },
+        space: { unit: p.space, width: p.width },
+        motion: { duration: p.duration, ease: 'out' },
+        export: { presetName: name },
+      } as Parameters<typeof kit.setValues>[0])
+      return
+    }
+    const sp = saved.find((x) => x.name === name || x.slug === name)
+    if (!sp) return
+    const l = sp.lab
     kit.setValues({
-      color: { accent: p.accent, tint: p.tint },
-      shape: { radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border },
-      type: { font: p.font, ratio: p.ratio, base: p.base, leading: p.leading },
-      space: { unit: p.space, width: p.width },
-      motion: { duration: p.duration },
+      color: { accent: l.accent, tint: l.tint, pin: !!l.pin },
+      shape: { radius: l.radius, corner: l.corner, shadow: l.shadow, border: l.border },
+      type: { font: l.font, ratio: l.ratio, base: l.base, leading: l.leading },
+      space: { unit: l.space, width: l.width },
+      motion: { duration: l.duration, ease: l.ease ?? 'out' },
+      ...(l.copy ? { copy: l.copy } : {}),
+      export: { presetName: sp.name },
     } as Parameters<typeof kit.setValues>[0])
+  }
+
+  function deleteSaved() {
+    const sp = saved.find((x) => x.name === presetName || x.slug === presetName)
+    if (!sp || !confirm(`Delete saved preset "${sp.name}"? The file in web-lab is removed.`)) return
+    fetch(`/api/presets?slug=${encodeURIComponent(sp.slug)}`, { method: 'DELETE' }).then(() => { flash('Deleted'); setPresetName('Minimal'); void refreshSaved() })
   }
 
   // Suppress transitions while the theme flips (better-ui: theme switch should snap, not smear).
@@ -132,13 +169,17 @@ export default function App() {
       <div className="lab-bar">
         <strong>web-lab · Style lab</strong>
         <div className="grp"><span>Preset</span>
-          <select value={presetName} onChange={(e) => applyPreset(e.target.value)}>{Object.keys(PRESETS).map((n) => <option key={n}>{n}</option>)}</select>
+          <select value={presetName} onChange={(e) => applyPreset(e.target.value)}>
+            <optgroup label="Built-in">{Object.keys(PRESETS).map((n) => <option key={n}>{n}</option>)}</optgroup>
+            {saved.length > 0 && <optgroup label="Saved in web-lab">{saved.map((sp) => <option key={sp.slug} value={sp.name}>{sp.name}</option>)}</optgroup>}
+            {!Object.keys(PRESETS).includes(presetName) && !saved.some((sp) => sp.name === presetName) && <option value={presetName}>{presetName}</option>}
+          </select>
+          {saved.some((sp) => sp.name === presetName) && <button onClick={deleteSaved} aria-label={`Delete saved preset ${presetName}`}>Delete</button>}
         </div>
         <div className="grp" role="group" aria-label="Preview width">
           {(['auto', '375', '768', '1280'] as const).map((w) => <button key={w} aria-pressed={width === w} onClick={() => setWidth(w)}>{w === 'auto' ? 'Fluid' : `${w} px`}</button>)}
         </div>
         <div className="grp"><button aria-pressed={dark} onClick={() => setDark(!dark)}>{dark ? 'Dark' : 'Light'} mode</button></div>
-        <div className="grp"><button onClick={() => download('tokens.tokens.json', JSON.stringify(buildTokens(k, rampsAll, semantic), null, 2))}>Export tokens.tokens.json</button><button onClick={() => download('tokens.css', tokensCss(k, rampsAll, semantic), 'text/css')}>Export tokens.css</button></div>
         <div className="status">contrast: <b className={fails ? 'fail' : 'ok'}>{fails ? `${fails} pair(s) fail` : `${pairs.length} pairs pass`}</b>{toast ? ` · ${toast}` : ''}</div>
       </div>
       <script type="application/json" id="tokens-json" dangerouslySetInnerHTML={{ __html: tokensJson.replace(/</g, '\\u003c') }} />

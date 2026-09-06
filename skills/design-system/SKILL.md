@@ -62,11 +62,26 @@ procedure and the checkpoint.
   primitives in `@theme`, semantics in `:root` with a dark-mode override and aliases in
   `@theme inline`, and verifies the contrast of every declared pair in both modes.
 
+## Saved presets: "use Template A"
+
+Presets saved from the lab live in `skills/design-system/presets/<slug>.tokens.json` (see the
+README there). When the user names one, at the start of the project or of this phase:
+
+1. Copy it to `docs/04-design/tokens.tokens.json`, run `tokens_to_tailwind.py` and keep the
+   generated `tokens.css`. If a pair fails, fix the token, never the rule.
+2. Treat its knobs as the chosen visual direction: step 4.1 becomes a confirmation with the real
+   copy (open the lab on that preset, load the briefs' copy, show the user), not a three-variant
+   exploration. Record the choice in `visual-direction.md` naming the preset.
+3. Continue with 4.3 onward on those tokens. Osmani builds on the same `tokens.css`.
+
+If the user names a preset that does not exist, list the saved ones and ask.
+
 ## Step 4.0 · Entry
 
 0. Read `<web-lab>/learnings/frost.md` and `<web-lab>/docs/PREFERENCES.md`. If visual styles
    the user likes or dislikes are already there, they are the starting point for 4.1.
-1. Read `docs/03-content/matrix.md` (approved), `editorial-guide.md`, `briefs/`, `assets.md`;
+1. If the user named a saved preset, apply "Saved presets" above first. Then read
+   `docs/03-content/matrix.md` (approved), `editorial-guide.md`, `briefs/`, `assets.md`;
    `docs/02-structure/wireframes/` with their component annotations and `flows.md`;
    `docs/01-discovery/brief.md` for what exists of the brand and `architecture-decision.md` to
    know whether it is Astro or Next.js.
