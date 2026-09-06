@@ -80,9 +80,9 @@ body { margin: 0; font-family: "Inter", system-ui, sans-serif; background: #f4f4
 .preview .grid { display: grid; gap: var(--spacing-4); grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 
 /* Surfaces: concentric radius (outer = inner + padding), shadows for depth, borders for structure. */
-.preview .card { background: var(--card); border-radius: var(--radius-lg); corner-shape: var(--corner-shape); box-shadow: var(--shadow-md); padding: var(--spacing-5); display: grid; gap: var(--spacing-3); border: var(--border-width, 0px) solid var(--border); transition: box-shadow var(--duration-fast) var(--ease-ui), transform var(--duration-fast) var(--ease-ui); }
+.preview .card { background: var(--card); border-radius: var(--radius-lg); corner-shape: var(--corner-shape); box-shadow: var(--shadow-md); padding: var(--spacing-5); display: grid; gap: var(--spacing-3); align-content: start; border: var(--border-width, 0px) solid var(--border); transition: box-shadow var(--duration-fast) var(--ease-ui), transform var(--duration-fast) var(--ease-ui); }
 .preview .card:hover { box-shadow: var(--shadow-lg); }
-.preview .card .thumb { aspect-ratio: 16 / 9; border-radius: calc(var(--radius-lg) - var(--spacing-5)); corner-shape: var(--corner-shape); background: linear-gradient(135deg in oklab, var(--color-brand-200), var(--color-brand-500)); min-height: 60px; }
+.preview .card .thumb { aspect-ratio: 16 / 9; width: 100%; align-self: start; border-radius: calc(var(--radius-lg) - var(--spacing-5)); corner-shape: var(--corner-shape); background: linear-gradient(135deg in oklab, var(--color-brand-200), var(--color-brand-500)); min-height: 60px; }
 .preview .card .thumb.neutral { background: linear-gradient(135deg in oklab, var(--color-gray-100), var(--color-gray-300)); }
 
 /* Buttons: nine states; scale 0.96 on press; transition only what changes. */
