@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DialRoot, useDialKitController } from 'dialkit'
 import { buildRamps, buildSemantic } from './engine/color'
 import { checkPairs } from './engine/contrast'
@@ -86,6 +86,27 @@ const CONFIG = {
   },
 }
 
+// Which DialKit panels are relevant to each section (matched by panel name against
+// the "name" passed to useDialKitController below). Panels not in the list are hidden.
+type PanelName = 'Color' | 'Shape' | 'Type' | 'Space' | 'Motion' | 'Copy' | 'Export'
+const VISIBILITY: Record<SectionId, PanelName[]> = {
+  presets: ['Export'],
+  color: ['Color'],
+  typography: ['Type', 'Copy'],
+  shape: ['Shape'],
+  elevation: ['Shape'],
+  spacing: ['Space'],
+  motion: ['Motion'],
+  buttons: ['Shape', 'Motion'],
+  forms: ['Shape', 'Type'],
+  cards: ['Shape', 'Space'],
+  navigation: ['Type', 'Space', 'Copy'],
+  hero: ['Copy', 'Type', 'Space'],
+  list: ['Space', 'Shape'],
+  feedback: ['Color', 'Shape'],
+  dialog: ['Motion', 'Shape'],
+}
+
 function download(name: string, text: string, type = 'application/json') {
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([text], { type }))
@@ -112,8 +133,16 @@ export default function App() {
     if (location.hash.slice(1) !== section) location.hash = section
   }, [section])
 
-  const kit = useDialKitController('Style lab', CONFIG, {
-    id: 'style-lab',
+  // One controller per group, so each shows as its own DialKit panel and can be
+  // hidden/shown independently depending on the active section (see VISIBILITY above).
+  const colorKit = useDialKitController('Color', CONFIG.color, { id: 'lab-color', persist: true })
+  const shapeKit = useDialKitController('Shape', CONFIG.shape, { id: 'lab-shape', persist: true })
+  const typeKit = useDialKitController('Type', CONFIG.type, { id: 'lab-type', persist: true })
+  const spaceKit = useDialKitController('Space', CONFIG.space, { id: 'lab-space', persist: true })
+  const motionKit = useDialKitController('Motion', CONFIG.motion, { id: 'lab-motion', persist: true })
+  const copyKit = useDialKitController('Copy', CONFIG.copy, { id: 'lab-copy', persist: true })
+  const exportKit = useDialKitController('Export', CONFIG.export, {
+    id: 'lab-export',
     persist: true,
     onAction: (action) => {
       const k = knobs(), r = ramps(), s = sem()
@@ -121,28 +150,28 @@ export default function App() {
       if (action.endsWith('tokensCss')) download('tokens.css', tokensCss(k, r, s), 'text/css')
       if (action.endsWith('copyJson')) navigator.clipboard.writeText(JSON.stringify(buildTokens(k, r, s), null, 2)).then(() => flash('Tokens JSON copied'))
       if (action.endsWith('savePreset')) {
-        const name = String(kit.getValues().export.presetName || '').trim()
+        const name = String(exportKit.getValues().presetName || '').trim()
         const tokens = buildTokens(k, r, s) as Record<string, unknown> & { $extensions: { 'web-lab': { lab: Record<string, unknown> } } }
-        tokens.$extensions['web-lab'].lab.copy = kit.getValues().copy
+        tokens.$extensions['web-lab'].lab.copy = copyKit.getValues()
         fetch('/api/presets', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, tokens }) })
           .then((res) => res.json()).then((j) => { if (j.error) flash(j.error); else { flash(`Saved: ${j.file}`); setPresetName(name); void refreshSaved() } })
           .catch(() => flash('Could not save (is the dev server running?)'))
       }
     },
   })
-  const v = kit.values
+  const controllers = { Color: colorKit, Shape: shapeKit, Type: typeKit, Space: spaceKit, Motion: motionKit, Copy: copyKit, Export: exportKit }
 
   const knobs = (): Knobs => ({
-    accent: v.color.accent, pin: v.color.pin, tint: v.color.tint,
-    customDark: v.color.customDark, darkAccent: v.color.darkAccent, darkSurface: v.color.darkSurface as Knobs['darkSurface'],
-    radius: v.shape.radius, corner: v.shape.corner as Knobs['corner'], shadow: v.shape.shadow as Knobs['shadow'], border: v.shape.border,
-    font: v.type.font, ratio: v.type.ratio, base: v.type.base, leading: v.type.leading,
-    space: v.space.unit, width: v.space.width, duration: v.motion.duration, ease: v.motion.ease,
+    accent: colorKit.values.accent, pin: colorKit.values.pin, tint: colorKit.values.tint,
+    customDark: colorKit.values.customDark, darkAccent: colorKit.values.darkAccent, darkSurface: colorKit.values.darkSurface as Knobs['darkSurface'],
+    radius: shapeKit.values.radius, corner: shapeKit.values.corner as Knobs['corner'], shadow: shapeKit.values.shadow as Knobs['shadow'], border: shapeKit.values.border,
+    font: typeKit.values.font, ratio: typeKit.values.ratio, base: typeKit.values.base, leading: typeKit.values.leading,
+    space: spaceKit.values.unit, width: spaceKit.values.width, duration: motionKit.values.duration, ease: motionKit.values.ease,
   })
-  const k = useMemo(knobs, [v])
+  const k = useMemo(knobs, [colorKit.values, shapeKit.values, typeKit.values, spaceKit.values, motionKit.values])
   const built = useMemo(
-    () => buildRamps(k.accent, k.pin, k.tint, { danger: v.color.danger, success: v.color.success, warning: v.color.warning }, { accent: k.customDark ? k.darkAccent : undefined }),
-    [k.accent, k.pin, k.tint, k.customDark, k.darkAccent, v.color.danger, v.color.success, v.color.warning],
+    () => buildRamps(k.accent, k.pin, k.tint, { danger: colorKit.values.danger, success: colorKit.values.success, warning: colorKit.values.warning }, { accent: k.customDark ? k.darkAccent : undefined }),
+    [k.accent, k.pin, k.tint, k.customDark, k.darkAccent, colorKit.values.danger, colorKit.values.success, colorKit.values.warning],
   )
   const rampsAll = built.ramps
   const ramps = () => rampsAll
@@ -151,7 +180,7 @@ export default function App() {
   const pairs = useMemo(() => checkPairs(semantic), [semantic])
   const vars = useMemo(() => cssVars(k, rampsAll, semantic, dark), [k, rampsAll, semantic, dark])
   const fails = pairs.filter((p) => !p.ok).length
-  const copy: Copy = v.copy
+  const copy: Copy = copyKit.values
 
   function flash(msg: string) { setToast(msg); setTimeout(() => setToast(''), 1800) }
 
@@ -160,28 +189,24 @@ export default function App() {
     try { localStorage.setItem('style-lab:preset', name) } catch { /* private mode */ }
     const p = PRESETS[name]
     if (p) {
-      kit.setValues({
-        color: { accent: p.accent, tint: p.tint, pin: false, customDark: false, darkSurface: 'deep' },
-        shape: { radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border },
-        type: { font: p.font, ratio: p.ratio, base: p.base, leading: p.leading },
-        space: { unit: p.space, width: p.width },
-        motion: { duration: p.duration, ease: 'out' },
-        export: { presetName: name },
-      } as Parameters<typeof kit.setValues>[0])
+      colorKit.setValues({ accent: p.accent, tint: p.tint, pin: false, customDark: false, darkSurface: 'deep' })
+      shapeKit.setValues({ radius: p.radius, corner: p.corner, shadow: p.shadow, border: p.border })
+      typeKit.setValues({ font: p.font, ratio: p.ratio, base: p.base, leading: p.leading })
+      spaceKit.setValues({ unit: p.space, width: p.width })
+      motionKit.setValues({ duration: p.duration, ease: 'out' })
+      exportKit.setValues({ presetName: name })
       return
     }
     const sp = saved.find((x) => x.name === name || x.slug === name)
     if (!sp) return
     const l = sp.lab
-    kit.setValues({
-      color: { accent: l.accent, tint: l.tint, pin: !!l.pin, customDark: !!l.customDark, darkAccent: l.darkAccent ?? l.accent, darkSurface: l.darkSurface ?? 'deep' },
-      shape: { radius: l.radius, corner: l.corner, shadow: l.shadow, border: l.border },
-      type: { font: l.font, ratio: l.ratio, base: l.base, leading: l.leading },
-      space: { unit: l.space, width: l.width },
-      motion: { duration: l.duration, ease: l.ease ?? 'out' },
-      ...(l.copy ? { copy: l.copy } : {}),
-      export: { presetName: sp.name },
-    } as Parameters<typeof kit.setValues>[0])
+    colorKit.setValues({ accent: l.accent, tint: l.tint, pin: !!l.pin, customDark: !!l.customDark, darkAccent: l.darkAccent ?? l.accent, darkSurface: l.darkSurface ?? 'deep' })
+    shapeKit.setValues({ radius: l.radius, corner: l.corner, shadow: l.shadow, border: l.border })
+    typeKit.setValues({ font: l.font, ratio: l.ratio, base: l.base, leading: l.leading })
+    spaceKit.setValues({ unit: l.space, width: l.width })
+    motionKit.setValues({ duration: l.duration, ease: l.ease ?? 'out' })
+    if (l.copy) copyKit.setValues(l.copy)
+    exportKit.setValues({ presetName: sp.name })
   }
 
   function deleteSaved(name: string = presetName) {
@@ -207,6 +232,37 @@ export default function App() {
   // Current export, readable from the DOM (Frost's skill and tests read it without clicking).
   const tokensJson = useMemo(() => JSON.stringify(buildTokens(k, rampsAll, semantic), null, 2), [k, rampsAll, semantic])
 
+  // Settings that apply to the active section only: expand the relevant DialKit panels...
+  const visiblePanels = VISIBILITY[section]
+  useEffect(() => {
+    visiblePanels.forEach((name) => controllers[name]?.setOpen(true))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [section])
+
+  // ...and hide every other panel. DialKit renders each controller as a
+  // ".dialkit-folder" (the shared shell folder carries ".dialkit-folder-root" too,
+  // so excluding it leaves just the seven group panels); its accessible name lives
+  // on the ".dialkit-folder-header-top" element's aria-label, set unconditionally
+  // regardless of open/collapsed state, which is why we read that instead of the
+  // title span (only rendered while a root folder is open).
+  const panelRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const aside = panelRef.current
+    if (!aside) return
+    const applyVisibility = () => {
+      const folders = aside.querySelectorAll<HTMLElement>('.dialkit-folder:not(.dialkit-folder-root)')
+      folders.forEach((el) => {
+        const header = el.querySelector<HTMLElement>('.dialkit-folder-header-top')
+        const title = header?.getAttribute('aria-label')?.trim() || header?.textContent?.trim() || ''
+        el.hidden = !visiblePanels.includes(title as PanelName)
+      })
+    }
+    applyVisibility()
+    const mo = new MutationObserver(applyVisibility)
+    mo.observe(aside, { childList: true, subtree: true })
+    return () => mo.disconnect()
+  }, [section, visiblePanels])
+
   function renderSection() {
     switch (section) {
       case 'presets': return <Presets builtIn={Object.keys(PRESETS)} saved={saved} current={presetName} onApply={applyPreset} onDelete={onDeleteSaved} />
@@ -215,7 +271,7 @@ export default function App() {
       case 'shape': return <Shape k={k} />
       case 'elevation': return <Elevation k={k} />
       case 'spacing': return <Spacing k={k} />
-      case 'motion': return <Motion k={k} reduced={v.motion.reduced} />
+      case 'motion': return <Motion k={k} reduced={motionKit.values.reduced} />
       case 'buttons': return <Buttons copy={copy} />
       case 'forms': return <FormControls />
       case 'cards': return <Cards k={k} copy={copy} />
@@ -223,14 +279,16 @@ export default function App() {
       case 'hero': return <Hero copy={copy} />
       case 'list': return <List />
       case 'feedback': return <Feedback />
-      case 'dialog': return <Dialog k={k} reduced={v.motion.reduced} />
+      case 'dialog': return <Dialog k={k} reduced={motionKit.values.reduced} />
       default: return null
     }
   }
 
+  const activeLabel = SECTIONS.find((s) => s.id === section)?.label ?? ''
+  const onlyExportVisible = visiblePanels.length === 1 && visiblePanels[0] === 'Export'
+
   return (
     <div className="lab">
-      <DialRoot position="top-right" theme="system" mode="popover" defaultOpen />
       <div className="lab-bar">
         <strong>web-lab · Style lab</strong>
         <div className="grp"><span>Preset</span>
@@ -261,11 +319,18 @@ export default function App() {
         </nav>
         <div className="stage">
           <div className="frame" data-width={width === 'auto' ? undefined : width}>
-            <div className="preview" data-theme={dark ? 'dark' : 'light'} data-reduced={v.motion.reduced ? 'true' : 'false'} style={vars as React.CSSProperties}>
+            <div className="preview" data-theme={dark ? 'dark' : 'light'} data-reduced={motionKit.values.reduced ? 'true' : 'false'} style={vars as React.CSSProperties}>
               {renderSection()}
             </div>
           </div>
         </div>
+        <aside className="lab-panel" aria-label="Settings" ref={panelRef}>
+          <div className="lab-panel-title">Settings · <span>{activeLabel}</span></div>
+          {onlyExportVisible && (
+            <p className="small muted">Save the current settings as a preset. Copy and colors are edited in their sections.</p>
+          )}
+          <DialRoot mode="inline" theme="system" defaultOpen />
+        </aside>
       </div>
     </div>
   )
