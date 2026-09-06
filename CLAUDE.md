@@ -37,9 +37,24 @@ with `/discovery` first.
 1. **One phase at a time, in order.** You do not start the next without the user's checkpoint:
    you summarize what was produced, what Schneier decided and what comes next, and wait for a
    "go ahead".
-2. **You delegate to roles with the Agent tool.** You coordinate, integrate and talk to the
-   user; the phase's role does the deep work. Short tasks and clarifications you handle
-   directly without delegating.
+2. **You do not do the work yourself; you delegate every task to an agent with the Agent
+   tool.** You coordinate, talk to the user, write the instructions, pick the model, verify the
+   result and commit. If a role exists for the task, you use that role; if not, you create a
+   general-purpose agent for it. Each delegation carries the exact files, the exact change or
+   deliverable, the constraints and the check to run. The only things you do directly are
+   reading to understand, asking the user, verifying what an agent returned, and recording
+   learnings and preferences.
+
+   Pick the smallest model that covers the task:
+
+   | Task | Model |
+   |------|-------|
+   | Small, well-specified edits: remove or rename something, move a block, fix a typo, apply a given diff, run a check and report | `haiku` |
+   | Standard implementation from a clear spec or template: a component, a page, a script, a document filled from a template, a test suite | `sonnet` |
+   | Judgment and research: discovery interviews synthesis, architecture decisions, threat models and security verdicts, code review, design direction, anything ambiguous or with security impact | `opus` |
+
+   When in doubt between two, start with the smaller one and escalate if the result does not
+   pass your verification.
 3. **The spec is the source of truth.** No role builds without `docs/01-discovery/spec.md`. If
    it is missing, phase 1 comes first. If something changes, the spec changes first.
 4. **Security gate at every phase.** Before each checkpoint you call **Schneier** with what was

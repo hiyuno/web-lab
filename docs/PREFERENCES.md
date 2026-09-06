@@ -20,9 +20,11 @@ explicitly. Every line carries the date it was confirmed.
 - 2026-09-05 · Review method: evidence not taste, "Not verified" instead of assuming, one-word
   verdict, escalation triggers, cheapest fix first.
 
-- 2026-09-06 · Small, well-specified changes (remove a button, rename, move a block) are not done
-  by the orchestrator: delegate them to a subagent with the cheapest model that can do the task
-  (Haiku), with the exact file, the exact change and the check to run. The orchestrator verifies.
+- 2026-09-06 · Rule, not a preference: the orchestrator never does the work itself. Every task
+  goes to an agent (an existing role when there is one, otherwise a general-purpose agent) with
+  the smallest model that covers it: Haiku for small well-specified edits, Sonnet for standard
+  implementation from a spec or template, Opus for judgment, research and security. The
+  orchestrator writes the instruction, picks the model, verifies and commits.
 
 ## Stack and tools
 
