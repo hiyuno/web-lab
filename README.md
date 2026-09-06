@@ -27,6 +27,21 @@ de cada fase y puede bloquear un checkpoint. Claude Code actúa como orquestador
 | Todas | [`schneier`](agents/schneier.md) | Seguridad y privacidad. Puerta de cada fase, firma el lanzamiento. Skill `/security` |
 | 7 y 8 | [`allspaw`](agents/allspaw.md) | Despliegue, DNS, monitoreo, backups, mantenimiento |
 
+## Dependencia: la colección `interfaces`
+
+Los roles cargan por nombre los skills de dominio de [jakubkrehel/skills](https://github.com/jakubkrehel/skills)
+(Jakub Krehel, MIT), incluidos como submódulo en `vendor/interfaces`: `better-accessibility`,
+`better-layout`, `better-writing`, `better-typography`, `better-colors`, `better-ui`,
+`better-interface`, `interface-review`, `explain-interface`, `break` y `variant`. Nuestros
+skills traen el proceso de cada fase; los suyos, el conocimiento de interfaz, y cada regla vive
+en un solo sitio (tabla de propiedad en [`CLAUDE.md`](CLAUDE.md)). Los pasos 4.1 y 4.8 de
+Frost son adaptaciones de `variant` y `break`.
+
+```bash
+git submodule update --init            # primera vez
+git submodule update --remote --merge  # traer la última versión
+```
+
 ## Aprendizaje
 
 Los roles mejoran con cada proyecto. [`learnings/`](learnings/README.md) guarda un archivo por
@@ -158,11 +173,13 @@ Node con Playwright solo para la auditoría responsive opcional.
 git clone https://github.com/hiyuno/web-lab.git ~/Documents/GitSync/web-lab
 for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
 mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
+cd ~/Documents/GitSync/web-lab && git submodule update --init
+for d in ~/Documents/GitSync/web-lab/vendor/interfaces/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
 ```
 
 Con eso `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
-`/security` y `/optimize-assets` aparecen en Claude Code y los nueve roles quedan
-disponibles como subagentes.
+`/security` y `/optimize-assets` aparecen en Claude Code junto con los once skills de
+`interfaces`, y los nueve roles quedan disponibles como subagentes.
 
 ## Pruebas de la app
 

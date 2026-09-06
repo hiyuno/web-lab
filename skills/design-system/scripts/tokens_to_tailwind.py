@@ -122,6 +122,7 @@ def build(tokens):
             if "dark" in tok["ext"]:
                 dark = resolve(tokens, tok["ext"]["dark"])
                 root_dark.append(f"  {var}: {as_css_ref(tok['ext']['dark'], dark)};")
+            # un alias a otro semántico hereda su modo oscuro a través de var(), no necesita fila
             ns = {"color": "color", "spacing": "spacing", "radius": "radius", "shadow": "shadow",
                   "text": "text", "font": "font", "duration": "duration", "ease": "ease"}.get(kind)
             if ns:
@@ -148,11 +149,15 @@ def build(tokens):
 
 
 def as_css_ref(raw, resolved):
-    """Si el valor era un alias a un primitivo, emite var(--...) para que Tailwind lo vea."""
+    """Alias a primitivo → var(--color-x); alias a semántico → var(--nombre-semantico)."""
     if isinstance(raw, str):
         m = ALIAS.match(raw.strip())
-        if m and m.group(1).split(".")[0] in THEME_GROUPS:
-            return f"var({css_name(m.group(1))})"
+        if m:
+            parts = m.group(1).split(".")
+            if parts[0] in THEME_GROUPS:
+                return f"var({css_name(m.group(1))})"
+            if parts[0] == "semantic":
+                return f"var(--{'-'.join(parts[2:]) if len(parts) > 2 else parts[-1]})"
     return resolved
 
 

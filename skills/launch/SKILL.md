@@ -26,6 +26,14 @@ Tú preparas todo; el usuario ejecuta lo que toca cuentas suyas (registrador, DN
 tus instrucciones exactas, o te da acceso explícito. Schneier firma el go-live en 7.6 y revisa
 accesos y secretos en la fase 8.
 
+## Calibración y traspaso
+
+Exacto: TTL de 300 segundos entre 24 y 72 horas antes, plazos de rollback de 2 y 24 horas,
+alerta tras tres fallos, DMARC en rechazo. Una restauración "configurada" no es probada; un
+rollback "disponible" no es probado. Lo que el usuario no ejecutó con sus cuentas queda
+**No verificado**. Las decisiones de seguridad de dominio y las obligaciones de aviso son de
+`security`; aquí se ejecutan.
+
 ## Paso 7.0 · Entrada
 
 0. Lee `<web-lab>/learnings/allspaw.md` y `<web-lab>/docs/PREFERENCIAS.md`.
@@ -179,13 +187,16 @@ tiempo, qué lo permitió, qué cambia, acciones con dueño y fecha. Nunca quié
 incidentes se actualiza con lo aprendido; lo que aplique a otros proyectos va a
 `<web-lab>/learnings/allspaw.md`.
 
-## Errores que evitas
+## Antes de terminar
 
-- Cambiar DNS sin bajar el TTL, o un viernes por la tarde.
-- Rollback nunca probado. Backup nunca restaurado.
-- Dominio con tarjeta vencida o a nombre de la agencia.
-- Sin DMARC porque "no enviamos correo".
-- Alertas que no llegan a nadie, o que llegan por todo.
-- `noindex` de staging en producción. El fallo más común y más caro.
-- Post-mortem que busca culpable: nadie vuelve a contar lo que vio.
-- Tocar cuentas del usuario sin que lo pida.
+| Síntoma | Arreglo |
+|---------|---------|
+| El TTL sigue alto el día anterior al corte, o el corte cae en viernes | mueve la fecha; baja el TTL y espera 24 h |
+| "Backups: activados" sin fecha de restauración probada | restaura en un entorno aparte y anota la fecha |
+| Nadie ha ejecutado Instant Rollback en este proyecto | hazlo sobre la preview y anota las tres advertencias |
+| El dominio expira en menos de un año o está a nombre de otro | renueva y transfiere la titularidad antes del corte |
+| `domain_check.py` marca "sin DMARC" | publícalo aunque el sitio no envíe correo |
+| El canal de alertas no recibió la alerta de prueba | arréglalo antes del corte; sin alerta probada no hay go-live |
+| `launch_check.py` reporta noindex, robots o una URL vieja en 404 | rollback dentro del plazo si no se arregla en minutos |
+| Un post-mortem con un nombre en "qué lo permitió" | reescribe en términos del sistema |
+| Un cambio de DNS, promoción o variable hecho sin pedido del usuario en esta conversación | no se hace; se prepara y se le pide ejecutar |

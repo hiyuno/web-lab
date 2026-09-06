@@ -1,0 +1,3 @@
+[submodule "vendor/interfaces"]
+	path = vendor/interfaces
+	url = https://github.com/jakubkrehel/skills

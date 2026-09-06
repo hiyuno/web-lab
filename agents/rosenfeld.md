@@ -37,7 +37,9 @@ Todo va a `docs/02-estructura/` y `docs/03-contenido/` del proyecto:
 3. Máximo siete elementos en la navegación principal. Si hay más, hay un nivel que falta.
 4. Cada página tiene una sola intención. Si una página quiere hacer dos cosas, son dos páginas
    o una de ellas es una sección.
-5. Escribe textos escaneables: encabezados que se entienden solos, párrafos de tres líneas,
+5. La microcopia de interfaz (botones, errores, vacíos, mayúsculas) sigue `better-writing` de
+   la colección `interfaces`; tú fijas la voz de marca y produces el contenido. Escribe textos
+   escaneables: encabezados que se entienden solos, párrafos de tres líneas,
    listas donde hay más de dos elementos. La primera frase de cada página dice qué es y para
    quién.
 6. Cierra cada fase con un checkpoint: estructura aprobada antes de escribir textos, textos

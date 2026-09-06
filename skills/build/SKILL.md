@@ -25,6 +25,16 @@ Trabajas como orquestador: delegas tareas al subagente `osmani` o `hopper` segú
 una o pocas a la vez, con el issue completo en el prompt, y revisas cada pull request antes
 de mezclar. Los cambios de alcance vuelven a la spec primero.
 
+## Calibración y traspaso
+
+Exacto: el presupuesto de `lighthouserc.json`, las cabeceras de `headers.md`, los nueve
+estados de cada componente y los tres casos de prueba por acción. Un lint desactivado, una
+prueba saltada o un `any` para que compile son hallazgos, no atajos. Antes de abrir un pull
+request, el subagente corre `better-interface` sobre lo que tocó y adjunta su veredicto; las
+reglas de accesibilidad, layout, tipografía, color, superficies y redacción son de los
+`better-*`, y aquí solo se exige que se cumplan. Lo que no se probó en el navegador se
+reporta como **No verificado**.
+
 ## Paso 5.0 · Entrada
 
 0. Lee `<web-lab>/learnings/osmani.md`, `<web-lab>/learnings/hopper.md` y
@@ -176,13 +186,18 @@ con lupa. Un hallazgo crítico se arregla antes del checkpoint.
    herramientas confirmadas a `docs/PREFERENCIAS.md`.
 3. Con la aprobación, di qué sigue: fase 6 con Beizer sobre staging.
 
-## Errores que evitas
+## Antes de terminar
 
-- Construir desde el wireframe saltándose los tokens y componentes de Frost.
-- `"use client"` en todo. `client:load` en todo.
-- Auth solo en el middleware. Confiar en tipos en tiempo de ejecución. Devolver el registro completo.
-- Secretos con `NEXT_PUBLIC_`. `.env` en el primer commit.
-- Desactivar lint o pruebas para que pase el build. Pull requests de dos mil líneas.
-- Prueba escrita después del código "para que pase".
-- Sin presupuesto hasta que Lighthouse da 40 la semana del lanzamiento.
-- Staging con lorem ipsum y fotos sin optimizar.
+| Síntoma | Arreglo |
+|---------|---------|
+| Un color, espacio o radio literal en un componente | token de `tokens.css`; Frost lo tiene o se añade |
+| `"use client"` o `client:load` en un archivo sin evento ni estado | quítalo; Server Component o HTML |
+| `auth()` solo en `page.tsx` y no en la acción o en `src/data` | re-verifica dentro; el middleware no es barrera |
+| `process.env` o el cliente de BD fuera de `src/data/` | muévelo; los tres greps de `dal.md` |
+| Una acción que devuelve el registro completo | DTO con lo que la interfaz necesita |
+| `NEXT_PUBLIC_` con "secret", "key" o "token" en el nombre | es privado; quita el prefijo y muévelo al servidor |
+| `eslint-disable`, `@ts-ignore`, `test.skip` o `any` nuevos en el diff | arregla la causa o justifica en el PR con issue |
+| Un PR con más de 400 líneas de cambio | divídelo por tarea |
+| El commit de la prueba es posterior al de la implementación | prueba primero; si no, dilo en el PR |
+| Lighthouse CI en amarillo "por ahora" | no se mezcla; el presupuesto es el umbral |
+| Lorem ipsum o una imagen de más de 300 KB en staging | briefs y Bellard antes del checkpoint |

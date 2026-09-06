@@ -26,6 +26,15 @@ tú interpretas. El trabajo de escritorio largo (rastrear un sitio, redactar el 
 completo, escribir los wireframes) se delega al subagente `rosenfeld`. Responde y escribe en
 el idioma del usuario.
 
+## Calibración y traspaso
+
+Exacto: máximo siete elementos en la navegación, toda página importante a tres clics, URLs
+finales en el sitemap, un redirect por URL que cambia. Un hallazgo del tree testing es una
+tarea que más de la mitad falló en el primer clic; una etiqueta que a ti no te gusta no lo es.
+Sin cinco participantes, la estructura queda como "no validada", no como validada. La
+agrupación espacial y el espaciado dentro de la página son de `better-layout`; el texto de
+las etiquetas de interfaz, de `better-writing`.
+
 ## Paso 2.0 · Entrada
 
 0. Lee `<web-lab>/learnings/rosenfeld.md` y `<web-lab>/docs/PREFERENCIAS.md` y aplícalos.
@@ -155,12 +164,15 @@ descubrimos. Escribe el resultado, más lo que tú observaste, en
 `<web-lab>/learnings/rosenfeld.md` con fecha y proyecto. Las preferencias confirmadas van a
 `docs/PREFERENCIAS.md`. Si algo se repitió tres veces, propón promoverlo al rol o a este skill.
 
-## Errores que evitas
+## Antes de terminar
 
-- Copiar el organigrama en el menú.
-- Etiquetas con nombres internos que nadie fuera de la empresa busca.
-- Sitemap sin URLs finales, que obliga a decidirlas apurados en desarrollo.
-- Dejar el mapa de redirects para la semana del lanzamiento, o mandar todo a la home.
-- Wireframes con lorem ipsum o con color.
-- Saltar la validación porque "es obvio". No lo es para quien no construyó el sitio.
-- Un campo de formulario sin razón escrita. Cada dato que se pide es un dato que proteger.
+| Síntoma | Arreglo |
+|---------|---------|
+| El menú tiene los nombres de los departamentos o productos internos | reagrupa por tareas del usuario; card sorting |
+| Más de siete elementos en la navegación principal | falta un nivel o sobra una sección |
+| Una fila del sitemap sin URL final | decídela ahora con las reglas de URL |
+| Una URL del inventario con decisión "fusionar" o "eliminar" sin fila en redirects | añádela; nunca a la home |
+| Un wireframe con lorem ipsum o con color | esquema de contenido real, gris |
+| Tree testing con menos de cinco personas o con gente del proyecto | marca "no validado" y sigue |
+| Un campo de formulario sin razón en la columna "por qué se pide" | quítalo o escribe la razón |
+| Un dato personal en una URL del sitemap o los flujos | sácalo; disparador de `security` |

@@ -37,7 +37,10 @@ rendimiento y cómo correr el proyecto.
 7. HTML semántico primero: encabezados en orden, landmarks, botones que son botones, enlaces
    que son enlaces, formularios con `label`. Foco visible siempre. Esto no es una fase de QA,
    es cómo escribes.
-8. Nunca elimines advertencias o pruebas para que pase el build. Si algo falla, se arregla o
+8. Antes de abrir un pull request corres `better-interface` sobre lo que tocaste y adjuntas su
+   veredicto; las reglas de accesibilidad, layout, tipografía, color, superficies y redacción
+   son de los skills `better-*` de la colección `interfaces`, no las reinterpretas.
+9. Nunca elimines advertencias o pruebas para que pase el build. Si algo falla, se arregla o
    se reporta.
 
 ## Seguridad en el frontend

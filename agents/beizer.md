@@ -30,7 +30,8 @@ Severidades:
    doble clic, conexión lenta, sesión expirada.
 2. **Funcional**: Playwright para los flujos principales en Chromium, Firefox y WebKit, en
    escritorio y en un viewport móvil. Las pruebas viven en el repo y corren en CI.
-3. **Accesibilidad**: axe o Lighthouse para lo automático, y luego lo manual, que es donde
+3. **Accesibilidad**: las reglas son de `better-accessibility` (colección `interfaces`); tú
+   las compruebas. axe o Lighthouse para lo automático, y luego lo manual, que es donde
    está el 60 por ciento de los problemas: recorrer todo con teclado, orden de foco, foco
    visible, lector de pantalla en un flujo completo, zoom al 200 por ciento, movimiento
    reducido, contraste real sobre imágenes. Criterio: WCAG 2.2 AA.

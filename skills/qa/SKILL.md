@@ -26,6 +26,14 @@ Casi todo lo corres tú o el subagente `beizer`. Lo que necesita a una persona c
 real (lector de pantalla, móviles físicos) se lo pides al usuario con guion. Schneier
 interpreta la parte de seguridad en 6.9.
 
+## Calibración y traspaso
+
+Exacto: los umbrales de Lighthouse, las etiquetas WCAG de axe, los códigos HTTP del rastreo.
+Un hallazgo tiene dónde, pasos, evidencia y arreglo; "parece lento" o "se ve raro" no lo es.
+Lo que no pudiste ejecutar es **No verificado**, nunca un fallo ni un pase. Para revisar
+cambios concretos con criterio de dominio, el usuario puede correr `/interface-review`; las
+reglas de accesibilidad son de `better-accessibility` y aquí solo se comprueban.
+
 ## Severidades
 
 | Nivel | Significa | Efecto |
@@ -148,12 +156,15 @@ tareas; tú re-pruebas solo lo que falló y conviertes cada bug en una prueba de
 4. Retro a `<web-lab>/learnings/beizer.md`.
 5. Con la aprobación, di qué sigue: fase 7 con Allspaw.
 
-## Errores que evitas
+## Antes de terminar
 
-- Probar solo en el navegador del desarrollador.
-- "axe pasó" como sinónimo de accesible.
-- Negociar la severidad después de encontrar el bug.
-- Formularios probados sin confirmar que el correo llegó.
-- Escaneo de seguridad contra producción o contra un sitio ajeno.
-- Cerrar con mayores pendientes sin aceptación escrita.
-- Hallazgo sin evidencia. "Parece que" no es un hallazgo.
+| Síntoma | Arreglo |
+|---------|---------|
+| La matriz de dispositivos solo tiene Chromium | Firefox y WebKit en Playwright; un móvil real del usuario |
+| "axe sin violaciones" y ninguna fila en el recorrido manual | teclado y lector de pantalla con el guion; axe es el piso |
+| Una severidad cambiada después de encontrar el hallazgo | vuelve a la tabla del plan; la prioridad la pone el usuario, no la severidad |
+| Formulario marcado ok sin confirmación de correo recibido | pide al usuario que lo confirme o márcalo "No verificado" |
+| Una URL que no es staging del usuario en un comando de escaneo | detente; solo entornos propios |
+| Un mayor abierto en `salida.md` sin fila de aceptación firmada | arréglalo o consigue la aceptación escrita |
+| "Parece que", "probablemente", "debería" en un hallazgo | reproduce y adjunta evidencia, o quítalo |
+| Un bug arreglado sin prueba de Playwright nueva | escríbela antes de cerrar la fila |

@@ -25,6 +25,14 @@ Lo que necesita al usuario (voz y tono, datos de la empresa para los legales, he
 verificar, aprobación) corre en la conversación principal. La redacción larga y el SEO por
 página se delegan al subagente `rosenfeld`; los legales se revisan con `schneier`.
 
+## Calibración y traspaso
+
+Exacto: título de 50 a 60 caracteres, meta de 120 a 160, un H1, respuesta directa de 40 a 60
+palabras, dos rondas y un aprobador. Una afirmación sin fuente no se publica, un legal
+copiado no se publica. Un cambio de palabra que solo te gusta más no es un hallazgo en la
+revisión. La redacción de interfaz (botones, errores, vacíos, mayúsculas) sigue las reglas de
+`better-writing`; aquí se fija la voz de marca y se produce el contenido de las páginas.
+
 ## Paso 3.0 · Entrada
 
 0. Lee `<web-lab>/learnings/rosenfeld.md` y `<web-lab>/docs/PREFERENCIAS.md` y aplícalos. Si
@@ -151,13 +159,16 @@ Actualiza la matriz: `revisión` y luego `aprobada`.
    El tono de voz elegido, si es general, a `docs/PREFERENCIAS.md`.
 4. Con la aprobación, di qué sigue: fase 4 con Frost, que diseña sobre este texto.
 
-## Errores que evitas
+## Antes de terminar
 
-- Diseñar con lorem ipsum y descubrir al final que el texto real no cabe.
-- Superlativos y jerga interna. "Soluciones integrales de vanguardia" no dice nada.
-- Repetir la keyword en vez de responder la pregunta del lector.
-- Marcar en JSON-LD cosas que no están visibles en la página.
-- Alt text vacío en imágenes con contenido, o descriptivo en imágenes decorativas.
-- Legales copiados de otro sitio, con el nombre de otra empresa.
-- Aprobación por comité. Un aprobador, dos rondas.
-- Una prueba sin fuente, una cifra sin fecha.
+| Síntoma | Arreglo |
+|---------|---------|
+| Una página en estado "brief" cuando Frost va a empezar | escríbela o marca la fase como incompleta; nunca lorem al diseño |
+| "Integral", "de vanguardia", "líder", "solución" en un texto | borra el adjetivo y pon el hecho con su prueba |
+| La keyword aparece más de una vez por cada cien palabras | responde la pregunta del lector; la keyword va en título, H1 y primera frase |
+| Un bloque de JSON-LD con datos que no están visibles | quítalo o hazlo visible |
+| `alt` vacío en una imagen con contenido, o texto en una decorativa | intercámbialo según assets.md |
+| Un nombre de empresa que no es la del proyecto en los legales | están copiados; reescribe con legal-mx.md |
+| Más de un aprobador o más de dos rondas en la matriz | un nombre, dos rondas; lo demás es backlog |
+| Una cifra sin fecha o un testimonio sin permiso | pide la fuente o quítalo |
+| Un botón que no empieza con verbo, un "clic aquí" | regla de `better-writing`; corrige la microcopia |

@@ -62,10 +62,62 @@ un descubrimiento corto con `/discovery`.
 | 7 y 8 | `allspaw` | Despliegue, dominio, DNS, monitoreo, backups, runbook, mantenimiento |
 
 Las definiciones viven en `agents/*.md` y se instalan enlazándolas en `~/.claude/agents/`.
+Además, la colección `interfaces` de Jakub Krehel (`vendor/interfaces`, MIT) aporta los skills
+de dominio `better-accessibility`, `better-layout`, `better-writing`, `better-typography`,
+`better-colors`, `better-ui`, el orquestado `better-interface`, y los de usuario
+`interface-review`, `explain-interface`, `break` y `variant`. Nuestros skills traen el
+proceso; los suyos, el conocimiento de interfaz. Cuando un rol necesita una regla de esos
+dominios, carga el skill dueño en vez de repetirla.
 Los skills con procedimiento y plantillas viven en `skills/`: `discovery` para la fase 1,
 `structure` para la fase 2, `content` para la fase 3, `design-system` para la fase 4, `build`
 para la fase 5, `qa` para la fase 6, `launch` para las fases 7 y 8, `security` para las puertas
 de Schneier en todas, y `optimize-assets` para medios en las fases 5 y 6.
+
+## Método de revisión compartido
+
+Tomado de la colección `interfaces` de Jakub Krehel (`vendor/interfaces`, MIT), que los roles
+cargan por nombre. Aplica a toda puerta, reporte y veredicto de web-lab.
+
+**Evidencia, no gusto.** Un hallazgo cita dónde (`archivo:línea` o URL), muestra lo que hay y
+propone lo que va. Una densidad, un radio o un tono que no te gusta no es un hallazgo. Lo que
+no se pudo comprobar se marca **No verificado**, nunca se reporta como fallo ni se aprueba.
+Nunca se aprueba cobertura que no se inspeccionó.
+
+**Propiedad de reglas.** Cada regla vive en un solo lugar; los demás la citan por nombre.
+
+| Regla | Dueño |
+|-------|-------|
+| Proceso de cada fase, checkpoints, entregables | el skill de la fase (`discovery`, `structure`, `content`, `design-system`, `build`, `qa`, `launch`) |
+| Semántica HTML, teclado, foco, nombres accesibles, formularios, movimiento reducido | `better-accessibility` |
+| Agrupación, alineación, espaciado, responsive, propiedades lógicas | `better-layout` |
+| Redacción de producto: etiquetas, errores, vacíos, voz y tono de la interfaz | `better-writing` (la voz de marca la fija `content`) |
+| Tipografía: escala, interlineado, fuentes, ajuste de texto | `better-typography` |
+| Rampas de color, tokens de color, notación, medición de contraste | `better-colors` (el nivel exigido lo pone `better-accessibility`) |
+| Superficies, radios, sombras, iconos, movimiento estético | `better-ui` |
+| Seguridad y privacidad: amenazas, severidad de riesgo, veredicto, riesgos aceptados | `security` |
+| Rendimiento: presupuesto, Core Web Vitals, imágenes y video | `build` (presupuesto) y `optimize-assets` (medios) |
+| Contenido, SEO, legales | `content` |
+| Dominio, DNS, correo, monitoreo, incidentes | `launch` |
+
+**Disparadores de escalada.** Son graves a la vista, digan lo que digan la guía de estilo o el
+plazo: control interactivo sin nombre accesible; control alcanzable con teclado sin foco
+visible; ruta alcanzable con puntero pero no con teclado; movimiento que ignora
+`prefers-reduced-motion`; contenido o control cortado, superpuesto o inalcanzable a 320 px o
+al 200 %; par de contraste de texto o control que falla su umbral; estado o significado solo
+por color; acción destructiva sin confirmación ni deshacer; texto truncado sin forma de leer
+el completo; error que no dice cómo recuperarse; color semántico usado contra su significado;
+cambio de estado que solo comunica el movimiento; y, de `security`, cualquier crítico.
+
+**Escalera del arreglo más barato.** Ante más de un arreglo posible, el primero que funcione:
+borrar, usar la plataforma, reutilizar lo que el proyecto ya tiene, corregir el valor, añadir.
+Proponer algo nuevo cuando bastaba borrar es un hallazgo en sí.
+
+**Formato de reporte.** Una tabla ordenada por severidad y luego por alcance, una fila por
+causa raíz listando todos los lugares donde aparece, máximo quince filas y los disparadores
+siempre primero. Columnas: Severidad · Dónde · Antes · Después · Por qué. Termina con una
+palabra: **Bloqueado** si queda algún crítico o disparador, **Aprobado** si no, dejando el
+resto en la tabla como trabajo pendiente. Sin hallazgos: "Sin hallazgos accionables" más lo que
+se verificó.
 
 ## Aprendizaje
 

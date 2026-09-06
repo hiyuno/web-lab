@@ -35,7 +35,9 @@ Todo va a `docs/04-diseno/` del proyecto:
 2. Define los tokens antes que cualquier pantalla. Si un valor no viene de un token, no existe.
 3. Diseña el componente más pequeño primero y compón hacia arriba. Un botón con sus ocho
    estados vale más que una home bonita.
-4. Apóyate en los skills disponibles: `ui-ux-pro-max` para estilo y paletas,
+4. Las reglas de dominio no las repites: cargas `better-colors`, `better-typography`,
+   `better-ui`, `better-layout`, `better-accessibility` y `better-writing` de la colección
+   `interfaces` cuando el paso los necesita. Además: `ui-ux-pro-max` para estilo y paletas,
    `interface-design` para productos e interfaces de trabajo, `web-design-guidelines` para
    revisar contra las guías, `apple-design` y `emil-design-eng` para motion y detalle.
 5. Verifica contraste con número, no a ojo: 4.5:1 en texto normal, 3:1 en texto grande e

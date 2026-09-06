@@ -25,6 +25,15 @@ La dirección visual y la prueba con personas necesitan al usuario y corren en l
 principal. La producción de tokens, componentes, plantillas y prototipo se delega al subagente
 `frost`. Schneier revisa los flujos sensibles al cierre.
 
+## Calibración y traspaso
+
+Los valores de este skill son exactos: 4.5:1 no es "alrededor de 4.5", 24 px no es "unos 24".
+Un hallazgo de diseño es algo que falla un disparador de escalada (CLAUDE.md), rompe la
+consistencia del sistema o contradice el texto real; una preferencia de densidad, radio o
+tono no lo es. Lo que no pudiste ver renderizado se reporta como **No verificado**. Las reglas
+de color, tipografía, superficies, layout, accesibilidad y redacción viven en los skills
+`better-*`; aquí solo está el procedimiento y el checkpoint.
+
 ## Herramientas
 
 - Skills instalados que usas según el caso: `ui-ux-pro-max` para estilos, paletas y pares
@@ -33,6 +42,12 @@ principal. La producción de tokens, componentes, plantillas y prototipo se dele
   para movimiento y detalle; `pick-ui-library` para elegir la base de componentes; `design`
   de Anthropic para bocetos en canvas si el usuario quiere tocar visualmente.
 - MCP disponibles si el usuario los tiene conectados: Pencil, Stitch, Figma.
+- Skills de dominio de la colección `interfaces` (Jakub Krehel, MIT, `vendor/interfaces`), que
+  cargas por nombre cuando el paso los necesita: `better-colors` para rampas, tokens y
+  contraste; `better-typography` para escala y fuentes; `better-ui` para radios concéntricos,
+  sombras, iconos y movimiento; `better-layout` para retícula y espaciado;
+  `better-accessibility` para foco, teclado y áreas de toque; `better-writing` para la
+  microcopia. Sus reglas no se repiten aquí: este skill es el proceso, ellos el conocimiento.
 - `scripts/tokens_to_tailwind.py`: convierte `tokens.tokens.json` (DTCG) en `tokens.css` con
   primitivos en `@theme`, semánticos en `:root` con sobreescritura para modo oscuro y alias en
   `@theme inline`, y verifica el contraste de cada par declarado en ambos modos.
@@ -55,21 +70,26 @@ editorial a atributos visuales: cada atributo de voz implica decisiones de tipog
 contraste, densidad y color. Pregunta al usuario en una ronda: sitios cuya estética admira y
 por qué, cuáles detesta, si quiere modo oscuro, qué existe de marca que no se puede cambiar.
 
-Prepara dos o tres direcciones con referencias reales y, para cada una, una muestra de la
-home en gris más un bloque en color con el texto real. Usa `ui-ux-pro-max` para partir de un
-estilo, paleta y par tipográfico coherentes. Si no hay marca, aquí se decide el mínimo: marca
-tipográfica, paleta y tipografía.
+Construye tres variantes de la pieza que define a las demás (normalmente el hero de la home)
+siguiendo `references/variantes.md`: un solo eje por ronda, nombres que digan la dirección,
+montadas en la página real con texto real, detrás de un selector por URL, sin favorita
+marcada. Usa `ui-ux-pro-max` para partir de un estilo, paleta y par tipográfico coherentes en
+cada una. Si no hay marca, aquí se decide el mínimo: marca tipográfica, paleta y tipografía.
 
-**Checkpoint A**: el usuario elige la dirección. Lo que diga sobre lo que le gusta y no le
+**Checkpoint A**: el usuario elige la variante; se promueve al sistema y se borran las otras. Lo que diga sobre lo que le gusta y no le
 gusta va a `docs/PREFERENCIAS.md` si es general.
 
 ## Paso 4.2 · Tokens
 
-Con `references/tokens.tokens.json` como base. Tres capas, nunca te saltes la semántica:
+Con `references/tokens.tokens.json` como base y `better-colors` cargado para las reglas de
+rampa y nombres: rampas y no colores, cada paso con un rol, claridad percibida pareja, tono
+constante, vividez que pica en el centro, ambos extremos lejos del blanco y negro puros, modo
+oscuro que no es el espejo. La marca se llama `accent`; `primary` queda como alias para shadcn.
+Tres capas, nunca te saltes la semántica:
 
 1. **Primitivos**: paleta en OKLCH con escala 50 a 950, escala tipográfica, espaciado en base
    4, radios, sombras, duraciones y curvas, breakpoints. Sin significado.
-2. **Semánticos**: la decisión. `background`, `foreground`, `primary`, `muted`, `border`,
+2. **Semánticos**: la decisión. `background`, `foreground`, `accent`, `muted`, `border`,
    `danger`, `success`. Referencian primitivos. El modo oscuro es una sobreescritura de esta
    capa en `$extensions.web-lab.dark`, no otra paleta.
 3. **De componente**: solo cuando un componente necesita apartarse. Referencian semánticos.
@@ -95,7 +115,10 @@ Más comportamiento con texto largo y corto, cambios por breakpoint, y notas de 
 rol, nombre accesible, teclado, qué anuncia el lector de pantalla.
 
 Empieza por botón, campo de formulario y enlace: son los que más se repiten y donde más se
-nota la falta de un estado.
+nota la falta de un estado. Carga `better-ui` para radios concéntricos (exterior = interior +
+relleno), sombras en vez de bordes para profundidad, contornos de imagen, escala 0.96 al
+pulsar e iconos que cambian con escala y desenfoque; y `better-accessibility` para foco,
+teclado y áreas de toque.
 
 ## Paso 4.4 · Plantillas
 
@@ -130,11 +153,15 @@ que Osmani continúa. Ábrelo en el navegador integrado en 375 y 1280 y, si se p
 móvil real. El canvas `design`, Pencil, Stitch o v0 sirven para explorar; el prototipo que
 se entrega es el de código.
 
-## Paso 4.8 · QA de diseño y prueba con personas
+## Paso 4.8 · Romper, QA de diseño y prueba con personas
 
-Con `references/qa.md`: tipografía, color, espaciado, alineación, todos los estados de cada
-componente, los tres anchos, iconos, contenido exacto de los briefs y la checklist de
-accesibilidad, todo verificado sobre el prototipo. Luego prueba de usabilidad con tres a
+Primero rompe los componentes que más se repiten (botón, campo, tarjeta, listado) con
+`references/romper.md`: cada uno en todos los escenarios que puede alcanzar, en una página
+desechable que es el reporte, con los dueños de cada rotura. Luego `references/qa.md`:
+tipografía, color, espaciado, alineación, todos los estados de cada componente, los tres
+anchos, iconos, contenido exacto de los briefs y la checklist de accesibilidad, todo verificado
+sobre el prototipo. Si quieres una segunda opinión completa, el usuario puede correr
+`/interface-review` sobre el prototipo. Luego prueba de usabilidad con tres a
 cinco personas usando las tareas de `flujos.md`, guion en `references/prueba-usabilidad.md`.
 Lo que falle se corrige en el sistema, no en la página, y se vuelve a probar esa tarea.
 
@@ -152,13 +179,17 @@ Lo que falle se corrige en el sistema, no en la página, y se vuelve a probar es
 5. Con la aprobación, di qué sigue: fase 5 con Osmani, y Hopper si hay servidor, partiendo de
    este paquete y del prototipo.
 
-## Errores que evitas
+## Antes de terminar
 
-- Diseñar antes de tener el texto, o con lorem ipsum.
-- "Este gris un poco más claro": valores fuera de los tokens.
-- Componentes con un solo estado.
-- Contraste a ojo. Quitar el foco visible porque afea.
-- Controles que solo aparecen al pasar el cursor.
-- Escritorio primero y móvil como versión recortada.
-- Entregar capturas en vez de tokens y especificaciones.
-- Un login en modal o con aspecto distinto en cada página: facilita el phishing.
+| Síntoma | Arreglo |
+|---------|---------|
+| Hay lorem ipsum o texto inventado en el prototipo | trae el texto de los briefs; si no cabe, cambia el diseño |
+| Un valor literal de color, espacio o radio en el CSS o en Figma | crea o usa el token; el script de tokens te dice si falta |
+| Un componente sin uno de sus nueve estados | dibújalo; sin error y sin vacío no está terminado |
+| Contraste "se ve bien" sin número | `tokens_to_tailwind.py --check`; APCA como desempate según `better-colors` |
+| `outline: none` o foco invisible en algún control | anillo de 2 px y 3:1, regla de `better-accessibility` |
+| Un control que solo aparece al pasar el cursor | hazlo visible; disparador de escalada |
+| Radios iguales en contenedor e hijo con relleno entre ellos | exterior = interior + relleno (`better-ui`) |
+| Diseño solo en 1280 | 375 primero; los tres anchos en cada plantilla |
+| El paquete a Osmani son capturas | tokens JSON y CSS, especificación de componentes, prototipo |
+| Login en un modal o distinto en cada página | página propia y consistente; lo revisa Schneier |

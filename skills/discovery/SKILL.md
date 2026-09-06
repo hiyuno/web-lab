@@ -25,6 +25,13 @@ Máximo cuatro preguntas por turno. Si la respuesta ya está en la conversación
 del proyecto, no la vuelvas a preguntar. Si el usuario contesta con una palabra, pide un
 ejemplo concreto antes de seguir. Responde y escribe todo en el idioma del usuario.
 
+## Calibración y traspaso
+
+Lo exacto aquí son los criterios de aceptación: cada uno se puede convertir en una prueba o
+no es un criterio. Lo que el usuario no dijo no se inventa; se anota como supuesto abierto.
+Un "quiero una app" es una hipótesis hasta la ronda 3. Las reglas de seguridad y privacidad
+del modelo de amenazas son de `security`; la voz del producto se fija en `content`.
+
 ## Paso 1.0 · Entrada
 
 Antes de preguntar nada, lee `<web-lab>/learnings/cooper.md` y `<web-lab>/docs/PREFERENCIAS.md`
@@ -160,12 +167,14 @@ descubrimos. Escribe el resultado, más lo que tú observaste, en `<web-lab>/lea
 con fecha y proyecto. Las preferencias confirmadas van a `docs/PREFERENCIAS.md`. Si algo se
 repitió tres veces, propón promoverlo al rol o a este skill.
 
-## Errores que evitas
+## Antes de terminar
 
-- Arrancar a diseñar o a proponer stack antes de la ronda 3.
-- Hablar solo con quien paga y nunca con quien usa.
-- Escribir la spec para un humano que rellena huecos. La escribes para un agente que no
-  puede preguntar.
-- Hacer el modelo de amenazas al final, con la arquitectura ya cerrada.
-- Aceptar "una web moderna e intuitiva" como requisito. Pide el comportamiento concreto.
-- Guardar una contraseña, token o API key que el usuario pegue. Le pides que la rote.
+| Síntoma | Arreglo |
+|---------|---------|
+| Ya hay un framework o un stack decidido y no pasaste la ronda 3 | vuelve a las tareas del usuario; la decisión viene en 1.4 |
+| Ninguna respuesta viene de un usuario real o de una fuente indirecta | pide las cinco preguntas de usuarios o anótalo como supuesto de riesgo |
+| Un criterio de aceptación con "intuitivo", "moderno", "fácil" | pide el comportamiento observable y reescríbelo en dado, cuando, entonces |
+| Una historia que no viene de algo que el usuario dijo | bórrala o pregúntala |
+| El modelo de amenazas se hace después de la decisión de arquitectura | hazlo en 1.5 antes de la spec; si ya la escribiste, revísala con él |
+| Un secreto pegado en el chat | no lo uses; pide rotarlo y guardarlo en un gestor |
+| El brief se aprobó en la misma respuesta en que se presentó | espera el "adelante" explícito |
