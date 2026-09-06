@@ -4,7 +4,7 @@
 body { margin: 0; font-family: "Inter", system-ui, sans-serif; background: #f4f4f5; color: #18181b; }
 @media (prefers-color-scheme: dark) { body { background: #0c0c0e; color: #e4e4e7; } }
 
-.lab { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; }
+.lab { display: grid; grid-template-rows: auto 1fr; height: 100vh; }
 .lab-bar { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 10px 16px; background: #fff; border-bottom: 1px solid #e4e4e7; font-size: 13px; }
 @media (prefers-color-scheme: dark) { .lab-bar { background: #18181b; border-color: #27272a; } }
 .lab-bar strong { font-weight: 600; }
@@ -15,7 +15,26 @@ body { margin: 0; font-family: "Inter", system-ui, sans-serif; background: #f4f4
 .lab-bar .status { margin-left: auto; font-variant-numeric: tabular-nums; }
 .lab-bar .status b.fail { color: #dc2626; }
 .lab-bar .status b.ok { color: #16a34a; }
-.stage { display: flex; justify-content: center; padding: 24px; overflow-x: auto; }
+/* Two-column body below the bar: sidebar nav (one section at a time, docs-site style) and the stage.
+   The row is a fixed-height flex area (.lab is 100vh) so the nav and the stage each scroll on their
+   own — this keeps the nav "under the bar" without guessing the bar's height for a sticky offset,
+   since the bar can wrap onto a second line on narrow layouts. */
+.lab-main { display: flex; min-height: 0; overflow: hidden; }
+.lab-nav { width: 220px; flex: none; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; background: #fff; border-right: 1px solid #e4e4e7; padding: 16px 8px; }
+@media (prefers-color-scheme: dark) { .lab-nav { background: #18181b; border-color: #27272a; } }
+.lab-nav-group { display: flex; flex-direction: column; gap: 2px; }
+.lab-nav-heading { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #71717a; padding: 4px 8px; }
+.lab-nav button { font: inherit; font-size: 13px; text-align: left; width: 100%; padding: 8px; border: 0; border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
+.lab-nav button[aria-current="page"] { background: #18181b; color: #fff; }
+@media (prefers-color-scheme: dark) { .lab-nav button[aria-current="page"] { background: #fafafa; color: #18181b; } }
+@media (max-width: 899px) {
+  .lab-main { flex-direction: column; }
+  .lab-nav { width: 100%; flex-direction: row; overflow-x: auto; overflow-y: visible; border-right: none; border-bottom: 1px solid #e4e4e7; white-space: nowrap; }
+  .lab-nav-group { display: contents; }
+  .lab-nav-heading { display: none; }
+  .lab-nav button { width: auto; }
+}
+.stage { flex: 1; display: flex; justify-content: center; padding: 24px; overflow: auto; min-width: 0; }
 .frame { width: 100%; transition: width 200ms ease-out; }
 .frame[data-width="375"] { width: 375px; }
 .frame[data-width="768"] { width: 768px; }

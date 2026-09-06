@@ -5,12 +5,37 @@ import { checkPairs } from './engine/contrast'
 import { FONTS, PRESETS } from './engine/presets'
 import { buildTokens, cssVars, tokensCss } from './engine/tokens'
 import type { Knobs } from './engine/tokens'
-import { Typography, Color, Buttons, Cards, Form, Navigation, Hero, List, Feedback, Dialog } from './patterns'
+import { Presets, Typography, Color, Shape, Elevation, Spacing, Motion, Buttons, FormControls, Cards, Navigation, Hero, List, Feedback, Dialog } from './patterns'
 import type { Copy } from './patterns'
 
 const P = PRESETS.Minimal
 
 interface SavedPreset { slug: string; name: string; accent?: string; font?: string; updated: string; lab: Record<string, any> }
+
+type SectionId = 'presets' | 'color' | 'typography' | 'shape' | 'elevation' | 'spacing' | 'motion' | 'buttons' | 'forms' | 'cards' | 'navigation' | 'hero' | 'list' | 'feedback' | 'dialog'
+
+const SECTIONS: { id: SectionId; label: string; group: 'General' | 'Patterns' }[] = [
+  { id: 'presets', label: 'Presets', group: 'General' },
+  { id: 'color', label: 'Color', group: 'General' },
+  { id: 'typography', label: 'Typography', group: 'General' },
+  { id: 'shape', label: 'Shape', group: 'General' },
+  { id: 'elevation', label: 'Elevation', group: 'General' },
+  { id: 'spacing', label: 'Spacing', group: 'General' },
+  { id: 'motion', label: 'Motion', group: 'General' },
+  { id: 'buttons', label: 'Buttons', group: 'Patterns' },
+  { id: 'forms', label: 'Form controls', group: 'Patterns' },
+  { id: 'cards', label: 'Cards', group: 'Patterns' },
+  { id: 'navigation', label: 'Navigation', group: 'Patterns' },
+  { id: 'hero', label: 'Hero', group: 'Patterns' },
+  { id: 'list', label: 'List and table', group: 'Patterns' },
+  { id: 'feedback', label: 'Feedback', group: 'Patterns' },
+  { id: 'dialog', label: 'Dialog and sheet', group: 'Patterns' },
+]
+const SECTION_IDS = new Set<string>(SECTIONS.map((s) => s.id))
+function sectionFromHash(): SectionId {
+  const h = location.hash.slice(1)
+  return (SECTION_IDS.has(h) ? h : 'presets') as SectionId
+}
 
 const CONFIG = {
   color: {
@@ -72,8 +97,17 @@ export default function App() {
   const [presetName, setPresetName] = useState(() => { try { return localStorage.getItem('style-lab:preset') || 'Minimal' } catch { return 'Minimal' } })
   const [toast, setToast] = useState('')
   const [saved, setSaved] = useState<SavedPreset[]>([])
+  const [section, setSection] = useState<SectionId>(() => sectionFromHash())
   const refreshSaved = () => fetch('/api/presets').then((r) => r.json()).then(setSaved).catch(() => setSaved([]))
   useEffect(() => { void refreshSaved() }, [])
+  useEffect(() => {
+    const onHash = () => setSection(sectionFromHash())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  useEffect(() => {
+    if (location.hash.slice(1) !== section) location.hash = section
+  }, [section])
 
   const kit = useDialKitController('Style lab', CONFIG, {
     id: 'style-lab',
@@ -143,10 +177,15 @@ export default function App() {
     } as Parameters<typeof kit.setValues>[0])
   }
 
-  function deleteSaved() {
-    const sp = saved.find((x) => x.name === presetName || x.slug === presetName)
+  function deleteSaved(name: string = presetName) {
+    const sp = saved.find((x) => x.name === name || x.slug === name)
     if (!sp || !confirm(`Delete saved preset "${sp.name}"? The file in web-lab is removed.`)) return
     fetch(`/api/presets?slug=${encodeURIComponent(sp.slug)}`, { method: 'DELETE' }).then(() => { flash('Deleted'); setPresetName('Minimal'); void refreshSaved() })
+  }
+
+  function onDeleteSaved(name: string) {
+    setPresetName(name)
+    deleteSaved(name)
   }
 
   // Suppress transitions while the theme flips (better-ui: theme switch should snap, not smear).
@@ -158,10 +197,29 @@ export default function App() {
     requestAnimationFrame(() => requestAnimationFrame(() => style.remove()))
   }, [dark])
 
-  const semList = Object.entries(semantic)
-
   // Current export, readable from the DOM (Frost's skill and tests read it without clicking).
   const tokensJson = useMemo(() => JSON.stringify(buildTokens(k, rampsAll, semantic), null, 2), [k, rampsAll, semantic])
+
+  function renderSection() {
+    switch (section) {
+      case 'presets': return <Presets builtIn={Object.keys(PRESETS)} saved={saved} current={presetName} onApply={applyPreset} onDelete={onDeleteSaved} />
+      case 'color': return <Color ramps={rampsAll} sem={semantic} pairs={pairs} pinned={built.pinned} />
+      case 'typography': return <Typography k={k} copy={copy} />
+      case 'shape': return <Shape k={k} />
+      case 'elevation': return <Elevation k={k} />
+      case 'spacing': return <Spacing k={k} />
+      case 'motion': return <Motion k={k} reduced={v.motion.reduced} />
+      case 'buttons': return <Buttons copy={copy} />
+      case 'forms': return <FormControls />
+      case 'cards': return <Cards k={k} copy={copy} />
+      case 'navigation': return <Navigation copy={copy} />
+      case 'hero': return <Hero copy={copy} />
+      case 'list': return <List />
+      case 'feedback': return <Feedback />
+      case 'dialog': return <Dialog k={k} reduced={v.motion.reduced} />
+      default: return null
+    }
+  }
 
   return (
     <div className="lab">
@@ -174,7 +232,7 @@ export default function App() {
             {saved.length > 0 && <optgroup label="Saved in web-lab">{saved.map((sp) => <option key={sp.slug} value={sp.name}>{sp.name}</option>)}</optgroup>}
             {!Object.keys(PRESETS).includes(presetName) && !saved.some((sp) => sp.name === presetName) && <option value={presetName}>{presetName}</option>}
           </select>
-          {saved.some((sp) => sp.name === presetName) && <button onClick={deleteSaved} aria-label={`Delete saved preset ${presetName}`}>Delete</button>}
+          {saved.some((sp) => sp.name === presetName) && <button onClick={() => deleteSaved()} aria-label={`Delete saved preset ${presetName}`}>Delete</button>}
         </div>
         <div className="grp" role="group" aria-label="Preview width">
           {(['auto', '375', '768', '1280'] as const).map((w) => <button key={w} aria-pressed={width === w} onClick={() => setWidth(w)}>{w === 'auto' ? 'Fluid' : `${w} px`}</button>)}
@@ -183,24 +241,22 @@ export default function App() {
         <div className="status">contrast: <b className={fails ? 'fail' : 'ok'}>{fails ? `${fails} pair(s) fail` : `${pairs.length} pairs pass`}</b>{toast ? ` · ${toast}` : ''}</div>
       </div>
       <script type="application/json" id="tokens-json" dangerouslySetInnerHTML={{ __html: tokensJson.replace(/</g, '\\u003c') }} />
-      <div className="stage">
-        <div className="frame" data-width={width === 'auto' ? undefined : width}>
-          <div className="preview" data-theme={dark ? 'dark' : 'light'} data-reduced={v.motion.reduced ? 'true' : 'false'} style={vars as React.CSSProperties}>
-            <Typography k={k} copy={copy} />
-            <Color ramps={rampsAll} sem={semantic} pairs={pairs} pinned={built.pinned} />
-            <Buttons copy={copy} />
-            <Cards k={k} copy={copy} />
-            <Form />
-            <Navigation copy={copy} />
-            <Hero copy={copy} />
-            <List />
-            <Feedback />
-            <Dialog k={k} reduced={v.motion.reduced} />
-            <section className="pattern"><header><h2>Semantic tokens</h2><span className="n">what the export writes</span></header>
-              <table><thead><tr><th>Token</th><th>Light</th><th>Dark</th></tr></thead><tbody>
-                {semList.map(([n, val]) => <tr key={n}><td className="mono">--{n}</td><td className="mono">{val.lightRef} <span className="sample" style={{ background: val.light, border: '1px solid var(--border)' }}>&nbsp;&nbsp;&nbsp;</span></td><td className="mono">{val.darkRef} <span className="sample" style={{ background: val.dark, border: '1px solid var(--border)' }}>&nbsp;&nbsp;&nbsp;</span></td></tr>)}
-              </tbody></table>
-            </section>
+      <div className="lab-main">
+        <nav className="lab-nav" aria-label="Sections">
+          {(['General', 'Patterns'] as const).map((group) => (
+            <div className="lab-nav-group" key={group}>
+              <div className="lab-nav-heading">{group}</div>
+              {SECTIONS.filter((s) => s.group === group).map((s) => (
+                <button key={s.id} aria-current={section === s.id ? 'page' : undefined} onClick={() => setSection(s.id)}>{s.label}</button>
+              ))}
+            </div>
+          ))}
+        </nav>
+        <div className="stage">
+          <div className="frame" data-width={width === 'auto' ? undefined : width}>
+            <div className="preview" data-theme={dark ? 'dark' : 'light'} data-reduced={v.motion.reduced ? 'true' : 'false'} style={vars as React.CSSProperties}>
+              {renderSection()}
+            </div>
           </div>
         </div>
       </div>
