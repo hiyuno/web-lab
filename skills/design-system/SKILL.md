@@ -47,6 +47,17 @@ procedure and the checkpoint.
   `pick-ui-library` to choose the component base; Anthropic's `design` for canvas sketches if the
   user wants to touch things visually.
 - MCPs if the user has them connected: Pencil, Stitch, Figma.
+- **The style lab**, `app/`: a local page with the ten patterns that define a system (typography,
+  color, buttons, cards, form, navigation, hero, list, feedback, dialog and motion) driven by a
+  DialKit panel. Pick an accent and the ramps, semantic tokens and contrast table follow; tune
+  radius, corner shape (round, squircle, sharp), shadow style, border, font pair, type scale,
+  spacing unit, content width, duration and easing; six starting presets; light and dark;
+  375, 768 and 1280 preview widths; real copy fields. It exports `tokens.tokens.json` (our DTCG
+  schema, with the knob positions in `$extensions.web-lab.lab`) and `tokens.css`. Start it from
+  the web-lab root with `preview_start name=style-lab` (`.claude/launch.json`) or
+  `cd skills/design-system/app && npm install && npm run dev`, then open `http://localhost:8771`.
+  The current export is also in the page as `<script id="tokens-json">`. Headless:
+  `npx tsx src/cli.ts --preset Playful --json tokens.tokens.json --css tokens.css`.
 - `scripts/tokens_to_tailwind.py`: converts `tokens.tokens.json` (DTCG) into `tokens.css` with
   primitives in `@theme`, semantics in `:root` with a dark-mode override and aliases in
   `@theme inline`, and verifies the contrast of every declared pair in both modes.
@@ -69,8 +80,10 @@ guide into visual attributes: each voice attribute implies decisions on typograp
 density and color. Ask the user in one round: sites whose aesthetics they admire and why, which
 they dislike, whether they want dark mode, what exists of the brand that cannot change.
 
-Build three variants of the piece that defines the others (normally the home hero) following
-`references/variants.md`: one axis per round, names that say the direction, mounted on the real
+Open the style lab and start from the preset closest to the direction; the hero, cards and
+buttons update as you move the accent, corners, shadows and type. Save a lab export per
+direction (`tokens.tokens.json` carries the knob positions). Then build three variants of the
+piece that defines the others (normally the home hero) following `references/variants.md`: one axis per round, names that say the direction, mounted on the real
 page with real copy, behind a URL picker, no favorite marked. Use `ui-ux-pro-max` to start each
 from a coherent style, palette and font pair. If there is no brand, the minimum is decided here:
 wordmark, palette and typography.
@@ -81,8 +94,8 @@ general.
 
 ## Step 4.2 · Tokens
 
-With `references/tokens.tokens.json` as the base and `better-colors` loaded for ramp and naming
-rules: ramps not colors, every step with a role, even perceived lightness, constant hue,
+Start from the lab export of the chosen direction (or `references/tokens.tokens.json` if you
+skipped the lab) and `better-colors` loaded for ramp and naming rules: ramps not colors, every step with a role, even perceived lightness, constant hue,
 vividness peaking mid-ramp, both ends short of pure white and black, dark mode that is not the
 mirror. The brand is called `accent`; `primary` stays as an alias for shadcn. Three tiers, never
 skip the semantic one:

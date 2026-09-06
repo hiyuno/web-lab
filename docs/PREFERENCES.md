@@ -25,7 +25,8 @@ explicitly. Every line carries the date it was confirmed.
 - 2026-09-04 · Astro for content sites, Next.js for applications, Tailwind v4 with tokens,
   Vercel as default hosting.
 - 2026-09-04 · Tools without heavy dependencies: Python stdlib, Pillow, ffmpeg. Node only when
-  truly needed.
+  truly needed. Exception agreed on 2026-09-05: the style lab uses Vite, React and DialKit
+  because DialKit is the control panel the user asked for.
 - 2026-09-04 · Roles are named after a real figure in their discipline.
 - 2026-09-05 · Brand token: `accent` in the semantic tier, with `primary` as an alias so shadcn
   does not break.
