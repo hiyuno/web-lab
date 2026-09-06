@@ -165,6 +165,13 @@ covers, comparator, version history and configurable output folder.
 - App: `skills/optimize-assets/app/` (Python stdlib + Pillow + ffmpeg, no npm dependencies)
 - Analysis thresholds: `skills/optimize-assets/references/thresholds.md`
 
+### `/update`
+
+Pulls the latest `web-lab` and relinks its roles into `~/.claude/agents` and its skills (own and
+the `interfaces` vendor submodule) into `~/.claude/skills`. Works from any project.
+
+- Script: `skills/update/scripts/update.sh` (flags `--no-pull`, `--dry-run`)
+
 Mac requirements: `python3` with Pillow, `ffmpeg`/`ffprobe` (`brew install ffmpeg`), and Node
 with Playwright only for the optional responsive audit. The style lab needs Node 22 and npm.
 
@@ -172,15 +179,14 @@ with Playwright only for the optional responsive audit. The style lab needs Node
 
 ```bash
 git clone https://github.com/hiyuno/web-lab.git ~/Documents/GitSync/web-lab
-for d in ~/Documents/GitSync/web-lab/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
-mkdir -p ~/.claude/agents && for f in ~/Documents/GitSync/web-lab/agents/*.md; do ln -sf "$f" ~/.claude/agents/; done
-cd ~/Documents/GitSync/web-lab && git submodule update --init
-for d in ~/Documents/GitSync/web-lab/vendor/interfaces/skills/*/; do ln -sfn "${d%/}" ~/.claude/skills/; done
+bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 ```
 
+Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
+
 With that, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
-`/security` and `/optimize-assets` appear in Claude Code along with the eleven `interfaces`
-skills, and the nine roles are available as subagents.
+`/security`, `/optimize-assets` and `/update` appear in Claude Code along with the eleven
+`interfaces` skills, and the nine roles are available as subagents.
 
 ## App tests
 

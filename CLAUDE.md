@@ -90,7 +90,8 @@ owning skill instead of restating it.
 Skills with procedure and templates live in `skills/`: `discovery` for phase 1, `structure`
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them, and
-`optimize-assets` for media in phases 5 and 6.
+`optimize-assets` for media in phases 5 and 6, and `update` refreshes the installed roles and
+skills from the repo (`/update`).
 
 ## Shared review method
 
