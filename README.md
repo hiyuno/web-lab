@@ -28,6 +28,27 @@ close of every phase and can block a checkpoint. Claude Code acts as orchestrato
 | All | [`schneier`](agents/schneier.md) | Security and privacy. Gate at every phase, signs the launch. Skill `/security` |
 | 7 and 8 | [`allspaw`](agents/allspaw.md) | Deployment, DNS, monitoring, backups, maintenance |
 
+## Project types
+
+Some kinds of site repeat often enough to be worth a preset: a skill that presets phases 1
+through 5 with type-specific inputs, without adding a phase number or a `docs/` folder of its
+own. See [`CLAUDE.md`](CLAUDE.md)'s "Project types" section for how the orchestrator routes to
+one.
+
+### `/app-web`
+
+The on-ramp for a recurring project type: a marketing and product site for one of the user's own
+apps, plus a public feature-request forum. It presets phases 1 through 5 with app-specific
+inputs — discovery add-on questions, a default sitemap, an app page brief, four new style-lab
+patterns and the forum's schema and rate limiting — and adds a public-write-surface security
+review for the forum. It introduces no new phase and writes no `docs/` folder of its own.
+
+- Skill: [`skills/app-web/SKILL.md`](skills/app-web/SKILL.md)
+- References: `skills/app-web/references/` (discovery add-on, sitemap)
+- Also loads: `skills/content/references/app-page-brief.md`, `skills/build/references/forum.md`, `skills/security/references/public-write-surfaces.md`
+
+New project types are added here the same way, each as its own subsection.
+
 ## Dependency: the `interfaces` collection
 
 The roles load by name the domain skills from [jakubkrehel/skills](https://github.com/jakubkrehel/skills)
@@ -51,18 +72,6 @@ that is read on start and fed by a retro at the close of each phase;
 all. Whatever repeats three times is promoted to the role or the skill.
 
 ## Skills
-
-### `/app-web` · project type
-
-The on-ramp for a recurring project type: a marketing and product site for one of the user's own
-apps, plus a public feature-request forum. It presets phases 1 through 5 with app-specific
-inputs — discovery add-on questions, a default sitemap, an app page brief, four new style-lab
-patterns and the forum's schema and rate limiting — and adds a public-write-surface security
-review for the forum. It introduces no new phase and writes no `docs/` folder of its own.
-
-- Skill: [`skills/app-web/SKILL.md`](skills/app-web/SKILL.md)
-- References: `skills/app-web/references/` (discovery add-on, sitemap)
-- Also loads: `skills/content/references/app-page-brief.md`, `skills/build/references/forum.md`, `skills/security/references/public-write-surfaces.md`
 
 ### `/discovery` · Cooper
 

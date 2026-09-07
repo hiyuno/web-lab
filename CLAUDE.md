@@ -10,10 +10,10 @@ When the user opens a conversation without a clear task, or says "let's start", 
 doing", "new project" or similar, ask first what we are going to do, with AskUserQuestion if
 available:
 
-1. **Start a new project** → load the `/discovery` skill and run phase 1 as Cooper. If it is a
-   marketing/product site for one of the user's own apps with a public feature-request forum, use
-   `/app-web` instead, since it presets discovery, structure, content, design and build for that
-   project type.
+1. **Start a new project** → ask what kind of site or app it is, with AskUserQuestion if
+   available, and load the matching project type from the table in `## Project types` below.
+   Default to `/discovery` with Cooper for anything general; a project type only changes what
+   gets preset into phases 1 through 5, never the phases themselves.
 2. **Improve an existing project** → ask which part and route:
    - heavy images or video, slow site, Lighthouse → `/optimize-assets` with Bellard
    - review security, privacy, a finding, privacy notice → `/security` with Schneier
@@ -94,8 +94,23 @@ Skills with procedure and templates live in `skills/`: `discovery` for phase 1, 
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them, and
 `optimize-assets` for media in phases 5 and 6, and `update` refreshes the installed roles and
-skills from the repo (`/update`); `app-web` presets the eight phases for the recurring project
-type of an app's marketing site plus its public feature-request forum (`/app-web`).
+skills from the repo (`/update`).
+
+## Project types
+
+Some kinds of site repeat often enough to be worth a preset. A project type is a skill that
+presets phases 1 through 5 with type-specific inputs — extra discovery questions, a starting
+sitemap, a content brief, style-lab patterns, anything a `/build` track needs — without adding a
+phase number or a `docs/` folder of its own. `skills/app-web/SKILL.md` is the template to copy.
+
+| Type | Skill | What it adds |
+|------|-------|---------------|
+| General (default) | `/discovery` | Nothing extra; the plain eight phases |
+| Marketing site + public feature-request forum, for one of your own apps | `/app-web` | App-specific discovery questions, a starting sitemap, an app page brief, four style-lab patterns, the forum's schema and DAL, and a public-write-surface security review |
+
+Add a row here, and a skill next to `app-web`, when a real project needs a type that repeats —
+research it the way `/app-web` was built rather than speccing one in the abstract before there is
+a project asking for it.
 
 ## Shared review method
 
