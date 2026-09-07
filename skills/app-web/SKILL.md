@@ -52,6 +52,8 @@ is not a finding; a second competing primary CTA is.
 1. Confirm in one line: which app, which platforms, and that the forum is in scope. If the user
    wants no forum, see **Before you finish**.
 2. If `docs/01-discovery/spec.md` already exists for this app, skip to the step that is missing.
+3. If the user brings a filled `app-web-intake.md` from AppleAppLab, load it as the starting
+   point before running the discovery add-on interview.
 
 ## Step 1 · Discovery add-on → `/discovery`, Cooper
 

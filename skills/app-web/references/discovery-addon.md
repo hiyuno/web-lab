@@ -9,6 +9,11 @@ confirm before moving on.
 Each question says what it decides. If an answer does not decide anything downstream, do not ask
 it.
 
+If the user brings a filled `app-web-intake.md` from AppleAppLab (his app-development project),
+treat every field in it as an answer already given: read it first and only ask the questions
+below whose corresponding field is missing or still marked `TBD`. Do not re-ask what the file
+already answers.
+
 ## Round A · The app and its platform
 
 Extends round 1. Feeds: brief, architecture decision, hero brief.
