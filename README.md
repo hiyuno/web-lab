@@ -52,6 +52,18 @@ all. Whatever repeats three times is promoted to the role or the skill.
 
 ## Skills
 
+### `/app-web` · project type
+
+The on-ramp for a recurring project type: a marketing and product site for one of the user's own
+apps, plus a public feature-request forum. It presets phases 1 through 5 with app-specific
+inputs — discovery add-on questions, a default sitemap, an app page brief, four new style-lab
+patterns and the forum's schema and rate limiting — and adds a public-write-surface security
+review for the forum. It introduces no new phase and writes no `docs/` folder of its own.
+
+- Skill: [`skills/app-web/SKILL.md`](skills/app-web/SKILL.md)
+- References: `skills/app-web/references/` (discovery add-on, sitemap)
+- Also loads: `skills/content/references/app-page-brief.md`, `skills/build/references/forum.md`, `skills/security/references/public-write-surfaces.md`
+
 ### `/discovery` · Cooper
 
 Phase 1. Starts a project from the idea, with no brief: interviews the user in seven short
@@ -96,7 +108,7 @@ block with dark mode and verifies the contrast of every semantic pair in both mo
 `docs/04-design/`.
 
 - Skill: [`skills/design-system/SKILL.md`](skills/design-system/SKILL.md)
-- Style lab: `skills/design-system/app/` (Vite + React + DialKit + culori + apca-w3). `npm install && npm run dev`, then `http://localhost:8771`; or `preview_start name=style-lab` from the repo root. Pick an accent, tune shape, type, space and motion on ten real patterns, verify contrast live (WCAG and APCA) and export `tokens.tokens.json` and `tokens.css`. Headless: `npx tsx src/cli.ts --preset Playful --json tokens.tokens.json`.
+- Style lab: `skills/design-system/app/` (Vite + React + DialKit + culori + apca-w3). `npm install && npm run dev`, then `http://localhost:8771`; or `preview_start name=style-lab` from the repo root. Pick an accent, tune shape, type, space and motion on fourteen real patterns, verify contrast live (WCAG and APCA) and export `tokens.tokens.json` and `tokens.css`. Headless: `npx tsx src/cli.ts --preset Playful --json tokens.tokens.json`.
 - Saved presets: `skills/design-system/presets/` ("Save preset to web-lab" in the lab; then "use Template A" in any project)
 - Base tokens: [`skills/design-system/references/tokens.tokens.json`](skills/design-system/references/tokens.tokens.json)
 - Templates: `skills/design-system/references/` (visual direction, component, template, accessibility, motion, usability test, QA, variants, break)
@@ -184,8 +196,8 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
-With that, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`, `/launch`,
-`/security`, `/optimize-assets` and `/update` appear in Claude Code along with the eleven
+With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
+`/launch`, `/security`, `/optimize-assets` and `/update` appear in Claude Code along with the eleven
 `interfaces` skills, and the nine roles are available as subagents.
 
 ## App tests

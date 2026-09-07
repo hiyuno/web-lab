@@ -47,8 +47,9 @@ procedure and the checkpoint.
   `pick-ui-library` to choose the component base; Anthropic's `design` for canvas sketches if the
   user wants to touch things visually.
 - MCPs if the user has them connected: Pencil, Stitch, Figma.
-- **The style lab**, `app/`: a local page with the ten patterns that define a system (typography,
-  color, buttons, cards, form, navigation, hero, list, feedback, dialog and motion) driven by a
+- **The style lab**, `app/`: a local page with the fourteen patterns that define a system (typography,
+  color, buttons, cards, form, navigation, hero, list, feedback, dialog and motion, feature
+  showcase, pricing, changelog and voting board) driven by a
   DialKit panel. Pick an accent and the ramps, semantic tokens and contrast table follow; tune
   radius, corner shape (round, squircle, sharp), shadow style, border, font pair, type scale,
   spacing unit, content width, duration and easing; six starting presets; light and dark;

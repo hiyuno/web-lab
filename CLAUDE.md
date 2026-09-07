@@ -10,7 +10,10 @@ When the user opens a conversation without a clear task, or says "let's start", 
 doing", "new project" or similar, ask first what we are going to do, with AskUserQuestion if
 available:
 
-1. **Start a new project** → load the `/discovery` skill and run phase 1 as Cooper.
+1. **Start a new project** → load the `/discovery` skill and run phase 1 as Cooper. If it is a
+   marketing/product site for one of the user's own apps with a public feature-request forum, use
+   `/app-web` instead, since it presets discovery, structure, content, design and build for that
+   project type.
 2. **Improve an existing project** → ask which part and route:
    - heavy images or video, slow site, Lighthouse → `/optimize-assets` with Bellard
    - review security, privacy, a finding, privacy notice → `/security` with Schneier
@@ -91,7 +94,8 @@ Skills with procedure and templates live in `skills/`: `discovery` for phase 1, 
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them, and
 `optimize-assets` for media in phases 5 and 6, and `update` refreshes the installed roles and
-skills from the repo (`/update`).
+skills from the repo (`/update`); `app-web` presets the eight phases for the recurring project
+type of an app's marketing site plus its public feature-request forum (`/app-web`).
 
 ## Shared review method
 

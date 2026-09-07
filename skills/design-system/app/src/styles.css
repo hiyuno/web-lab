@@ -165,6 +165,12 @@ body { margin: 0; font-family: "Inter", system-ui, sans-serif; background: #f4f4
 .preview .skeleton { height: 14px; border-radius: var(--radius-sm); background: var(--muted); animation: pulse 1.5s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: 0.5; } }
 
+/* Pricing: plain feature lists inside a card need baseline spacing (.preview only resets .nav ul). */
+.preview .card ul { margin: 0; padding-left: 1.1em; display: grid; gap: var(--spacing-1); font-size: var(--text-sm); color: var(--muted-foreground); }
+
+/* Voting board: the vote control stacks an arrow glyph over the count instead of the default inline .btn label. */
+.preview .vote-btn { flex-direction: column; gap: 2px; height: auto; padding-block: var(--spacing-2); line-height: 1; }
+
 /* Dialog + motion */
 .preview .dialog-stage { position: relative; min-height: 260px; border-radius: var(--radius-lg); corner-shape: var(--corner-shape); background: var(--muted); display: grid; place-items: center; overflow: clip; }
 .preview .scrim { position: absolute; inset: 0; background: oklch(0 0 0 / 0.45); }

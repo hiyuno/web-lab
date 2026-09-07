@@ -5,14 +5,14 @@ import { checkPairs } from './engine/contrast'
 import { FONTS, PRESETS } from './engine/presets'
 import { buildTokens, cssVars, tokensCss } from './engine/tokens'
 import type { Knobs } from './engine/tokens'
-import { Presets, Typography, Color, Shape, Elevation, Spacing, Motion, Buttons, FormControls, Cards, Navigation, Hero, List, Feedback, Dialog } from './patterns'
+import { Presets, Typography, Color, Shape, Elevation, Spacing, Motion, Buttons, FormControls, Cards, Navigation, Hero, List, Feedback, Dialog, Showcase, Pricing, Changelog, Voting } from './patterns'
 import type { Copy } from './patterns'
 
 const P = PRESETS.Minimal
 
 interface SavedPreset { slug: string; name: string; accent?: string; font?: string; updated: string; lab: Record<string, any> }
 
-type SectionId = 'presets' | 'color' | 'typography' | 'shape' | 'elevation' | 'spacing' | 'motion' | 'buttons' | 'forms' | 'cards' | 'navigation' | 'hero' | 'list' | 'feedback' | 'dialog'
+type SectionId = 'presets' | 'color' | 'typography' | 'shape' | 'elevation' | 'spacing' | 'motion' | 'buttons' | 'forms' | 'cards' | 'navigation' | 'hero' | 'list' | 'feedback' | 'dialog' | 'showcase' | 'pricing' | 'changelog' | 'voting'
 
 const SECTIONS: { id: SectionId; label: string; group: 'General' | 'Patterns' }[] = [
   { id: 'presets', label: 'Presets', group: 'General' },
@@ -30,6 +30,10 @@ const SECTIONS: { id: SectionId; label: string; group: 'General' | 'Patterns' }[
   { id: 'list', label: 'List and table', group: 'Patterns' },
   { id: 'feedback', label: 'Feedback', group: 'Patterns' },
   { id: 'dialog', label: 'Dialog and sheet', group: 'Patterns' },
+  { id: 'showcase', label: 'Feature showcase', group: 'Patterns' },
+  { id: 'pricing', label: 'Pricing', group: 'Patterns' },
+  { id: 'changelog', label: 'Changelog', group: 'Patterns' },
+  { id: 'voting', label: 'Voting board', group: 'Patterns' },
 ]
 const SECTION_IDS = new Set<string>(SECTIONS.map((s) => s.id))
 function sectionFromHash(): SectionId {
@@ -107,6 +111,10 @@ const VISIBILITY: Record<SectionId, PanelName[]> = {
   list: ['Space', 'Shape'],
   feedback: ['Color', 'Shape'],
   dialog: ['Motion', 'Shape'],
+  showcase: ['Copy', 'Type', 'Space'],
+  pricing: ['Shape', 'Space'],
+  changelog: ['Space', 'Shape'],
+  voting: ['Shape', 'Color'],
 }
 
 function download(name: string, text: string, type = 'application/json') {
@@ -288,6 +296,10 @@ export default function App() {
       case 'list': return <List />
       case 'feedback': return <Feedback />
       case 'dialog': return <Dialog k={k} reduced={motionKit.values.reduced} />
+      case 'showcase': return <Showcase copy={copy} />
+      case 'pricing': return <Pricing k={k} copy={copy} />
+      case 'changelog': return <Changelog />
+      case 'voting': return <Voting />
       default: return null
     }
   }

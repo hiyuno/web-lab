@@ -452,6 +452,137 @@ export function Feedback() {
   )
 }
 
+export function Showcase({ copy }: { copy: Copy }) {
+  const features: { title: string; claim: string }[] = [
+    { title: copy.title, claim: copy.lede },
+    { title: 'Works fully offline', claim: 'Every screen keeps working without a connection, and syncs the moment you are back online.' },
+    { title: 'Syncs across every device', claim: 'Start on one device, pick up on another. Changes land in seconds, not minutes.' },
+  ]
+  return (
+    <Pattern n={15} title="Feature showcase" note="claim + visual · alternating layout">
+      <div className="stack" style={{ gap: 'var(--spacing-10)' }}>
+        {features.map((f, i) => (
+          <div className="row" key={f.title} style={{ flexWrap: 'wrap', flexDirection: i % 2 ? 'row-reverse' : 'row' }}>
+            <div className={`thumb ${i % 2 ? 'neutral' : ''}`} role="img" aria-label="Placeholder image" style={{ flex: '1 1 320px', aspectRatio: '16 / 9' }} />
+            <div className="stack" style={{ flex: '1 1 320px' }}>
+              <h3>{f.title}</h3>
+              <p>{f.claim}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Pattern>
+  )
+}
+
+export function Pricing({ k, copy }: { k: Knobs; copy: Copy }) {
+  const plans: { name: string; price: React.ReactNode; features: string[]; cta: 'primary' | 'secondary'; badge?: boolean }[] = [
+    { name: 'Starter', price: <>$0</>, features: ['Up to 3 projects', 'Community support', '1 GB storage'], cta: 'secondary' },
+    { name: 'Studio', price: <>$9<span className="small muted">/mo</span></>, features: ['Unlimited projects', 'Email support', '50 GB storage', 'Custom domains'], cta: 'primary', badge: true },
+    { name: 'Agency', price: <>$29<span className="small muted">/mo</span></>, features: ['Everything in Studio', 'Priority support', '500 GB storage'], cta: 'secondary' },
+  ]
+  return (
+    <Pattern n={16} title="Pricing" note={`${k.corner} corners · radius ${k.radius}px`}>
+      <div className="grid">
+        {plans.map((p) => (
+          <article className="card" key={p.name}>
+            <div className="row" style={{ justifyContent: 'space-between' }}>
+              <h3>{p.name}</h3>
+              {p.badge && <span className="tag accent">Most popular</span>}
+            </div>
+            <p className="lede">{p.price}</p>
+            <ul>{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
+            <div className="row"><button className={`btn ${p.cta} sm`}>{copy.cta}</button></div>
+          </article>
+        ))}
+      </div>
+    </Pattern>
+  )
+}
+
+const CHANGELOG_ENTRIES: { date: string; type: 'New' | 'Improved' | 'Fixed'; tag: string; title: string; body: string }[] = [
+  { date: 'Sep 2, 2026', type: 'New', tag: 'accent', title: 'Faster search across your whole library', body: 'Search now indexes everything up front, so results appear as you type.' },
+  { date: 'Aug 21, 2026', type: 'Improved', tag: 'success', title: 'Smoother scrolling on large lists', body: 'Long lists render only what is on screen, so scrolling stays smooth at any size.' },
+  { date: 'Aug 10, 2026', type: 'Fixed', tag: 'warning', title: 'Fixed a crash when importing very large files', body: 'Imports over 500 MB no longer crash the app; they now show progress instead.' },
+  { date: 'Jul 29, 2026', type: 'Improved', tag: 'success', title: 'Clearer error messages', body: 'Errors now say what went wrong and what to try next, instead of an error code.' },
+]
+
+export function Changelog() {
+  return (
+    <Pattern n={17} title="Changelog" note="release feed · type tags · newest first">
+      <div className="stack">
+        {CHANGELOG_ENTRIES.map((e) => (
+          <div className="stack" style={{ gap: 'var(--spacing-2)' }} key={e.title}>
+            <div className="row" style={{ justifyContent: 'space-between' }}>
+              <span className="small muted">{e.date}</span>
+              <span className={`tag ${e.tag}`}>{e.type}</span>
+            </div>
+            <h3>{e.title}</h3>
+            <p className="small muted">{e.body}</p>
+          </div>
+        ))}
+      </div>
+    </Pattern>
+  )
+}
+
+type VoteStatus = 'open' | 'planned' | 'in_progress' | 'shipped' | 'declined'
+const STATUS_TAG: Record<VoteStatus, string> = { open: '', planned: 'accent', in_progress: 'warning', shipped: 'success', declined: 'danger' }
+const STATUS_LABEL: Record<VoteStatus, string> = { open: 'Open', planned: 'Planned', in_progress: 'In progress', shipped: 'Shipped', declined: 'Declined' }
+
+const VOTE_REQUESTS: { title: string; body: string; votes: number; comments: number; status: VoteStatus }[] = [
+  { title: 'Dark mode for the widget', body: 'Match the embedded widget to the page theme automatically.', votes: 128, comments: 14, status: 'open' },
+  { title: 'Export to CSV', body: 'Download any table or report as a plain CSV file.', votes: 96, comments: 9, status: 'planned' },
+  { title: 'Keyboard shortcuts', body: 'Navigate and act without leaving the keyboard.', votes: 74, comments: 6, status: 'in_progress' },
+  { title: 'Offline mode', body: 'Keep working with no connection and sync automatically after.', votes: 210, comments: 22, status: 'shipped' },
+  { title: 'Bulk delete', body: 'Select multiple items at once and remove them in one action.', votes: 18, comments: 3, status: 'declined' },
+]
+
+function VoteCard({ item }: { item: (typeof VOTE_REQUESTS)[number] }) {
+  const [voted, setVoted] = useState(false)
+  const count = item.votes + (voted ? 1 : 0)
+  const tag = STATUS_TAG[item.status]
+  return (
+    <div className="list">
+      <div className="item" style={{ gridTemplateColumns: '56px 1fr' }}>
+        <button
+          className={`btn ${voted ? 'primary' : 'secondary'} sm vote-btn`}
+          aria-pressed={voted}
+          aria-label={voted ? 'Remove vote' : 'Vote for this request'}
+          onClick={() => setVoted((v) => !v)}
+        >
+          <span aria-hidden="true">▲</span><b>{count}</b>
+        </button>
+        <div className="stack" style={{ gap: 'var(--spacing-2)' }}>
+          <b>{item.title}</b>
+          <p className="small muted">{item.body}</p>
+          <div className="row" style={{ justifyContent: 'space-between' }}>
+            <span className={`tag ${tag}`}>{STATUS_LABEL[item.status]}</span>
+            <span className="small muted">💬 {item.comments}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function Voting() {
+  const openCount = VOTE_REQUESTS.filter((r) => r.status === 'open').length
+  return (
+    <Pattern n={18} title="Voting board" note="open · planned · in progress · shipped · declined">
+      <div className="stack">
+        <div className="row" style={{ justifyContent: 'space-between' }}>
+          <span className="small muted">{openCount} open request{openCount === 1 ? '' : 's'}</span>
+          <button className="btn primary sm">Submit an idea</button>
+        </div>
+        <div className="stack" style={{ gap: 'var(--spacing-3)' }}>
+          {VOTE_REQUESTS.map((r) => <VoteCard item={r} key={r.title} />)}
+        </div>
+      </div>
+    </Pattern>
+  )
+}
+
 export function Dialog({ k, reduced }: { k: Knobs; reduced: boolean }) {
   const [open, setOpen] = useState(true)
   const [sheetOpen, setSheetOpen] = useState(false)
