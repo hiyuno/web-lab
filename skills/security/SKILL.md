@@ -86,7 +86,7 @@ phase.
 ## S.3 · Code review (phase 5)
 
 With `references/code-review.md`. Manual, because broken access control is not found by a
-scanner. Order:
+scanner. For `app-web` projects, `references/public-write-surfaces.md` has the threat checklist for the feature-request forum or any public-write feature. Order:
 
 1. **Boundaries first**: where user input enters, where the database is queried, where
    `process.env` is read, where a third party is called, where it is decided who can do what.

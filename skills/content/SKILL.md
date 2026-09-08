@@ -12,7 +12,7 @@ procedure is here.
 
 The result goes to the project's `docs/03-content/`, with the templates in `references/`:
 `editorial-guide.md`, `messages.md`, `matrix.md`, `briefs/<slug>.md` (one per page), `seo.md`,
-`legal.md` and `assets.md`.
+`legal.md` and `assets.md`. For `app-web` projects, `references/app-page-brief.md` has the app-specific page brief (hero, features, pricing, changelog, feedback, security page).
 
 ## Golden rule: words before design
 
@@ -49,7 +49,7 @@ python3 <skill>/scripts/content_matrix.py docs/02-structure/sitemap.md --briefs 
 
    It creates `docs/03-content/matrix.md` with one row per page and an empty brief per page in
    `briefs/`, from the `references/page-brief.md` template pre-filled with URL, template, keyword
-   and intent from the sitemap.
+   and intent from the sitemap. See `references/matrix.md` for the expected format of the generated matrix.
 3. If `docs/03-content/` exists, continue from the missing step.
 
 ## Step 3.1 · Voice, tone and editorial guide

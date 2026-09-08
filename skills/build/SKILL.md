@@ -126,7 +126,7 @@ You delegate to `osmani`. Beyond the cycle:
 
 ## Step 5.5 · Backend track · Hopper (applications only)
 
-You delegate to `hopper`. With `references/dal.md` as the pattern:
+You delegate to `hopper`. With `references/dal.md` as the pattern. For `app-web` projects, `references/forum.md` has the feature-request forum's schema, DAL functions and rate limiting.
 
 - **Data access layer** in `src/data/` marked `import 'server-only'`: the only one that reads
   `process.env` and touches the database. Every function authenticates, authorizes per resource
