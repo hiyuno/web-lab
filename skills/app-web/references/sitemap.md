@@ -72,8 +72,7 @@ users are covered by Mexico's 2025 LFPDPPP. If the app has accounts of its own, 
 | legal | /security, /privacy-notice, /terms, 404 | wireframes/legal.md |
 
 `board`, `request`, `pricing` and `changelog` map to the four style-lab patterns Frost tunes in
-phase 4: Voting board, Voting board (detail), Pricing and Changelog. Feature showcase lives
-inside `home` and `features`.
+phase 4: Pricing, Feature showcase, Changelog and Voting board.
 
 ## Page states
 

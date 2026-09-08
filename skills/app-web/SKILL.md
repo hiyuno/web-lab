@@ -104,7 +104,7 @@ content written over what Schneier decides, not a new owner of security rules.
 ## Step 4 · Design → `/design-system`, Frost
 
 Run `/design-system` as normal, from `skills/design-system/references/tokens.tokens.json` or a
-saved preset. This project type needs four patterns from the style lab beyond the usual ten:
+saved preset. This project type needs four patterns from the style lab beyond the usual eight:
 **Pricing**, **Feature showcase**, **Changelog** and **Voting board**. Frost tunes the direction
 on those alongside the rest.
 
@@ -138,11 +138,8 @@ The normal per-phase gate runs at every checkpoint. On top of it, Schneier revie
 specifically as a **public-write surface** using
 `skills/security/references/public-write-surfaces.md`: spam and abuse, the moderation queue and
 who staffs it, personal data that users paste into request titles and comments under the 2025
-LFPDPPP, what is shown publicly next to a vote, and deletion on request.
-
-A critical here blocks the launch like any other critical: no rate limiting on submissions or
-comments, no moderation queue, votes not deduplicated at the database level, or a forum field
-rendered without escaping.
+LFPDPPP, what is shown publicly next to a vote, and deletion on request. That file's own "What
+counts as a critical here" section sets what blocks the launch; nothing in it is restated here.
 
 One thing to note and not over-engineer: Apple's rule from September 2026 requiring apps to
 declare a social-media capability applies to a feature forum embedded **inside** the app. Yuno's

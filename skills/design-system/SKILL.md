@@ -52,8 +52,8 @@ procedure and the checkpoint.
   billing toggle as a reference for this kind of micro-interaction. Osmani can adopt it directly
   in `/build` for React/Next.js projects (always true for `/app-web`'s track) — it is an
   available option, not a new rule, and it has no place in an Astro-only build.
-- **The style lab**, `app/`: a local page with the fourteen patterns that define a system (typography,
-  color, buttons, cards, form, navigation, hero, list, feedback, dialog and motion, feature
+- **The style lab**, `app/`: a local page with the twelve patterns that define a system (buttons,
+  form controls, cards, navigation, hero, list and table, feedback, dialog and sheet, feature
   showcase, pricing, changelog and voting board) driven by a
   DialKit panel. Pick an accent and the ramps, semantic tokens and contrast table follow; tune
   radius, corner shape (round, squircle, sharp), shadow style, border, font pair, type scale,
@@ -163,12 +163,12 @@ and spacing only from tokens.
 
 ## Step 4.5 · System accessibility
 
-With `references/accessibility.md`, verified in tokens and components, not page by page. What
-WCAG 2.2 AA asks of design: 4.5:1 and 3:1 contrast in both modes; visible focus of at least 2 px
-and 3:1, never removed; 24 by 24 px targets or spaced; controls always visible, not only on
-hover; a one-click alternative to every drag; not asking for the same data twice; login that
-works with password managers and without cognitive tests; help in the same place; text at 200 %
-without loss; nothing by color alone; motion with an alternative.
+With `references/accessibility.md`, verified in tokens and components, not page by page: contrast
+thresholds and measurement from `better-colors`, and focus, target size, drag alternatives,
+repeated-data, password-manager and cognitive-test, help placement, reflow and color-alone rules
+from `better-accessibility`. WCAG 2.2 AA end to end, with motion's reduced-motion alternative
+picked up again in Step 4.6. Nothing here overrides those skills' values; this step is the
+checkpoint that confirms the system meets them before hand-off.
 
 ## Step 4.6 · Motion
 
