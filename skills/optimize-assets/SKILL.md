@@ -40,7 +40,8 @@ Reply and write the report in the language the user uses.
 
 ## Phase 0 · Inputs
 
-Before touching anything, confirm with the user:
+Before touching anything, read this project's own `docs/learnings.md` (bellard's section, if it
+has entries) and `<web-lab>/docs/PREFERENCES.md` and apply them. Then confirm with the user:
 
 1. URL of the published site, **or** the local media folder if there is no site.
 2. Working folder (propose `<cwd>/assets-audit/`). Everything generated lives there:
@@ -170,6 +171,11 @@ What the app does underneath, in case the user prefers the terminal:
 
 If the user asks "optimize everything" from the chat, use the app's batch button or
 `POST /api/convert-batch {"ids":[...]}` with the criticals; do not reimplement the conversion.
+
+When this pass is done, retro into this project's own `docs/learnings.md` (create it from
+`<web-lab>/docs/learnings-template.md` if it does not exist yet), under the bellard section;
+bring the file to a web-lab session so it merges into the persistent
+`<web-lab>/learnings/bellard.md`.
 
 ## Format recommendations (when asked)
 

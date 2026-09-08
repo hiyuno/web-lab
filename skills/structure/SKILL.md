@@ -34,7 +34,8 @@ spacing inside the page belong to `better-layout`; interface label wording to `b
 
 ## Step 2.0 · Entry
 
-0. Read `<web-lab>/learnings/rosenfeld.md` and `<web-lab>/docs/PREFERENCES.md` and apply them.
+0. Read this project's own `docs/learnings.md` (rosenfeld's section, if it has entries) and
+   `<web-lab>/docs/PREFERENCES.md` and apply them.
 1. Read `docs/01-discovery/spec.md`, `brief.md` and `architecture-decision.md`. If they do not
    exist or are not approved, stop and propose `/discovery`.
 2. Note: audiences and their tasks, spec stories, whether it is a redesign and its URL, whether
@@ -153,11 +154,14 @@ not validated.
 
 ## Step 2.9 · Retro and learnings
 
-With the phase approved, three questions to the user: what worked, what did not, what
-preference of theirs we discovered. Write the result, plus what you observed, in
-`<web-lab>/learnings/rosenfeld.md` with date and project. Confirmed preferences go to
-`docs/PREFERENCES.md`. If something repeated three times, propose promoting it to the role or
-this skill.
+With the phase approved, three questions to the user: what worked, what did not,
+what preference of theirs we discovered. Write the result, plus what you observed,
+into this project's own `docs/learnings.md` (create it from
+`<web-lab>/docs/learnings-template.md` if it does not exist yet), under the rosenfeld
+section, with date and project. Bring the file to a web-lab session at project
+close so it merges into the persistent learnings there. Confirmed preferences go to
+`docs/PREFERENCES.md`. If something repeated three times, propose promoting it to
+the role or this skill.
 
 ## Before you finish
 

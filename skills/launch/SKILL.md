@@ -35,7 +35,8 @@ are executed.
 
 ## Step 7.0 · Entry
 
-0. Read `<web-lab>/learnings/allspaw.md` and `<web-lab>/docs/PREFERENCES.md`.
+0. Read this project's own `docs/learnings.md` (allspaw's section, if it has entries) and
+   `<web-lab>/docs/PREFERENCES.md`.
 1. Confirm `docs/06-qa/exit.md` signed by Beizer and Schneier with no blockers or criticals. If
    not, stop and hand it back to `/qa`.
 2. Read `docs/02-structure/redirects.md`, `docs/05-development/frontend.md` and `backend.md`
@@ -150,8 +151,9 @@ Console and Bing, home indexing requested. Someone watches traffic and errors fo
 - Day 28: field Core Web Vitals compared with lab.
 - Findings to the backlog with severity; only incidents are hotfixed.
 - **Checkpoint B** on day 30: present availability, errors, index coverage, field Core Web
-  Vitals, traffic against baseline, and what is pending. Retro to
-  `<web-lab>/learnings/allspaw.md`. Phase 8 starts.
+  Vitals, traffic against baseline, and what is pending. Retro into this project's own
+  `docs/learnings.md` (create it from `<web-lab>/docs/learnings-template.md` if it does not
+  exist yet), under the allspaw section. Phase 8 starts.
 
 ## Step 8.1 · Maintenance plan
 
@@ -179,7 +181,9 @@ when to roll back. A short runbook that exists beats a long one that does not.
 
 With `references/postmortem.md`, within 72 hours of every incident: what happened, timeline,
 what allowed it, what changes, actions with owner and date. Never who. The incident runbook is
-updated with what was learned; what applies to other projects goes to
+updated with what was learned; what applies to other projects goes into this project's own
+`docs/learnings.md`, under the allspaw section. Bring the file to a web-lab session at project
+close (or after a significant incident) so it merges into the persistent
 `<web-lab>/learnings/allspaw.md`.
 
 ## Before you finish

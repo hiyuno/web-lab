@@ -46,9 +46,10 @@ is not a finding; a second competing primary CTA is.
 
 ## Step 0 · Entry
 
-0. Read `<web-lab>/learnings/` for every role this project touches (cooper, rosenfeld, frost,
-   osmani, hopper, schneier) and `<web-lab>/docs/PREFERENCES.md`. This project type repeats
-   across Yuno's apps, so prior lessons usually apply verbatim.
+0. Read this project's own `docs/learnings.md` for every role this project touches (cooper,
+   rosenfeld, frost, osmani, hopper, schneier), if it has entries yet, and
+   `<web-lab>/docs/PREFERENCES.md`. This project type repeats across Yuno's apps, so prior
+   lessons usually apply verbatim once promoted into the roles or this skill.
 1. Confirm in one line: which app, which platforms, and that the forum is in scope. If the user
    wants no forum, see **Before you finish**.
 2. If `docs/01-discovery/spec.md` already exists for this app, skip to the step that is missing.
@@ -155,9 +156,12 @@ own site.
 
 ## Step 7 · Retro
 
-At the close of each phase, the usual retro, written to `<web-lab>/learnings/<role>.md` with date
-and app name for every role involved: cooper, rosenfeld, frost, osmani, hopper, schneier. A
-correction about style, tone or tooling goes to `docs/PREFERENCES.md` right then.
+At the close of each phase, the usual retro, written into this app's own `docs/learnings.md`
+(create it from `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the
+section for every role involved: cooper, rosenfeld, frost, osmani, hopper, schneier. Bring the
+file to a web-lab session at project close so it merges into the persistent
+`<web-lab>/learnings/<role>.md` files, with date and app name preserved. A correction about
+style, tone or tooling goes to `docs/PREFERENCES.md` right then.
 
 This project type recurs across Yuno's apps, so patterns compound: a question that turned out to
 matter, a section that did not convert, a forum rule that stopped spam, and a lesson seen three

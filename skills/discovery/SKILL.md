@@ -33,8 +33,8 @@ belong to `security`; the product's voice is set in `content`.
 
 ## Step 1.0 · Entry
 
-Before asking anything, read `<web-lab>/learnings/cooper.md` and `<web-lab>/docs/PREFERENCES.md`
-and apply them. Then look at what exists:
+Before asking anything, read this project's own `docs/learnings.md` (cooper's section, if it
+has entries) and `<web-lab>/docs/PREFERENCES.md` and apply them. Then look at what exists:
 
 1. If `docs/01-discovery/` exists, read what is there and continue from the missing step.
 2. If the user mentions a current site, open it with the built-in browser and note structure,
@@ -158,11 +158,14 @@ for an app.
 
 ## Step 1.9 · Retro and learnings
 
-With the phase approved, three questions to the user: what worked, what did not, what
-preference of theirs we discovered. Write the result, plus what you observed, in
-`<web-lab>/learnings/cooper.md` with date and project. Confirmed preferences go to
-`docs/PREFERENCES.md`. If something repeated three times, propose promoting it to the role or
-this skill.
+With the phase approved, three questions to the user: what worked, what did not,
+what preference of theirs we discovered. Write the result, plus what you observed,
+into this project's own `docs/learnings.md` (create it from
+`<web-lab>/docs/learnings-template.md` if it does not exist yet), under the cooper
+section, with date and project. Bring the file to a web-lab session at project
+close so it merges into the persistent learnings there. Confirmed preferences go to
+`docs/PREFERENCES.md`. If something repeated three times, propose promoting it to
+the role or this skill.
 
 ## Before you finish
 

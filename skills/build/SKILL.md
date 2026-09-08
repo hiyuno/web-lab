@@ -36,8 +36,8 @@ only required to be met. What was not tested in the browser is reported as **Not
 
 ## Step 5.0 · Entry
 
-0. Read `<web-lab>/learnings/osmani.md`, `<web-lab>/learnings/hopper.md` and
-   `<web-lab>/docs/PREFERENCES.md`.
+0. Read this project's own `docs/learnings.md` (osmani's and hopper's sections, if they have
+   entries) and `<web-lab>/docs/PREFERENCES.md`.
 1. Read `docs/01-discovery/spec.md`, `architecture-decision.md` and `threat-model.md`;
    `docs/03-content/seo.md`, `assets.md`, `legal.md` and the briefs; `docs/04-design/tokens.css`,
    `components/`, `templates/`, `accessibility.md`, `motion.md` and the prototype. If the design
@@ -178,8 +178,10 @@ is fixed before the checkpoint.
 1. **Checkpoint B**: present the staging URL, the CI status, the mobile Lighthouse report, how
    many must and should stories are done, Schneier's verdict and what was left out. Ask for
    explicit approval.
-2. Retro to `<web-lab>/learnings/osmani.md` and `hopper.md`; confirmed stack or tool preferences
-   to `docs/PREFERENCES.md`.
+2. Retro into this project's own `docs/learnings.md` (create it from
+   `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the osmani and hopper
+   sections. Bring the file to a web-lab session at project close so it merges into the
+   persistent learnings there. Confirmed stack or tool preferences to `docs/PREFERENCES.md`.
 3. With approval, say what comes next: phase 6 with Beizer on staging.
 
 ## Before you finish

@@ -160,25 +160,35 @@ actionable findings" plus what was verified.
 
 ## Learning
 
-Roles improve with every project. The mechanism lives in [`learnings/`](learnings/README.md)
-and [`docs/PREFERENCES.md`](docs/PREFERENCES.md):
+Roles improve with every project. Real projects run in their own repo, not in web-lab, so the
+mechanism has two sides: a local file that collects lessons while the project is under way, and
+a merge step that happens here, in web-lab, when that file comes back.
 
-1. **When delegating** to a role, include in its prompt the contents of `learnings/<role>.md`
-   and `docs/PREFERENCES.md`. Skills that run in this conversation read them in their entry
-   step.
+1. **In a project** (not web-lab itself): keep `docs/learnings.md` there, copied at kickoff from
+   [`docs/learnings-template.md`](docs/learnings-template.md) — one section per role. When
+   delegating to a role, include in its prompt that role's section from the project's own
+   `docs/learnings.md`, if it has entries yet, plus `docs/PREFERENCES.md`. Durable lessons
+   already reach every project through whatever has been promoted into the role's file in
+   `agents/` or its skill (item 5 below); there is no live read of web-lab's `learnings/` across
+   repos.
 2. **When closing each phase**, after the checkpoint, run a brief retro with the user: what
-   worked, what did not, what preference we discovered. Write the result in
-   `learnings/<role>.md` with date and project. If the user does not want a retro, note at least
-   what you observed.
+   worked, what did not, what preference we discovered. Write the result into that project's own
+   `docs/learnings.md`, under the section for the role involved, with date and phase. If the
+   user does not want a retro, note at least what you observed.
 3. **When the user corrects something** about style, tone, tooling or way of working, it is a
    preference: note it right then in `docs/PREFERENCES.md` with the date, without waiting for
    the retro.
-4. **Promote what repeats.** A lesson that appears three times, or that the user marks as a
+4. **When the user hands you a project's `docs/learnings.md`** — usually at project close, but
+   it can happen any time — read it here in web-lab: for each role's section, append its entries
+   into [`learnings/<role>.md`](learnings/README.md) with the date and project preserved, then
+   run the promotion check below across everything newly merged.
+5. **Promote what repeats.** A lesson that appears three times, or that the user marks as a
    rule, moves to the role file in `agents/`, to the skill, or to `PREFERENCES.md`, and is
    removed from `learnings/`. Propose the promotion to the user; do not change a role without
    saying so.
-5. **Never** store secrets, third parties' personal data or client content in these files.
-   Project and lesson, nothing else.
+6. **Never** store secrets, third parties' personal data or client content in these files.
+   Project and lesson, nothing else. Check a handed-over `docs/learnings.md` for this before
+   merging it.
 
 The claude-mem plugin keeps automatic session memory; it is a complement. What is in the repo is
 the source of truth because it travels with the roles and is versioned.
@@ -199,3 +209,8 @@ the source of truth because it travels with the roles and is versioned.
 Copy this file as `CLAUDE.md` at the project root and adjust the paths of `docs/PROCESS.md` and
 `docs/SECURITY.md` to the web-lab path on that machine. The roles are already available
 globally if they were installed with the README links.
+
+At kickoff, copy `<web-lab>/docs/learnings-template.md` into this project as `docs/learnings.md`.
+Every phase's retro writes there, one section per role. At project close — or any time the user
+wants to sync — hand that file to a web-lab session so its lessons merge into the persistent
+`learnings/<role>.md` files there; see `## Learning` above.

@@ -84,7 +84,8 @@ If the user names a preset that does not exist, list the saved ones and ask.
 
 ## Step 4.0 · Entry
 
-0. Read `<web-lab>/learnings/frost.md` and `<web-lab>/docs/PREFERENCES.md`. If visual styles
+0. Read this project's own `docs/learnings.md` (frost's section, if it has entries) and
+   `<web-lab>/docs/PREFERENCES.md`. If visual styles
    the user likes or dislikes are already there, they are the starting point for 4.1.
 1. If the user named a saved preset, apply "Saved presets" above first. Then read
    `docs/03-content/matrix.md` (approved), `editorial-guide.md`, `briefs/`, `assets.md`;
@@ -204,7 +205,10 @@ fails is fixed in the system, not on the page, and that task is retested.
 3. **Checkpoint B**: present in ten lines the chosen direction, the contrast result, how many
    components with all their states, the result of the test with people and Schneier's verdict.
    Ask for explicit approval.
-4. Retro to `<web-lab>/learnings/frost.md`; confirmed visual tastes to `docs/PREFERENCES.md`.
+4. Retro into this project's own `docs/learnings.md` (create it from
+   `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the frost section.
+   Bring the file to a web-lab session at project close so it merges into the persistent
+   learnings there. Confirmed visual tastes to `docs/PREFERENCES.md`.
 5. With approval, say what comes next: phase 5 with Osmani, and Hopper if there is a server,
    starting from this package and the prototype.
 

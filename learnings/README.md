@@ -7,16 +7,20 @@ at the start of the next. The user's stable preferences that apply to everyone l
 
 ## How it works
 
-1. **When delegating**, the orchestrator includes in the subagent's prompt the contents of
-   `learnings/<role>.md` and `docs/PREFERENCES.md`. Skills that run in the main conversation
-   read them in their entry step.
+1. **In a project** (not this repo): the orchestrator keeps `docs/learnings.md` there, copied at
+   kickoff from `docs/learnings-template.md`, one section per role. When delegating to a role,
+   its prompt includes that role's section from the project's own file, if it has entries yet,
+   plus `docs/PREFERENCES.md`.
 2. **When closing each phase**, the orchestrator runs a three-question retro and writes what
-   comes out in the role's file, with date and project: what worked, what did not, what user
-   preference we discovered.
-3. **When a lesson repeats three times** or the user marks it as a rule, it is promoted: it
+   comes out into that project's own `docs/learnings.md`, under the role's section, with date
+   and project: what worked, what did not, what user preference we discovered.
+3. **Comes from other projects.** When the user hands a project's filled `docs/learnings.md` to
+   a web-lab session — usually at project close — each role's entries are appended here, into
+   its file, with date and project preserved.
+4. **When a lesson repeats three times** or the user marks it as a rule, it is promoted: it
    moves to the role file in `agents/`, to the skill, or to `docs/PREFERENCES.md`, and is
    removed from here. That keeps learning files short and makes roles truly improve.
-4. **Never** store secrets, third parties' personal data or client content that is not the
+5. **Never** store secrets, third parties' personal data or client content that is not the
    user's. Project and lesson, nothing else.
 
 ## Entry format

@@ -35,7 +35,8 @@ Interface writing (buttons, errors, empty states, capitalization) follows the ru
 
 ## Step 3.0 · Entry
 
-0. Read `<web-lab>/learnings/rosenfeld.md` and `<web-lab>/docs/PREFERENCES.md` and apply them.
+0. Read this project's own `docs/learnings.md` (rosenfeld's section, if it has entries) and
+   `<web-lab>/docs/PREFERENCES.md` and apply them.
    If a preferred voice is already in preferences, it is the starting point for 3.1.
 1. Read `docs/02-structure/sitemap.md` (signed), `wireframes/`, `organization.md` (keywords,
    hubs, controlled vocabulary) and `docs/01-discovery/brief.md` (audiences, proof, constraints,
@@ -151,8 +152,11 @@ Update the matrix: `review` then `approved`.
 2. **Checkpoint B**: present the complete matrix with every page approved, the editorial guide,
    the SEO table, the legal pages and the asset list, and Schneier's verdict. Ask for explicit
    approval.
-3. Retro: three questions to the user and what you observed, to `<web-lab>/learnings/rosenfeld.md`.
-   The chosen voice, if general, to `docs/PREFERENCES.md`.
+3. Retro: three questions to the user and what you observed, into this project's
+   own `docs/learnings.md` (create it from `<web-lab>/docs/learnings-template.md`
+   if it does not exist yet), under the rosenfeld section. Bring the file to a
+   web-lab session at project close so it merges into the persistent learnings
+   there. The chosen voice, if general, to `docs/PREFERENCES.md`.
 4. With approval, say what comes next: phase 4 with Frost, who designs over this copy.
 
 ## Before you finish

@@ -47,7 +47,8 @@ You set the severity; the user sets the priority.
 
 ## Step 6.0 · Entry
 
-0. Read `<web-lab>/learnings/beizer.md` and `<web-lab>/docs/PREFERENCES.md`.
+0. Read this project's own `docs/learnings.md` (beizer's section, if it has entries) and
+   `<web-lab>/docs/PREFERENCES.md`.
 1. Confirm staging exists (the `main` preview on Vercel) with real content and green CI. If not,
    stop and hand it back to `/build`.
 2. Read `docs/01-discovery/spec.md` (acceptance criteria and NFRs), `docs/02-structure/flows.md`
@@ -149,7 +150,10 @@ you retest only what failed and turn every bug into a Playwright test.
    goes in `exit.md`.
 3. **Checkpoint B**: present in ten lines the numbers: tests, findings by severity, Lighthouse,
    axe, scan, and the verdict. Ask for explicit approval.
-4. Retro to `<web-lab>/learnings/beizer.md`.
+4. Retro into this project's own `docs/learnings.md` (create it from
+   `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the beizer section.
+   Bring the file to a web-lab session at project close so it merges into the persistent
+   learnings there.
 5. With approval, say what comes next: phase 7 with Allspaw.
 
 ## Before you finish
