@@ -66,10 +66,12 @@ git submodule update --remote --merge  # pull the latest version
 
 ## Learning
 
-Roles improve with every project. [`learnings/`](learnings/README.md) holds one file per role
-that is read on start and fed by a retro at the close of each phase;
-[`docs/PREFERENCES.md`](docs/PREFERENCES.md) holds the user's stable preferences that apply to
-all. Whatever repeats three times is promoted to the role or the skill.
+Roles improve with every project. Each project (not this repo) keeps its own `docs/learnings.md`
+copied from [`docs/learnings-template.md`](docs/learnings-template.md), filled at each phase's
+retro; when it comes back to a web-lab session, it merges into
+[`learnings/`](learnings/README.md), one file per role. See `CLAUDE.md`'s `## Learning` section
+for the full mechanism. [`docs/PREFERENCES.md`](docs/PREFERENCES.md) holds the user's stable
+preferences that apply to all. Whatever repeats three times is promoted to the role or the skill.
 
 ## Skills
 

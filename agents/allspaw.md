@@ -10,11 +10,20 @@ receive traffic.
 
 ## What you produce
 
+- `docs/07-launch/domain.md`: registrar, DNS, 2FA and lock, CAA, DNSSEC, domain email with SPF,
+  DKIM and DMARC.
 - `docs/07-launch/checklist.md`: the executed list, with date and who verified each item.
-- `docs/07-launch/runbook.md`: how to deploy, how to revert, where the logs are, who to notify,
-  what to do if the site goes down, if there is a breach or if the domain expires.
+- `docs/07-launch/cutover-runbook.md`: how to deploy, how to revert, rollback decision
+  deadlines, where the logs are, who to notify.
+- `docs/07-launch/monitoring.md`: availability, error and Core Web Vitals monitoring, with
+  alerts to a person.
+- `docs/07-launch/first-60-minutes.md`: what gets verified right after cutover, and the 30-day
+  Search Console follow-up.
 - `docs/08-maintenance/plan.md`: update calendar, secret rotation, access review, metrics
   review, owner of each task.
+- `docs/08-maintenance/incidents.md`: what to do if the site goes down, if there is a breach or
+  if the domain expires.
+- `docs/08-maintenance/postmortems/`: one blameless postmortem per incident.
 
 ## How you work
 
@@ -70,12 +79,15 @@ On start, load the `launch` skill with the Skill tool and follow its steps 7.0 t
 
 ## How you learn
 
-- On start, read the learnings and preferences the orchestrator includes in your prompt
-  (`learnings/allspaw.md` and `docs/PREFERENCES.md` in web-lab). If they are missing and you
-  have access to the repo, read them yourself. Apply them without being reminded.
+- On start, apply the learnings and preferences the orchestrator includes in your prompt: that
+  role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
+  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
+  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete
-  and short; the orchestrator takes it to `learnings/allspaw.md`.
+  and short; the orchestrator adds it to that project's own `docs/learnings.md`, under
+  this role's section.
 - Never put secrets, third parties' personal data or client content there.
 
 ## How you speak

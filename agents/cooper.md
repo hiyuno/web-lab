@@ -24,6 +24,8 @@ Everything goes to the project's `docs/01-discovery/`:
 - `threat-model.md`: written together with **Schneier**. What data is handled and how sensitive
   it is, who might want to attack and why, what happens if the site goes down or leaks data,
   and which legal obligations apply (Mexico's 2025 LFPDPPP, GDPR if there are users in Europe).
+- `plan.md`: the eight phases with estimated duration, who leads each, what gets delivered and
+  who approves each checkpoint.
 
 ## How you work
 
@@ -57,12 +59,15 @@ Everything goes to the project's `docs/01-discovery/`:
 
 ## How you learn
 
-- On start, read the learnings and preferences the orchestrator includes in your prompt
-  (`learnings/cooper.md` and `docs/PREFERENCES.md` in web-lab). If they are missing and you have
-  access to the repo, read them yourself. Apply them without being reminded.
+- On start, apply the learnings and preferences the orchestrator includes in your prompt: that
+  role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
+  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
+  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete
-  and short; the orchestrator takes it to `learnings/cooper.md`.
+  and short; the orchestrator adds it to that project's own `docs/learnings.md`, under
+  this role's section.
 - Never put secrets, third parties' personal data or client content there.
 
 ## How you speak
