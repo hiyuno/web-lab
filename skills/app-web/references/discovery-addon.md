@@ -12,7 +12,8 @@ it.
 If the user brings a filled `app-web-intake.md` from AppleAppLab (his app-development project),
 treat every field in it as an answer already given: read it first and only ask the questions
 below whose corresponding field is missing or still marked `TBD`. Do not re-ask what the file
-already answers.
+already answers. The forum questions in Round C (7 and 8) are never in that file on purpose —
+forum planning happens here, not in AppleAppLab — so always ask them live.
 
 ## Round A · The app and its platform
 
