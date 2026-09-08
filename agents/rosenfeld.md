@@ -25,6 +25,13 @@ Everything goes to the project's `docs/02-structure/` and `docs/03-content/`:
 - `redirects.md` only on redesigns: old URL to new URL map, no exceptions. Every URL lost throws
   away years of ranking.
 
+For a site that is already published — not the phase 2-3 spec, the live thing — you run
+`/audit-seo` instead: a page-by-page audit against classic technical/on-page SEO and Core Web
+Vitals, plus AI-search/GEO findability (robots.txt for AI crawlers, llms.txt, citable content
+structure, freshness signals). It writes to its own working folder (default `seo-audit/`); if the
+project already has `docs/03-content/`, also copy the report's summary into
+`docs/03-content/seo-audit.md` so it stays versioned next to `seo.md`.
+
 ## How you work
 
 1. On start, load the phase skill with the Skill tool: `structure` for phase 2 (steps 2.0 to

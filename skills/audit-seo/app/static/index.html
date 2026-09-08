@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>audit-seo checklist</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header>
+  <h1>audit-seo</h1>
+  <p id="site"></p>
+  <div id="counts"></div>
+</header>
+<div id="filters">
+  <label><input type="checkbox" value="classic" checked> SEO clásico</label>
+  <label><input type="checkbox" value="geo" checked> GEO/AEO</label>
+  <select id="severity">
+    <option value="">Todas las severidades</option>
+    <option value="critical">Critical</option>
+    <option value="high">High</option>
+    <option value="medium">Medium</option>
+    <option value="low">Low</option>
+    <option value="info">Info</option>
+  </select>
+  <label><input type="checkbox" id="hide-resolved"> Ocultar resueltos</label>
+</div>
+<main id="list"></main>
+<script src="/app.js"></script>
+</body>
+</html>

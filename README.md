@@ -188,6 +188,19 @@ covers, comparator, version history and configurable output folder.
 - App: `skills/optimize-assets/app/` (Python stdlib + Pillow + ffmpeg, no npm dependencies)
 - Analysis thresholds: `skills/optimize-assets/references/thresholds.md`
 
+### `/audit-seo` · Rosenfeld
+
+Audits the SEO of a published site (Framer, Webflow, WordPress or any live site), page by page,
+against 2026 technical/on-page SEO, structured data and Core Web Vitals, plus AI-search/GEO
+findability (robots.txt for AI crawlers, `llms.txt`, citable content structure, freshness
+signals). Produces a severity-ranked report and starts a local checklist app on `localhost:8772`
+to track fixes and re-run the checks that don't need a browser.
+
+- Skill: [`skills/audit-seo/SKILL.md`](skills/audit-seo/SKILL.md)
+- Agent: [`agents/rosenfeld.md`](agents/rosenfeld.md), information architect and content strategist
+- App: `skills/audit-seo/app/` (Python stdlib only, no dependencies)
+- Check catalog and Framer-specific fixes: `skills/audit-seo/references/`
+
 ### `/update`
 
 Pulls the latest `web-lab` and relinks its roles into `~/.claude/agents` and its skills (own and
@@ -208,8 +221,8 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/optimize-assets` and `/update` appear in Claude Code along with the eleven
-`interfaces` skills, and the nine roles are available as subagents.
+`/launch`, `/security`, `/optimize-assets`, `/audit-seo` and `/update` appear in Claude Code along
+with the eleven `interfaces` skills, and the nine roles are available as subagents.
 
 ## App tests
 
