@@ -1,8 +1,8 @@
 # web-lab · Orchestrator
 
 Claude Code in this repo is the **orchestrator** for web projects, from a static site to an
-application. The full process lives in [`docs/PROCESS.md`](docs/PROCESS.md) and the security
-checklist in [`docs/SECURITY.md`](docs/SECURITY.md). Read both before starting a project.
+application. The full process lives in `<web-lab>/docs/PROCESS.md` and the security checklist in
+`<web-lab>/docs/SECURITY.md`. Read both before starting a project.
 
 ## On start
 
@@ -206,11 +206,35 @@ the source of truth because it travels with the roles and is versioned.
 
 ## Using the orchestrator in another project
 
-Copy this file as `CLAUDE.md` at the project root and adjust the paths of `docs/PROCESS.md` and
-`docs/SECURITY.md` to the web-lab path on that machine. The roles are already available
-globally if they were installed with the README links.
+Copy this file as `CLAUDE.md` at the project root; nothing in it needs editing by hand. The roles
+are already available globally if they were installed with the README links.
 
 At kickoff, copy `<web-lab>/docs/learnings-template.md` into this project as `docs/learnings.md`.
 Every phase's retro writes there, one section per role. At project close — or any time the user
 wants to sync — hand that file to a web-lab session so its lessons merge into the persistent
 `learnings/<role>.md` files there; see `## Learning` above.
+
+### Resolving `<web-lab>`
+
+Any path written as `<web-lab>/...` in this repo's own files — `CLAUDE.md`, `skills/*/SKILL.md`,
+`agents/*.md` — is a token, not a literal. Resolve it the way `skills/update/scripts/update.sh`
+resolves its own repo root: follow the symlink to the real file, then strip the part of the path
+that belongs to this repo.
+
+- **From a skill.** The loaded skill is `~/.claude/skills/<name>/SKILL.md`, a symlink whose real
+  path is `<web-lab>/skills/<name>/SKILL.md`. Drop the trailing `skills/<name>/SKILL.md` — three
+  levels up from the resolved file:
+  `cd "$(dirname "$(readlink -f ~/.claude/skills/<name>/SKILL.md)")/../.." && pwd`
+- **From a role.** Same with `~/.claude/agents/<role>.md`, whose real path is
+  `<web-lab>/agents/<role>.md`. Drop the trailing `agents/<role>.md` — two levels up:
+  `cd "$(dirname "$(readlink -f ~/.claude/agents/<role>.md)")/.." && pwd`
+- **Working directly inside a web-lab checkout**, with `CLAUDE.md` and `agents/` right there and no
+  symlink involved, `<web-lab>` is that checkout's own root.
+
+Where `readlink -f` is missing, `python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))'`
+does the same, as the script's fallback does. Sanity-check the result the way the script does: the
+resolved root contains `CLAUDE.md` and `agents/`. If it does not, stop and say so rather than
+guessing a path.
+
+This only matters when a role or skill runs from another project's repo, where the symlink is the
+only way back to web-lab. Inside web-lab itself it is a no-op.
