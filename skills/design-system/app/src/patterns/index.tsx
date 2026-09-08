@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { TextMorph } from 'torph/react'
 import type { Ramps, Semantic } from '../engine/color'
 import { STEPS, hex } from '../engine/color'
 import type { PairResult } from '../engine/contrast'
@@ -475,26 +476,45 @@ export function Showcase({ copy }: { copy: Copy }) {
   )
 }
 
+type BillingPeriod = 'monthly' | 'yearly'
+
 export function Pricing({ k, copy }: { k: Knobs; copy: Copy }) {
-  const plans: { name: string; price: React.ReactNode; features: string[]; cta: 'primary' | 'secondary'; badge?: boolean }[] = [
-    { name: 'Starter', price: <>$0</>, features: ['Up to 3 projects', 'Community support', '1 GB storage'], cta: 'secondary' },
-    { name: 'Studio', price: <>$9<span className="small muted">/mo</span></>, features: ['Unlimited projects', 'Email support', '50 GB storage', 'Custom domains'], cta: 'primary', badge: true },
-    { name: 'Agency', price: <>$29<span className="small muted">/mo</span></>, features: ['Everything in Studio', 'Priority support', '500 GB storage'], cta: 'secondary' },
+  const [period, setPeriod] = useState<BillingPeriod>('monthly')
+  const plans: { name: string; monthly: number; yearly: number; suffix: boolean; features: string[]; cta: 'primary' | 'secondary'; badge?: boolean }[] = [
+    { name: 'Starter', monthly: 0, yearly: 0, suffix: false, features: ['Up to 3 projects', 'Community support', '1 GB storage'], cta: 'secondary' },
+    { name: 'Studio', monthly: 9, yearly: 90, suffix: true, features: ['Unlimited projects', 'Email support', '50 GB storage', 'Custom domains'], cta: 'primary', badge: true },
+    { name: 'Agency', monthly: 29, yearly: 290, suffix: true, features: ['Everything in Studio', 'Priority support', '500 GB storage'], cta: 'secondary' },
   ]
   return (
-    <Pattern n={16} title="Pricing" note={`${k.corner} corners · radius ${k.radius}px`}>
+    <Pattern
+      n={16}
+      title="Pricing"
+      note={`${k.corner} corners · radius ${k.radius}px · billed ${period} (2 months free yearly)`}
+      actions={
+        <div className="row" role="group" aria-label="Billing period">
+          <button className={`btn ${period === 'monthly' ? 'primary' : 'secondary'} sm`} aria-pressed={period === 'monthly'} onClick={() => setPeriod('monthly')}>Monthly</button>
+          <button className={`btn ${period === 'yearly' ? 'primary' : 'secondary'} sm`} aria-pressed={period === 'yearly'} onClick={() => setPeriod('yearly')}>Yearly</button>
+        </div>
+      }
+    >
       <div className="grid">
-        {plans.map((p) => (
-          <article className="card" key={p.name}>
-            <div className="row" style={{ justifyContent: 'space-between' }}>
-              <h3>{p.name}</h3>
-              {p.badge && <span className="tag accent">Most popular</span>}
-            </div>
-            <p className="lede">{p.price}</p>
-            <ul>{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
-            <div className="row"><button className={`btn ${p.cta} sm`}>{copy.cta}</button></div>
-          </article>
-        ))}
+        {plans.map((p) => {
+          const price = period === 'monthly' ? p.monthly : p.yearly
+          return (
+            <article className="card" key={p.name}>
+              <div className="row" style={{ justifyContent: 'space-between' }}>
+                <h3>{p.name}</h3>
+                {p.badge && <span className="tag accent">Most popular</span>}
+              </div>
+              <p className="lede">
+                <TextMorph>{`$${price}`}</TextMorph>
+                {p.suffix && <span className="small muted">/{period === 'monthly' ? 'mo' : 'yr'}</span>}
+              </p>
+              <ul>{p.features.map((f) => <li key={f}>{f}</li>)}</ul>
+              <div className="row"><button className={`btn ${p.cta} sm`}>{copy.cta}</button></div>
+            </article>
+          )
+        })}
       </div>
     </Pattern>
   )
@@ -551,7 +571,7 @@ function VoteCard({ item }: { item: (typeof VOTE_REQUESTS)[number] }) {
           aria-label={voted ? 'Remove vote' : 'Vote for this request'}
           onClick={() => setVoted((v) => !v)}
         >
-          <span aria-hidden="true">▲</span><b>{count}</b>
+          <span aria-hidden="true">▲</span><TextMorph as="b">{count}</TextMorph>
         </button>
         <div className="stack" style={{ gap: 'var(--spacing-2)' }}>
           <b>{item.title}</b>

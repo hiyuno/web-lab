@@ -47,6 +47,11 @@ procedure and the checkpoint.
   `pick-ui-library` to choose the component base; Anthropic's `design` for canvas sketches if the
   user wants to touch things visually.
 - MCPs if the user has them connected: Pencil, Stitch, Figma.
+- `torph` (MIT, dependency-free text/number morphing for React, Vue, Svelte and vanilla JS,
+  https://torph.lochie.me): wired into the style lab's Voting board vote count and Pricing's
+  billing toggle as a reference for this kind of micro-interaction. Osmani can adopt it directly
+  in `/build` for React/Next.js projects (always true for `/app-web`'s track) — it is an
+  available option, not a new rule, and it has no place in an Astro-only build.
 - **The style lab**, `app/`: a local page with the fourteen patterns that define a system (typography,
   color, buttons, cards, form, navigation, hero, list, feedback, dialog and motion, feature
   showcase, pricing, changelog and voting board) driven by a
