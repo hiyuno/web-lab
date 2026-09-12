@@ -23,6 +23,11 @@ Approver: [name]
   Store rating | press logos | none yet]. Anything not on this list stays out of the copy — see
   "Proof TBD" below, never a placeholder client name.
 - Support/contact email shown on the site: [ ]
+- Maker contact line, for a solo-built app (a real trust signal, not boilerplate): [ ] (e.g. "I
+  build this myself. Have an idea? Email me or ping me on X.") Place it near a feature or widget
+  list, or in the footer — wherever it reads as a genuine offer to hear from users, not a
+  contact-us afterthought. Skip entirely if the app isn't solo-built, or Yuno doesn't want to be
+  its public face.
 - Privacy notice URL (real, approved page): [ ]
 
 ### Proof TBD
@@ -72,6 +77,12 @@ One claim + one visual per block. No block ships without a visual. A claim is on
 sentence ("Search finds text inside PDFs, not just filenames"), not a category label
 ("Powerful search").
 
+When the app's features map to distinct moments or contexts (a work mode, a daily routine, a
+business view), frame the claim as that moment ("Focused work.", "Your everyday.", "Your
+business.") instead of a capability name ("Custom modes."). This reads as a story of the
+reader's day, not a spec list. Use it only when it genuinely fits — a plain benefit sentence
+beats a forced persona.
+
 | # | Claim (one sentence, concrete) | Visual | Visual type |
 |---|----------------------------------|--------|-------------|
 | 1 | | | screenshot / short clip / diagram |
@@ -113,6 +124,7 @@ objections from the Pricing page's FAQ if they apply site-wide.
 - Do not use a static screenshot as the hero visual when a clip or demo is available.
 - Do not invent a testimonial, install count, or press logo. Mark it TBD instead.
 - Do not stack more than 6 feature blocks; cut to the ones that differentiate.
+- Do not force a persona/moment framing onto features that don't naturally map to one.
 
 ---
 
@@ -134,6 +146,18 @@ This page can carry more blocks than the home teaser, but each still needs its o
 |---|-------|--------|-------------------------------|
 | 1 | | | |
 
+### Small delighters (optional)
+
+Polish details too small to earn their own claim-plus-visual block, but real enough to mention:
+a bold five-to-eight-word title plus one plain sentence, no visual required (dockset.app's "The
+little things, taken care of" section is the reference — six short entries, no icons, the title
+alone does the work). Use only for genuine small wins; padding this table to look thorough is
+worse than leaving it empty.
+
+| Title (bold, short) | One sentence |
+|-----------------------|-----------------|
+| | |
+
 ### Screenshot requirements
 
 - Real device frames, not bare crops. Device: [iPhone model | Mac frame].
@@ -151,12 +175,15 @@ This page can carry more blocks than the home teaser, but each still needs its o
 - [ ] Full feature list with a one-line benefit per feature
 - [ ] Screenshots or a build to capture them from, per platform
 - [ ] Which features are iOS-only, macOS-only, or both
+- [ ] Any small polish details worth a "delighters" line, or confirmation there are none
 
 ### What NOT to do
 
 - Do not caption a screenshot with the feature's internal name.
 - Do not mix device frames or OS chrome within one screenshot set.
 - Do not list a feature with no visual "for now" — hold the row until the visual exists.
+- Do not pad the delighters table with restated main features; leave it empty if there's nothing
+  genuinely small to add.
 
 ---
 
