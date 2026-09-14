@@ -93,26 +93,61 @@
       const STYLE_WRITE_MAX_MS = 8000; // same window as the frame sampler; don't outlive it by much
       const STYLE_WRITE_MAX_ELEMENTS = 50; // cap so a pathological page can't grow this unbounded
 
-      // Short, readable selector: tagName(.upTo2Classes)?, capped to 4 ancestors deep. Same
-      // technique as collect_animations.js's selectorFor — kept as its own local copy here since
-      // this script has no module system to share it through.
+      // shortSelector() calls document.querySelectorAll() to find the shortest CSS path that
+      // resolves uniquely — that DOM work must NEVER run inside the MutationObserver callback
+      // below, because that callback fires during the very jank-measurement window this probe is
+      // trying to measure: adding querySelectorAll() calls to the main thread while sampling main-
+      // thread jank would make the probe itself the thing it's measuring. So the observer callback
+      // only accumulates raw data keyed by element reference (see styleMo below); shortSelector()
+      // is called from drain(), once per distinct element, well after the measurement window ends.
+
+      // Short, readable selector: tagName(.upTo2Classes)?(:nth-of-type(n))? per ancestor. Same
+      // algorithm as collect_animations.js's selectorFor — kept as its own local copy here since
+      // this script has no module system to share it through, but the two MUST stay in sync:
+      // check_runtime.py's apply_layers() matches this selector (emitted as a runtime finding's
+      // `where`) against collect_animations.js's X lines by plain string equality, so any
+      // divergence between the two copies silently breaks that match.
+      //
+      // Never truncate a token with an ellipsis: `sel.slice(0, 90) + '…'` used to produce
+      // invalid CSS that document.querySelector throws on, which is exactly why ~30 runtime
+      // findings were coming back with no layer path — phase 3 never resolves an invalid
+      // selector, so it never appears as an X line either. Instead, trim whole ancestor segments
+      // from the LEFT (outermost first) until the selector is short enough, preferring the most
+      // specific (longest) candidate that both fits SELECTOR_MAX_LEN and resolves uniquely; if
+      // nothing resolves uniquely, fall back to the shortest candidate that is still valid CSS.
+      const SELECTOR_MAX_LEN = 120;
+      const SELECTOR_MAX_DEPTH = 10; // safety cap on ancestors collected before trimming
       function shortSelector(el) {
         if (!el || el.nodeType !== 1) return '';
         const parts = [];
         let node = el;
         let depth = 0;
-        while (node && node.nodeType === 1 && depth < 4) {
+        while (node && node.nodeType === 1 && depth < SELECTOR_MAX_DEPTH) {
           let part = node.tagName.toLowerCase();
           if (typeof node.className === 'string' && node.className.trim()) {
             const cls = node.className.trim().split(/\s+/).filter(Boolean).slice(0, 2).join('.');
             if (cls && part.length + cls.length < 40) part += '.' + cls;
           }
+          const parent = node.parentElement;
+          if (parent) {
+            const siblings = Array.prototype.filter.call(parent.children, (c) => c.tagName === node.tagName);
+            if (siblings.length > 1) part += `:nth-of-type(${siblings.indexOf(node) + 1})`;
+          }
           parts.unshift(part);
-          node = node.parentElement;
+          node = parent;
           depth++;
         }
-        const sel = parts.join('>');
-        return sel.length > 90 ? sel.slice(0, 90) + '…' : sel;
+        let shortestValid = null;
+        for (let start = 0; start < parts.length; start++) {
+          const sel = parts.slice(start).join('>');
+          if (sel.length > SELECTOR_MAX_LEN) continue;
+          let count;
+          try { count = document.querySelectorAll(sel).length; } catch { continue; }
+          if (count === 0) continue;
+          shortestValid = sel;
+          if (count === 1) return sel;
+        }
+        return shortestValid != null ? shortestValid : (parts[parts.length - 1] || '');
       }
 
       // Same value-aware diff as collect_animations.js's parseStyleText/diffStyleProps: a prop
@@ -138,20 +173,27 @@
         return changed;
       }
 
+      // store.styleWrites is keyed by element REFERENCE during the measurement window (Map<Element,
+      // {props: Set<string>, writes: number}>) — no selector computation, no DOM reads beyond the
+      // mutation record itself. Resolving the element to a selector string happens once per
+      // element in drain(), after the window closes.
       const styleMo = new MutationObserver((records) => {
         for (const rec of records) {
           if (rec.type !== 'attributes' || rec.attributeName !== 'style') continue;
           const el = rec.target;
           if (!(el instanceof Element)) continue;
-          const sel = shortSelector(el);
-          if (!store.styleWrites.has(sel) && store.styleWrites.size >= STYLE_WRITE_MAX_ELEMENTS) {
-            continue; // cap reached: keep updating elements already tracked, skip new ones
-          }
           const changed = diffStyleProps(rec.oldValue || '', el.style.cssText || '');
           if (!changed.size) continue;
-          const existing = store.styleWrites.get(sel) || new Set();
-          for (const c of changed) existing.add(c);
-          store.styleWrites.set(sel, existing);
+          let entry = store.styleWrites.get(el);
+          if (!entry) {
+            if (store.styleWrites.size >= STYLE_WRITE_MAX_ELEMENTS) {
+              continue; // cap reached: keep updating elements already tracked, skip new ones
+            }
+            entry = { props: new Set(), writes: 0 };
+            store.styleWrites.set(el, entry);
+          }
+          for (const c of changed) entry.props.add(c);
+          entry.writes++;
         }
       });
       styleMo.observe(document.body, {
@@ -233,12 +275,31 @@
     // is already computed from ALL frame samples, not the filtered set below.
     const loaf = store.loaf.filter((e) => e.duration > 50);
 
-    // styleWrites is a Map<selector, Set<propName>> during install(); JSON can't serialize a Map
-    // or a Set, so flatten it here into the array shape check_runtime.py's runtime_non_composited_
-    // write check expects.
+    // store.styleWrites is a Map<Element, {props: Set<string>, writes: number}> during install() —
+    // elements are resolved to selector strings HERE, after the measurement window, not inside the
+    // MutationObserver callback (see the comment above styleMo in install()). Some elements may
+    // have been removed from the document by now; shortSelector() still runs for them (its
+    // querySelectorAll probes just return 0 matches and it falls back to the shortest ancestor
+    // chain it collected while the element still existed) — they are not dropped here. Two
+    // elements that resolve to the same selector are merged (props unioned, writes summed) before
+    // the final array is built, so the output stays one entry per selector — same shape as before.
+    const merged = new Map(); // selector -> { props: Set<string>, writes: number }
+    for (const [el, data] of (store.styleWrites || new Map())) {
+      const sel = shortSelector(el);
+      if (!sel) continue; // defensive: shortSelector() only returns '' for a non-Element node
+      const existing = merged.get(sel);
+      if (existing) {
+        for (const p of data.props) existing.props.add(p);
+        existing.writes += data.writes;
+      } else {
+        merged.set(sel, { props: new Set(data.props), writes: data.writes });
+      }
+    }
+    // JSON can't serialize a Map or a Set, so flatten into the array shape check_runtime.py's
+    // runtime_non_composited_write check expects: [{ selector, props }].
     const styleWrites = [];
-    for (const [selector, propsSet] of (store.styleWrites || new Map())) {
-      styleWrites.push({ selector, props: [...propsSet] });
+    for (const [selector, data] of merged) {
+      styleWrites.push({ selector, props: [...data.props] });
     }
 
     const calibration = opts.calibration || { idleP50: null, throttled: false };

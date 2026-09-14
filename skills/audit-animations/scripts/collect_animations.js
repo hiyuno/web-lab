@@ -19,15 +19,30 @@
     return true;
   }
 
-  // Short, readable selector: tagName(.upTo2Classes)?(:nth-of-type(n))?, capped to 4 ancestors
-  // deep. Not a brittle full-DOM path — this is for a human reading the report, and it's
-  // recomputed fresh each time rather than cached, so it stays correct as candidate sets grow.
+  // Short, readable selector: tagName(.upTo2Classes)?(:nth-of-type(n))? per ancestor, up to
+  // SELECTOR_MAX_DEPTH levels deep. IMPORTANT: this must stay behaviorally identical to
+  // probe_runtime.js's copy of the same function (duplicated there — that script has no module
+  // system to share it through) — phase 4's runtime findings carry a `where` selector generated
+  // by that copy, and check_runtime.py's apply_layers() matches it against this file's X lines
+  // by plain string equality, so any divergence between the two silently breaks the match.
+  //
+  // Never truncate a token with an ellipsis: `sel.slice(0, 90) + '…'` used to produce a string
+  // that is not valid CSS (e.g. `[data-magnetichover="VCfulheAjumpB"] { t`), which
+  // document.querySelector then throws on — every finding pointing at such a selector silently
+  // lost its layer path. Instead, trim whole ancestor segments from the LEFT (outermost first)
+  // until the selector is short enough, preferring the most specific (longest) candidate that
+  // both fits SELECTOR_MAX_LEN and resolves uniquely; if nothing resolves uniquely, fall back to
+  // the shortest candidate that is still valid CSS.
+  const SELECTOR_MAX_LEN = 120;
+  const SELECTOR_MAX_DEPTH = 10; // safety cap on ancestors collected before trimming, not a target
+  const selectorCache = new WeakMap(); // pure function of the current DOM; safe to memoize per call
   function selectorFor(el) {
     if (!el || el.nodeType !== 1) return '';
+    if (selectorCache.has(el)) return selectorCache.get(el);
     const parts = [];
     let node = el;
     let depth = 0;
-    while (node && node.nodeType === 1 && depth < 4) {
+    while (node && node.nodeType === 1 && depth < SELECTOR_MAX_DEPTH) {
       let part = node.tagName.toLowerCase();
       if (typeof node.className === 'string' && node.className.trim()) {
         const cls = node.className.trim().split(/\s+/).filter(Boolean).slice(0, 2).join('.');
@@ -42,8 +57,19 @@
       node = parent;
       depth++;
     }
-    const sel = parts.join('>');
-    return sel.length > 90 ? sel.slice(0, 90) + '…' : sel;
+    let shortestValid = null;
+    for (let start = 0; start < parts.length; start++) {
+      const sel = parts.slice(start).join('>');
+      if (sel.length > SELECTOR_MAX_LEN) continue;
+      let count;
+      try { count = document.querySelectorAll(sel).length; } catch { continue; }
+      if (count === 0) continue;
+      shortestValid = sel; // overwritten on every valid hit, so it ends up the shortest one
+      if (count === 1) { selectorCache.set(el, sel); return sel; }
+    }
+    const result = shortestValid != null ? shortestValid : (parts[parts.length - 1] || '');
+    selectorCache.set(el, result);
+    return result;
   }
 
   // ---- Framer layer coordinates -------------------------------------------------------------
@@ -92,13 +118,41 @@
     return (kept.length < names.length ? '\u2026' + LAYER_SEP : '') + kept.join(LAYER_SEP);
   }
 
-  // A human-readable anchor for the element: its own trimmed text, or the nearest ancestor's if
-  // it has none (an animated wrapper around a heading is the common case).
+  // Nodes whose text is never author-visible copy: `.textContent` walks into these too, which is
+  // how a real capture once produced `"[data-magnetichover=\"VCfulheAjumpB\"] { t"` as an
+  // element's "text" — the opening of a <style> block, not anything a visitor reads.
+  const TEXT_SKIP_TAGS = new Set(['STYLE', 'SCRIPT', 'NOSCRIPT', 'SVG', 'TEMPLATE']);
+
+  // Only the visible text of `root`: walk its text nodes with a TreeWalker and reject any text
+  // node whose nearest element ancestor (up to `root`) is one of TEXT_SKIP_TAGS, instead of using
+  // `.textContent`, which concatenates everything including <style>/<script> children.
+  function visibleText(root) {
+    let walker;
+    try {
+      walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          let p = node.parentElement;
+          while (p && p !== root.parentElement) {
+            if (TEXT_SKIP_TAGS.has(p.tagName)) return NodeFilter.FILTER_REJECT;
+            p = p.parentElement;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      });
+    } catch { return (root.textContent || ''); } // no TreeWalker in this engine: best-effort fallback
+    let out = '';
+    let tn;
+    while ((tn = walker.nextNode())) out += tn.nodeValue + ' ';
+    return out;
+  }
+
+  // A human-readable anchor for the element: its own trimmed visible text, or the nearest
+  // ancestor's if it has none (an animated wrapper around a heading is the common case).
   function textFor(el) {
     let node = el;
     let depth = 0;
     while (node && node.nodeType === 1 && depth < 4) {
-      const t = (node.textContent || '').trim();
+      const t = visibleText(node).replace(/\s+/g, ' ').trim();
       if (t) return esc(t).slice(0, TEXT_MAX);
       node = node.parentElement;
       depth++;

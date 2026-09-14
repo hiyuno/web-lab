@@ -161,6 +161,56 @@ class TestRuntimeEnrichment(unittest.TestCase):
         self.assertEqual(check_runtime.load_layers("/nonexistent/raw.txt"), {})
 
 
+class TestSelectorNeverEllipsisTruncated(unittest.TestCase):
+    """Regression guard for the probe_runtime.js / collect_animations.js selectorFor fix.
+
+    The old `sel.slice(0, 90) + '…'` truncation produced invalid CSS: document.querySelector
+    throws on a selector ending in "…", so phase 3 never resolves it and it never appears as an
+    X line, and apply_layers() matches `where` to an X-line selector by plain string equality —
+    so a single truncated selector silently drops that finding's layer path (this is the exact
+    "~30 runtime findings with no layer path" bug). This suite can't run the real browser-side
+    selectorFor/shortSelector (no DOM here), but it locks down the Python-side contract those two
+    JS copies must honor: a selector ending in "…" must never be treated as a resolvable match.
+    """
+
+    def test_a_truncated_selector_never_enriches_from_a_clean_x_line(self):
+        # `layers` stands in for phase 3's X lines, which — post-fix — can never contain "…".
+        # `where` stands in for a hypothetical pre-fix runtime finding: same element, but with
+        # its selector cut mid-token. The two must not match.
+        layers = {"div.framer-abc>span.magnetichover-card": {
+            "layer": "Hero › Title", "text": "Hola", "y": 1024}}
+        truncated = ("div.framer-abc>span.magnetichover-card[data-magnetichover=\"VCfulheAjum"
+                     "pB\"] { t…")
+        findings = [{"where": truncated, "layer": None, "text": None, "y": None}]
+        enriched = check_runtime.apply_layers(findings, layers)
+        self.assertEqual(enriched, 0)
+        self.assertIsNone(findings[0]["layer"])
+        self.assertIsNone(findings[0]["y"])
+
+    def test_a_long_but_untruncated_selector_still_enriches(self):
+        # The fixed algorithm raises the soft length budget from 90 to 120 and trims whole
+        # ancestor segments instead of cutting a token — so a selector in that 90-120 range, with
+        # no ellipsis, must still round-trip through the raw-line format and match by exact
+        # string equality exactly like any other selector. Nothing on the Python side assumes a
+        # 90-char cap, so this is a straight parse-and-match check.
+        long_selector = "div.framer-1bbl5cr>section.framer-card-wrapper>span.framer-text-node"
+        self.assertGreater(len(long_selector), 60)
+        self.assertLess(len(long_selector), 120)
+        raw = (
+            "page=https://x.test/|slug=home|dpr=2|vw=1440|vh=900|reducedMotion=0\n"
+            f"X|{long_selector}|Hero › Title|Hola|1024\n"
+        )
+        path = write(raw)
+        try:
+            layers = check_runtime.load_layers(path)
+        finally:
+            os.unlink(path)
+        findings = [{"where": long_selector, "layer": None, "text": None, "y": None}]
+        enriched = check_runtime.apply_layers(findings, layers)
+        self.assertEqual(enriched, 1)
+        self.assertEqual(findings[0]["layer"], "Hero › Title")
+
+
 class TestReportColumns(unittest.TestCase):
     def test_layer_leads_and_selector_is_secondary(self):
         layer, selector = build_report.where_cells(
