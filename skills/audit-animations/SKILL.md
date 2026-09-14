@@ -92,7 +92,27 @@ will be marked `not_verified`) or fix the environment and re-run this phase. **C
 For each page kept from phase 1: `navigate`, wait ~2s, run `scripts/collect_animations.js` via
 `javascript_tool`, and save its `lines` (plus the header line) to `<out>/raw/<slug>.txt`, one
 line per array entry, header first. Batch several pages per `browser_batch` the way `/audit-seo`'s
-phase 3 does, then run both checks in one Bash call per page:
+phase 3 does.
+
+Every line that carries a selector ends with three **Framer locator** fields (`-` when empty):
+`<layer>`, the `data-framer-name` path of the element and its ancestors joined by " › " — the
+same names the editor's Layers panel shows, which is the only address a Framer author can act
+on, since the published CSS classes (`div.framer-1bbl5cr`) exist nowhere in the editor;
+`<text>`, the first 40 characters of the element's own or nearest ancestor's text; and `<y>`,
+its absolute vertical position in the page. To locate a finding, press **Cmd+F in the Layers
+panel** and search the last name of its path, then confirm with the quoted text and the `↓ px`
+offset.
+
+The collector's last line takes an options object. Pass `resolveSelectors` — the unique `where`
+values of this page's existing `findings/runtime-<slug>.json`, up to 60 — to also emit one
+`X|<selector>|<layer>|<text>|<y>` line per selector it can find in the page, which is how phase
+4's already-measured findings get a layer path without re-running their 10-second trace:
+
+```js
+})({ resolveSelectors: ['div.framer-les8p1>div.framer-8gkpvg-container>div>div'] });
+```
+
+Then run both checks in one Bash call per page:
 
 ```bash
 python3 <skill>/scripts/check_page.py   --raw <out>/raw/<slug>.txt --url <url> --slug <slug> --out <out> --platform framer
@@ -134,6 +154,12 @@ Then:
 ```bash
 python3 <skill>/scripts/check_runtime.py --json <out>/runtime/<slug>.json --slug <slug> --out <out>
 ```
+
+Runtime findings are measured, not collected, so they have no DOM node of their own. The ones
+whose `where` is a real selector get their Framer layer path from the `X` lines of the same
+page's phase 3 raw file: `--layers <out>/raw/<slug>.txt`, which is also the default when that
+file exists. Findings located by time or event instead of by element (`whole page`,
+`frame @ 12ms`, `event: pointerover`) keep a null layer — there is no single element to name.
 
 Optional: ask the user whether to skip this phase per-page if they only want the cheap static
 checks. **Checkpoint.**

@@ -15,6 +15,43 @@ helpers here.
 """
 import json, os
 
+# ---- Raw line file encoding ----------------------------------------------------------------
+# The raw per-page files collect_animations.js writes are pipe-delimited, and two of the fields
+# added for Framer layer paths (`layer`, `text`) come from author-controlled strings that may
+# legitimately contain a "|". Rather than switch the whole format to something quoted, the
+# collector escapes the separator to U+00A6 BROKEN BAR before emitting a field, and the parsers
+# here turn it back. Defined on this side (not only in the JS) so both halves share one constant.
+FIELD_SEP = "|"
+FIELD_ESCAPE = "\u00a6"   # BROKEN BAR — never produced by the collector except as an escape
+LAYER_SEP = " \u203a "     # " › " between Framer layer names, outermost first
+LAYER_MAX_DEPTH = 6        # at most this many data-framer-name levels in one path
+TEXT_MAX = 40              # first N characters of the element's (or nearest ancestor's) text
+EMPTY_FIELD = "-"          # what the collector writes for an absent layer/text/y
+
+
+def escape_field(s):
+    """Make a string safe to place between two FIELD_SEPs in a raw line."""
+    return (s or "").replace(FIELD_SEP, FIELD_ESCAPE).replace("\n", " ").replace("\r", " ")
+
+
+def unescape_field(s):
+    """Inverse of escape_field(); also maps the collector's EMPTY_FIELD to None."""
+    if s is None:
+        return None
+    s = s.replace(FIELD_ESCAPE, FIELD_SEP)
+    return None if s == EMPTY_FIELD or s == "" else s
+
+
+def parse_int_field(s):
+    """Parse a `y` field: an integer, or None for EMPTY_FIELD / anything unparseable."""
+    if s is None or s in (EMPTY_FIELD, ""):
+        return None
+    try:
+        return int(float(s))
+    except (TypeError, ValueError):
+        return None
+
+
 SEVERITY_ORDER = {"critical": 0, "high": 1, "medium": 2, "low": 3, "info": 4}
 CATEGORIES = ("composited", "runtime", "safari-risk")
 CONFIDENCES = ("measured", "documented", "heuristic")
@@ -23,7 +60,8 @@ _seq = {"n": 0}
 
 
 def finding(*, severity, category, page, where, before, after, why, source,
-            status="open", confidence="heuristic", nodes=None):
+            status="open", confidence="heuristic", nodes=None,
+            layer=None, text=None, y=None):
     assert severity in SEVERITY_ORDER
     assert category in CATEGORIES
     assert confidence in CONFIDENCES
@@ -35,6 +73,12 @@ def finding(*, severity, category, page, where, before, after, why, source,
         "category": category,
         "page": page,        # slug, or "site" for page-independent checks
         "where": where,       # selector, URL, or "site-wide" for page-independent checks
+        # Framer layer coordinates, so a finding can be located in the editor's Layers panel
+        # instead of in a CSS class the author never wrote. All three are None for page-level
+        # findings ("whole page"/"site-wide") and for any element with no data-framer-name.
+        "layer": layer,       # "Hero › Title" — data-framer-name path, outermost first
+        "text": text,         # first 40 chars of the element's own or nearest ancestor's text
+        "y": y,               # absolute vertical position in the page, in CSS px
         "nodes": nodes or [],  # additional selector paths sharing the same root cause
         "before": before,
         "after": after,

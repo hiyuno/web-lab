@@ -76,6 +76,9 @@ function counts() {
 
 // Group findings by (page, where): every finding sharing that pair describes the same real
 // animated element, whatever category or property it was flagged under.
+// The key stays (page, where) on purpose even though cards are now titled by layer path:
+// checklist.json is keyed off finding ids under this grouping, and changing the key would
+// orphan everything the user has already ticked off.
 function groupFindings() {
   const groups = new Map();
   for (const f of data.findings) {
@@ -84,6 +87,17 @@ function groupFindings() {
       groups.set(key, {page: f.page, where: f.where, findings: []});
     }
     groups.get(key).findings.push(f);
+  }
+  // A group's Framer locator: same element, so any finding that carries one carries the same
+  // one — but runtime findings can be missing it (an unresolved selector), so take the first
+  // non-empty rather than the first finding's.
+  for (const g of groups.values()) {
+    g.layer = g.findings.map(f => f.layer).find(Boolean) || null;
+    g.text = g.findings.map(f => f.text).find(Boolean) || null;
+    const y = g.findings.map(f => f.y).find(v => v !== null && v !== undefined);
+    g.y = y === undefined ? null : y;
+    g.title = g.layer || g.where;
+    g.haystack = [g.layer, g.text, g.where].filter(Boolean).join(' ').toLowerCase();
   }
   return [...groups.values()];
 }
@@ -115,6 +129,7 @@ function render() {
   const hideResolved = document.getElementById('hide-resolved').checked;
   const pageFilter = document.getElementById('page').value;
   const sortMode = document.getElementById('sort').value;
+  const q = document.getElementById('q').value.trim().toLowerCase();
 
   const matches = f => {
     if (!cats.includes(f.category)) return false;
@@ -127,6 +142,9 @@ function render() {
   let groups = groupFindings();
   // A group is shown if at least one of its findings matches the active filters.
   groups = groups.filter(g => g.findings.some(matches));
+  // Free-text search over the layer path, the text fragment and the CSS selector. Group-level,
+  // not per-finding: the locator describes the element, not the individual finding.
+  if (q) groups = groups.filter(g => g.haystack.includes(q));
   for (const g of groups) {
     g.score = score(g.findings);
     g.worst = worstSeverity(g.findings);
@@ -198,8 +216,8 @@ function topOffenders(groups) {
     chip.appendChild(dot);
     const label = document.createElement('span');
     label.className = 'offender-label';
-    label.textContent = `${g.page} · ${g.where}`;
-    label.title = `${g.page} · ${g.where}`;
+    label.textContent = `${g.page} · ${g.title}`;
+    label.title = `${g.page} · ${g.title}${g.layer ? '\n' + g.where : ''}`;
     chip.appendChild(label);
     const sc = document.createElement('span');
     sc.className = 'offender-score';
@@ -245,11 +263,46 @@ function renderCard(g) {
   const body = document.createElement('div');
   body.className = 'body';
 
+  // Title is the Framer layer path — what the author can actually find in the Layers panel —
+  // with the published CSS selector demoted underneath, and the text fragment plus the page
+  // offset on the right as the "is this the one?" check.
+  const head = document.createElement('div');
+  head.className = 'card-head';
+
+  const heading = document.createElement('div');
+  heading.className = 'card-heading';
   const title = document.createElement('div');
-  title.className = 'where card-title';
-  title.textContent = g.where;
-  title.title = g.where;
-  body.appendChild(title);
+  title.className = 'card-title';
+  title.textContent = g.title;
+  title.title = g.title;
+  heading.appendChild(title);
+  if (g.layer) {
+    const sel = document.createElement('div');
+    sel.className = 'card-selector';
+    sel.textContent = g.where;
+    sel.title = g.where;
+    heading.appendChild(sel);
+  }
+  head.appendChild(heading);
+
+  const locator = document.createElement('div');
+  locator.className = 'card-locator';
+  if (g.text) {
+    const t = document.createElement('span');
+    t.className = 'locator-text';
+    t.textContent = `\u201c${g.text}\u201d`;
+    t.title = g.text;
+    locator.appendChild(t);
+  }
+  if (g.y !== null) {
+    const yEl = document.createElement('span');
+    yEl.className = 'locator-y';
+    yEl.title = 'Distancia desde el inicio de la página';
+    yEl.textContent = `\u2193 ${g.y} px`;
+    locator.appendChild(yEl);
+  }
+  if (locator.childNodes.length) head.appendChild(locator);
+  body.appendChild(head);
 
   const meta = document.createElement('div');
   meta.className = 'card-meta';
@@ -340,5 +393,6 @@ async function setStatus(id, status) {
 
 document.querySelectorAll('#filters input, #filters select').forEach(el =>
   el.addEventListener('change', render));
+document.getElementById('q').addEventListener('input', render);
 
 load();

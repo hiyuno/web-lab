@@ -20,14 +20,36 @@ def load_all(out_dir):
     return findings
 
 
+def where_cells(r):
+    """(layer cell, selector cell) for one finding.
+
+    The person fixing a Framer site works in the Layers panel, where the published CSS class
+    names (`div.framer-1bbl5cr`) appear nowhere at all — so the layer path leads, with the text
+    fragment and the scroll position that let them find it on the live page, and the selector
+    drops to a secondary column. When a finding has no layer path (a page-level finding, or an
+    element Framer emitted without a `data-framer-name`), the selector takes the first column
+    back, exactly as before this column existed.
+    """
+    layer = r.get("layer")
+    if not layer:
+        return r["where"], "—"
+    cell = f"**{layer}**"
+    if r.get("text"):
+        cell += f' — "{r["text"]}"'
+    if r.get("y") is not None:
+        cell += f" · ↓ {r['y']}px"
+    return cell, f"`{r['where']}`"
+
+
 def table(rows):
     if not rows:
         return "_No findings in this category._\n"
-    lines = ["| Severity | Confidence | Where | Before | After | Why |",
-             "|---|---|---|---|---|---|"]
+    lines = ["| Severity | Confidence | Layer | Selector | Before | After | Why |",
+             "|---|---|---|---|---|---|---|"]
     for r in rows:
-        cells = [r["severity"].upper(), r["confidence"], r["where"], r["before"], r["after"],
-                 r["why"]]
+        layer_cell, selector_cell = where_cells(r)
+        cells = [r["severity"].upper(), r["confidence"], layer_cell, selector_cell, r["before"],
+                 r["after"], r["why"]]
         cells = [c.replace("|", "\\|").replace("\n", " ") for c in cells]
         lines.append("| " + " | ".join(cells) + " |")
     return "\n".join(lines) + "\n"
@@ -36,6 +58,8 @@ def table(rows):
 def render(site, findings, platform, ran_runtime, page_count):
     for f in findings:
         f.setdefault("confidence", "heuristic")
+        for k in ("layer", "text", "y"):
+            f.setdefault(k, None)
     verified = [f for f in findings if f["status"] != "not_verified"]
     not_verified = [f for f in findings if f["status"] == "not_verified"]
 
@@ -78,6 +102,14 @@ def render(site, findings, platform, ran_runtime, page_count):
     if platform == "framer":
         out.append("Platform: Framer — see `references/framer-fixes.md` for exact fixes "
                     "instead of generic advice.")
+        out.append("")
+        out.append("The **Layer** column is the `data-framer-name` path of the element, "
+                    "outermost first, exactly as the names read in the editor's Layers panel: "
+                    "press Cmd+F in Layers and search the last name in the path. The quoted "
+                    "text and the `↓ px` offset are there to confirm you landed on the right "
+                    "one. A row that shows a CSS selector in that column is an element Framer "
+                    "published without a layer name (or a page-level finding with no single "
+                    "element at all).")
         out.append("")
 
     if not verified:

@@ -14,7 +14,7 @@ Usage: check_safari.py --raw <out>/raw/<slug>.txt --url <url> --slug <slug> --ou
 """
 import argparse, re, sys
 from common import finding, write_findings
-from check_page import parse_raw
+from check_page import parse_raw, loc
 
 LAYER_THRESHOLD = 20  # same threshold as check_page.py's layer_promotion
 
@@ -39,7 +39,7 @@ def check_backdrop_filter_animated(data, page):
                 "risk: WebKit's own blog post introducing backdrop-filter says the effect "
                 "forces the engine to perform more rendering passes and recommends using it "
                 "only where it is most necessary.",
-            source="backdrop_filter_animated", confidence="documented",
+            source="backdrop_filter_animated", confidence="documented", **loc(row),
         ))
     return out
 
@@ -58,7 +58,7 @@ def check_will_change_backdrop(data, page):
             why="Never measured here. Lower confidence than the other Safari findings in this "
                 "file: this is based on scattered developer reports of Safari-specific issues "
                 "with `will-change: backdrop-filter`, not official WebKit documentation.",
-            source="will_change_backdrop", confidence="heuristic",
+            source="will_change_backdrop", confidence="heuristic", **loc(row),
         ))
     return out
 
@@ -92,15 +92,16 @@ def check_blur_radius_large(data, page):
             why="Never measured here. Framer's own site-optimization help page recommends "
                 "keeping blur values below 10 to maintain performance — this applies beyond "
                 "Framer too, since it reflects a real GPU cost rather than a platform quirk.",
-            source="blur_radius_large", confidence="documented",
+            source="blur_radius_large", confidence="documented", **loc(row),
         ))
     return out
 
 
 def check_blend_mode_with_filter(data, page):
-    by_selector = {}
+    by_selector, first_row = {}, {}
     for row in data["F"]:
         by_selector.setdefault(row["selector"], set()).add(row["kind"])
+        first_row.setdefault(row["selector"], row)
     out = []
     for selector, kinds in by_selector.items():
         if "mix-blend-mode" in kinds and ("filter" in kinds or "backdrop-filter" in kinds):
@@ -114,6 +115,7 @@ def check_blend_mode_with_filter(data, page):
                     "blend mode gets ignored or misrendered when combined with a filter on the "
                     "same or related elements.",
                 source="blend_mode_with_filter", confidence="documented",
+                **loc(first_row[selector]),
             ))
     return out
 
@@ -149,7 +151,7 @@ def check_playback_rate_altered(data, page):
                 "an altered playback rate, as documented by Motion's performance guide — same "
                 "underlying fact as check_page.py's `timing_params` check, seen from the "
                 "Safari-specific angle.",
-            source="playback_rate_altered", confidence="documented",
+            source="playback_rate_altered", confidence="documented", **loc(row),
         ))
     return out
 

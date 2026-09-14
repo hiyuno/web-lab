@@ -3,6 +3,24 @@
 Every check cites its source script (matches `finding.source` in `findings/*.json`) so a
 disagreement can be traced back to logic, not vibes.
 
+## Locating a finding: Framer layer path, not CSS selector
+
+Every finding carries three locator fields alongside its `where` selector: `layer`, the
+`data-framer-name` path of the element and its ancestors joined by " › " (outermost first, at
+most 6 levels, consecutive duplicates collapsed), `text`, the first 40 characters of its own or
+its nearest ancestor's text, and `y`, its absolute vertical position in the page. Framer emits
+`data-framer-name` on every published layer with exactly the name shown in the editor's Layers
+panel, so this path is the only address an author can act on — the published class names
+(`div.framer-1bbl5cr`) appear nowhere in the editor. To find a flagged animation, press **Cmd+F
+in the Layers panel** and search the last name of the path, then confirm with the quoted text
+and the `↓ px` offset; the CSS selector stays in a secondary column for devtools.
+
+`layer` is null for page-level findings (`whole page`, `site-wide` — no single element to name),
+for elements Framer published without a layer name, and for runtime findings located by time or
+event (`frame @ 12ms`, `event: pointerover`). `check_runtime.py` fills the locator on the
+findings it can — those whose `where` is a real selector — from the `X` lines of the same page's
+phase 3 raw file, which `collect_animations.js` produces when it is given `resolveSelectors`.
+
 ## Composited
 
 | Check | Script | Criterion | Why |

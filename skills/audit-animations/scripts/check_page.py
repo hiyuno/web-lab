@@ -6,12 +6,19 @@ script) before this script runs. Format: one header line, then one data line per
 finding-worthy element, pipe-delimited, first field a type tag:
 
     page=<url>|slug=<slug>|dpr=<n>|vw=<n>|vh=<n>|reducedMotion=<0|1>
-    A|<selector>|<props>|<composite>|<playbackRate>|<iterationStart>|<playState>
-    R|<selector>|<props>
-    L|<selector>|<reason>
-    F|<selector>|<kind>|<value>
-    P|<selector>|<position>
+    A|<selector>|<props>|<composite>|<playbackRate>|<iterationStart>|<playState>|<layer>|<text>|<y>
+    R|<selector>|<props>|<layer>|<text>|<y>
+    L|<selector>|<reason>|<layer>|<text>|<y>
+    F|<selector>|<kind>|<value>|<layer>|<text>|<y>
+    P|<selector>|<position>|<layer>|<text>|<y>
+    X|<selector>|<layer>|<text>|<y>
     S|scroll|<count>
+
+Every line that carries a selector ends with the same three Framer-locator fields, `-` when
+empty: <layer> is the `data-framer-name` path of the element and its ancestors joined by " › "
+(what the Framer editor's Layers panel shows), <text> the first 40 characters of its own or its
+nearest ancestor's text, <y> its absolute vertical position in the page in CSS px. Raw files
+written before these fields existed parse fine — the three values come back as None.
 
 - A: a Web Animations API animation from document.getAnimations(). <props> is a comma-joined
   list of animated CSS property names (camelCase, as returned by getKeyframes()).
@@ -28,7 +35,7 @@ Usage: check_page.py --raw <out>/raw/<slug>.txt --url <url> --slug <slug> --out 
        [--platform framer|other]
 """
 import argparse, json, os, re, sys
-from common import finding, write_findings
+from common import finding, write_findings, unescape_field, parse_int_field
 
 # GPU-safe / compositable property allowlist for the unsupported_property check. transform and
 # opacity are the only fully compositor-only properties; filter/backdrop-filter/clip-path are
@@ -59,8 +66,22 @@ def _to_float(s):
         return None
 
 
+def _meta(fields, start):
+    """The three trailing Framer-locator fields of a raw line, or Nones for a pre-locator file."""
+    layer = unescape_field(fields[start]) if len(fields) > start else None
+    text = unescape_field(fields[start + 1]) if len(fields) > start + 1 else None
+    y = parse_int_field(fields[start + 2]) if len(fields) > start + 2 else None
+    return {"layer": layer, "text": text, "y": y}
+
+
+def loc(row):
+    """Pull just the locator keys out of a parsed row, as kwargs for common.finding()."""
+    return {"layer": row.get("layer"), "text": row.get("text"), "y": row.get("y")}
+
+
 def parse_raw(path):
-    """Returns (header dict, {"A":[...], "R":[...], "L":[...], "F":[...], "P":[...]}, scroll_count)."""
+    """Returns (header dict, {"A":[...], "R":[...], "L":[...], "F":[...], "P":[...], "X":{...}},
+    scroll_count). "X" maps a caller-requested selector to its locator dict."""
     with open(path, encoding="utf-8", errors="replace") as fh:
         lines = [l.rstrip("\n") for l in fh if l.strip()]
     header = {}
@@ -69,7 +90,7 @@ def parse_raw(path):
             if "=" in part:
                 k, _, v = part.partition("=")
                 header[k] = v
-    data = {"A": [], "R": [], "L": [], "F": [], "P": []}
+    data = {"A": [], "R": [], "L": [], "F": [], "P": [], "X": {}}
     scroll_count = 0
     for line in lines[1:]:
         fields = line.split("|")
@@ -77,6 +98,7 @@ def parse_raw(path):
         if tag == "A" and len(rest) >= 6:
             selector, props, composite, rate, iter_start, play_state = rest[:6]
             data["A"].append({
+                **_meta(rest, 6),
                 "selector": selector,
                 "props": [p.strip() for p in props.split(",") if p.strip()],
                 "composite": composite,
@@ -86,17 +108,20 @@ def parse_raw(path):
             })
         elif tag == "R" and len(rest) >= 2:
             selector, props = rest[:2]
-            data["R"].append({"selector": selector,
+            data["R"].append({"selector": selector, **_meta(rest, 2),
                                "props": [p.strip() for p in props.split(",") if p.strip()]})
         elif tag == "L" and len(rest) >= 2:
             selector, reason = rest[:2]
-            data["L"].append({"selector": selector, "reason": reason})
+            data["L"].append({"selector": selector, "reason": reason, **_meta(rest, 2)})
         elif tag == "F" and len(rest) >= 3:
             selector, kind, value = rest[:3]
-            data["F"].append({"selector": selector, "kind": kind, "value": value})
+            data["F"].append({"selector": selector, "kind": kind, "value": value,
+                               **_meta(rest, 3)})
         elif tag == "P" and len(rest) >= 2:
             selector, position = rest[:2]
-            data["P"].append({"selector": selector, "position": position})
+            data["P"].append({"selector": selector, "position": position, **_meta(rest, 2)})
+        elif tag == "X" and len(rest) >= 2:
+            data["X"][unescape_field(rest[0]) or rest[0]] = _meta(rest, 1)
         elif tag == "S" and len(rest) >= 2:
             scroll_count = int(rest[1]) if rest[1].isdigit() else 0
     return header, data, scroll_count
@@ -119,7 +144,7 @@ def check_unsupported_property(data, page):
                       "keyframe on those two properties.",
                 why="Non-composited properties force layout/paint on every frame — same "
                     f"criterion as Lighthouse's `non-composited-animations` audit ({certainty}).",
-                source="unsupported_property",
+                source="unsupported_property", **loc(row),
             ))
     return out
 
@@ -146,7 +171,7 @@ def check_filter_moves_pixels(data, page):
             why="blur(), drop-shadow() and box-reflect() can move or sample neighboring pixels, "
                 "so Chrome can't composite them — same as Lighthouse's `filterMayMovePixels` "
                 "reason.",
-            source="filter_moves_pixels",
+            source="filter_moves_pixels", **loc(row),
         ))
     return out
 
@@ -162,7 +187,7 @@ def check_composite_mode(data, page):
                       "top of each other is strictly required.",
                 why="Non-`replace` composite modes aren't compositable (Lighthouse's "
                     "`nonReplaceCompositeMode`).",
-                source="composite_mode",
+                source="composite_mode", **loc(row),
             ))
     return out
 
@@ -192,7 +217,7 @@ def check_timing_params(data, page):
             before=f"Animation with {', '.join(parts)}.",
             after="Keep `playbackRate` at 1 and `iterationStart` at 0; bake any rate or offset "
                   "change into the keyframes instead.",
-            why=why, source="timing_params", confidence=confidence,
+            why=why, source="timing_params", confidence=confidence, **loc(row),
         ))
     return out
 
@@ -219,7 +244,7 @@ def check_incompatible_animations(data, page):
             why="Lighthouse's `incompatibleAnimations`: one non-composited animation on a "
                 "target can knock a composited one on the same target back to the main thread "
                 "too.",
-            source="incompatible_animations",
+            source="incompatible_animations", **loc(rows[0]),
         ))
     return out
 
@@ -259,7 +284,7 @@ def check_will_change_static(data, page):
                   "change and off right after.",
             why="MDN's `will-change` guidance: it should be a short-lived hint around an "
                 "actual change, not a permanent declaration in static CSS.",
-            source="will_change_static",
+            source="will_change_static", **loc(row),
         ))
     return out
 

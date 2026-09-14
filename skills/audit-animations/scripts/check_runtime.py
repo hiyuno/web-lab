@@ -33,11 +33,20 @@ is still produced (the raw numbers are reported) but marked `status="not_verifie
 `"open"`, since the measurement environment (a hidden browser pane, or a slow machine) makes
 the numbers untrustworthy as a real-device signal.
 
+Framer layer coordinates: runtime findings are measured, not collected, so they carry no DOM
+node — only a `where` string. The ones whose `where` is a real CSS selector
+(`runtime_non_composited_write`) are enriched afterwards from the `X` lines of the same page's
+phase 3 raw file, which phase 3 produced by resolving exactly these selectors in the live page.
+Pass `--layers <out>/raw/<slug>.txt`, or let it default to that path when it exists. Findings
+whose `where` is not a selector ("whole page", "frame @ 12ms", "event: pointerover") keep
+`layer`/`text`/`y` as null, and so do selectors phase 3 could not resolve.
+
 Usage: check_runtime.py --json <out>/runtime/<slug>.json --slug <slug> --out <out>
+       [--layers <out>/raw/<slug>.txt]
 """
-import argparse, json, sys
+import argparse, json, os, sys
 from common import finding, write_findings
-from check_page import COMPOSITABLE_PROPS, _norm_prop
+from check_page import COMPOSITABLE_PROPS, _norm_prop, parse_raw
 
 
 def _top_script(scripts):
@@ -144,6 +153,32 @@ def check_non_composited_write(payload, page, status, note):
     return out
 
 
+def load_layers(path):
+    """Read the `X` lines of a phase 3 raw file: selector -> {layer, text, y}."""
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        _, data, _ = parse_raw(path)
+    except Exception:
+        return {}
+    return data.get("X") or {}
+
+
+def apply_layers(findings, layers):
+    """Fill layer/text/y on every finding whose `where` matches a resolved selector. Returns the
+    number of findings enriched, so the caller can report what the lookup actually covered."""
+    if not layers:
+        return 0
+    n = 0
+    for f in findings:
+        meta = layers.get(f.get("where"))
+        if not meta:
+            continue
+        f["layer"], f["text"], f["y"] = meta["layer"], meta["text"], meta["y"]
+        n += 1
+    return n
+
+
 def check_api_support(payload, page, status, note):
     if payload.get("loafSupported", True):
         return []
@@ -180,13 +215,20 @@ def main():
     ap.add_argument("--json", required=True)
     ap.add_argument("--slug", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--layers", default=None,
+                     help="phase 3 raw file whose X lines resolve this page's selectors to "
+                          "Framer layer paths (default: <out>/raw/<slug>.txt if it exists)")
     a = ap.parse_args()
 
     with open(a.json, encoding="utf-8", errors="replace") as fh:
         payload = json.load(fh)
     findings = check(payload, a.slug)
+
+    layers_path = a.layers or os.path.join(a.out, "raw", f"{a.slug}.txt")
+    enriched = apply_layers(findings, load_layers(layers_path))
+
     path = write_findings(a.out, f"runtime-{a.slug}", findings)
-    print(f"{len(findings)} findings -> {path}", file=sys.stderr)
+    print(f"{len(findings)} findings ({enriched} with a layer path) -> {path}", file=sys.stderr)
 
 
 if __name__ == "__main__":

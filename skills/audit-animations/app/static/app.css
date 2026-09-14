@@ -51,8 +51,27 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .card{position:relative}
 .severity-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto;
   margin-top:5px}
-.card-title{font-size:14px;font-weight:600;color:var(--text);word-break:break-all;
-  margin-bottom:6px}
+/* Card head: the Framer layer path leads (that's what the Layers panel shows), the published
+   CSS selector sits under it in small mono — kept, because it's still the only thing that can be
+   pasted into devtools — and the text fragment + page offset sit on the right as confirmation
+   that you are looking at the same element. */
+.card-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;
+  margin-bottom:6px;flex-wrap:wrap}
+.card-heading{min-width:0;flex:1 1 320px}
+.card-title{font-size:14px;font-weight:600;color:var(--text);word-break:break-word;
+  margin-bottom:2px}
+.card-selector{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
+  color:var(--muted);opacity:.75;word-break:break-all}
+.card-locator{display:flex;gap:10px;align-items:baseline;flex:0 1 auto;max-width:100%;
+  font-size:12px;color:var(--muted)}
+.locator-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:260px;
+  font-style:italic}
+.locator-y{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Search box, same visual weight as the selects next to it. */
+#filters input[type=search]{background:var(--card);color:var(--text);border:1px solid var(--line);
+  border-radius:6px;padding:4px 8px;font:inherit;min-width:220px}
+#filters input[type=search]:focus{outline:2px solid var(--low);outline-offset:1px}
 .card-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
 .score{color:var(--muted);font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
   cursor:help}
