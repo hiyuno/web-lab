@@ -2,6 +2,9 @@ const COLORS = {critical:'var(--critical)',high:'var(--high)',medium:'var(--medi
   low:'var(--low)',info:'var(--info)'};
 const CAT_LABEL = {composited:'Composited', runtime:'Runtime', 'safari-risk':'Safari-risk'};
 const CATS = ['composited', 'runtime', 'safari-risk'];
+const SEVERITY_ORDER = ['critical','high','medium','low','info'];
+const SEVERITY_WEIGHT = {critical:100, high:40, medium:15, low:5, info:1};
+const CONFIDENCE_WEIGHT = {measured:1, documented:0.7, heuristic:0.5};
 
 let data = null;
 
@@ -30,6 +33,39 @@ function counts() {
   }
 }
 
+// Group findings by (page, where): every finding sharing that pair describes the same real
+// animated element, whatever category or property it was flagged under.
+function groupFindings() {
+  const groups = new Map();
+  for (const f of data.findings) {
+    const key = f.page + ' ' + f.where;
+    if (!groups.has(key)) {
+      groups.set(key, {page: f.page, where: f.where, findings: []});
+    }
+    groups.get(key).findings.push(f);
+  }
+  return [...groups.values()];
+}
+
+function order(sev) { return SEVERITY_ORDER.indexOf(sev); }
+
+function score(findings) {
+  let s = 0;
+  for (const f of findings) {
+    if (f.status === 'resolved') continue;
+    s += (SEVERITY_WEIGHT[f.severity] || 0) * (CONFIDENCE_WEIGHT[f.confidence] || 0.5);
+  }
+  return s;
+}
+
+// The worst severity among a group's unresolved findings, or null if every finding is resolved.
+function worstSeverity(findings) {
+  const open = findings.filter(f => f.status !== 'resolved');
+  if (!open.length) return null;
+  return open.reduce((worst, f) => order(f.severity) < order(worst) ? f.severity : worst,
+    open[0].severity);
+}
+
 function render() {
   counts();
   const cats = [...document.querySelectorAll('#filters input[type=checkbox][value]')]
@@ -37,59 +73,197 @@ function render() {
   const severity = document.getElementById('severity').value;
   const hideResolved = document.getElementById('hide-resolved').checked;
 
+  const matches = f => {
+    if (!cats.includes(f.category)) return false;
+    if (severity && f.severity !== severity) return false;
+    if (hideResolved && f.status === 'resolved') return false;
+    return true;
+  };
+
+  let groups = groupFindings();
+  // A group is shown if at least one of its findings matches the active filters.
+  groups = groups.filter(g => g.findings.some(matches));
+  for (const g of groups) {
+    g.score = score(g.findings);
+    g.worst = worstSeverity(g.findings);
+    g.shown = g.findings.filter(matches).sort((a, b) => order(a.severity) - order(b.severity));
+  }
+
   const list = document.getElementById('list');
   list.innerHTML = '';
-  for (const cat of CATS) {
-    if (!cats.includes(cat)) continue;
-    let items = data.findings.filter(f => f.category === cat);
-    if (severity) items = items.filter(f => f.severity === severity);
-    if (hideResolved) items = items.filter(f => f.status !== 'resolved');
-    items.sort((a, b) => order(a.severity) - order(b.severity));
-    if (!items.length) continue;
+  list.appendChild(topOffenders(groups));
 
-    const group = document.createElement('div');
-    group.className = 'group';
-    group.innerHTML = `<h2>${CAT_LABEL[cat]} (${items.length})</h2>`;
-    for (const f of items) group.appendChild(renderItem(f));
-    list.appendChild(group);
+  const byPage = new Map();
+  for (const g of groups) {
+    if (!byPage.has(g.page)) byPage.set(g.page, []);
+    byPage.get(g.page).push(g);
+  }
+  for (const [page, pageGroups] of byPage) {
+    pageGroups.sort((a, b) => b.score - a.score);
+    const worstOfPage = pageGroups.reduce((w, g) =>
+      (g.worst && (!w || order(g.worst) < order(w))) ? g.worst : w, null);
+    const section = document.createElement('div');
+    section.className = 'group';
+    section.innerHTML = `<h2>${escapeHtml(page)} <small>${pageGroups.length} animation` +
+      `${pageGroups.length === 1 ? '' : 's'}${worstOfPage ? ' · worst: ' + worstOfPage : ''}` +
+      `</small></h2>`;
+    for (const g of pageGroups) section.appendChild(renderCard(g));
+    list.appendChild(section);
   }
 }
 
-function order(sev) { return ['critical','high','medium','low','info'].indexOf(sev); }
+function groupDomId(g) {
+  // Stable, DOM-safe id derived from the group key so the top-offenders strip can scroll to it.
+  return 'card-' + btoa(unescape(encodeURIComponent(g.page + ' ' + g.where)))
+    .replace(/[^a-zA-Z0-9]/g, '');
+}
 
-function renderItem(f) {
+function topOffenders(groups) {
+  const wrap = document.createElement('div');
+  wrap.id = 'top-offenders';
+  if (groups.length < 3) return wrap; // not worth it on a tiny site
+
+  const top = [...groups].sort((a, b) => b.score - a.score).slice(0, 5).filter(g => g.score > 0);
+  if (!top.length) return wrap;
+
+  wrap.innerHTML = `<h2>Top offenders</h2><div class="chips"></div>`;
+  const chipsEl = wrap.querySelector('.chips');
+  for (const g of top) {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'offender-chip';
+    const dot = document.createElement('span');
+    dot.className = 'dot';
+    dot.style.background = g.worst ? COLORS[g.worst] : 'var(--muted)';
+    chip.appendChild(dot);
+    const label = document.createElement('span');
+    label.className = 'offender-label';
+    label.textContent = `${g.page} · ${g.where}`;
+    label.title = `${g.page} · ${g.where}`;
+    chip.appendChild(label);
+    const sc = document.createElement('span');
+    sc.className = 'offender-score';
+    sc.textContent = Math.round(g.score);
+    chip.appendChild(sc);
+    chip.onclick = () => scrollToCard(groupDomId(g));
+    chipsEl.appendChild(chip);
+  }
+  return wrap;
+}
+
+function scrollToCard(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    block: 'center',
+  });
+  if (prefersReducedMotion()) return;
+  el.classList.remove('pulse');
+  // restart the animation even if it was just triggered
+  void el.offsetWidth;
+  el.classList.add('pulse');
+  setTimeout(() => el.classList.remove('pulse'), 1600);
+}
+
+function prefersReducedMotion() {
+  return matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function renderCard(g) {
   const div = document.createElement('div');
-  div.className = 'item' + (f.status === 'resolved' ? ' resolved' : '');
+  div.className = 'item card';
+  div.id = groupDomId(g);
+  if (!g.worst) div.classList.add('resolved');
+
+  const dot = document.createElement('span');
+  dot.className = 'severity-dot';
+  dot.style.background = g.worst ? COLORS[g.worst] : 'var(--muted)';
+  dot.title = g.worst ? `Worst open severity: ${g.worst}` : 'All findings resolved';
+  div.appendChild(dot);
+
+  const body = document.createElement('div');
+  body.className = 'body';
+
+  const title = document.createElement('div');
+  title.className = 'where card-title';
+  title.textContent = g.where;
+  title.title = g.where;
+  body.appendChild(title);
+
+  const meta = document.createElement('div');
+  meta.className = 'card-meta';
+  const scoreEl = document.createElement('span');
+  scoreEl.className = 'score';
+  scoreEl.title = 'Higher = more/worse issues on this animation. Not a real performance unit.';
+  scoreEl.textContent = `Cost score: ${Math.round(g.score)}`;
+  meta.appendChild(scoreEl);
+  const cats = [...new Set(g.findings.map(f => f.category))];
+  for (const cat of cats) {
+    const chip = document.createElement('span');
+    chip.className = 'cat-chip';
+    chip.textContent = CAT_LABEL[cat];
+    meta.appendChild(chip);
+  }
+  body.appendChild(meta);
+
+  const ul = document.createElement('ul');
+  ul.className = 'issues';
+  for (const f of g.shown) ul.appendChild(renderIssue(f));
+  body.appendChild(ul);
+
+  const unresolvedShown = g.shown.filter(f => f.status !== 'resolved');
+  if (unresolvedShown.length) {
+    const needsRuntime = unresolvedShown.some(f => f.category === 'runtime');
+    const needsPhase3 = unresolvedShown.some(f => f.category !== 'runtime');
+    const parts = [];
+    if (needsPhase3) parts.push('phase 3 (composited/safari-risk)');
+    if (needsRuntime) parts.push('phase 4 (runtime)');
+    const hint = document.createElement('div');
+    hint.className = 'hint';
+    hint.textContent = `Re-run ${parts.join(' and ')} for this page to verify a fix`;
+    body.appendChild(hint);
+  }
+
+  div.appendChild(body);
+  return div;
+}
+
+function renderIssue(f) {
+  const li = document.createElement('li');
+  li.className = f.status === 'resolved' ? 'resolved' : '';
 
   const check = document.createElement('input');
   check.type = 'checkbox';
   check.checked = f.status === 'resolved';
   check.onchange = () => setStatus(f.id, check.checked ? 'resolved' : 'open');
-  div.appendChild(check);
+  li.appendChild(check);
 
-  const body = document.createElement('div');
-  body.className = 'body';
-  const notVerified = f.status === 'not_verified';
-  body.innerHTML = `
-    <span class="badge" style="background:${COLORS[f.severity]}">${f.severity}</span>
-    <span class="confidence ${f.confidence}">${f.confidence}</span>
-    ${notVerified ? '<span class="badge" style="background:#555">not verified</span>' : ''}
-    <div class="where">${f.page} · ${escapeHtml(f.where)}</div>
-    <div class="before"><strong>Antes:</strong> ${escapeHtml(f.before)}</div>
-    <div class="after"><strong>Después:</strong> ${escapeHtml(f.after)}</div>
-    ${f.why ? `<div class="why">${escapeHtml(f.why)}</div>` : ''}
-  `;
-  const actions = document.createElement('div');
-  actions.className = 'actions';
-  const hint = document.createElement('span');
-  hint.className = 'hint';
-  hint.textContent = f.category === 'runtime'
-    ? 'Re-run phase 4 (runtime) for this page to verify a fix'
-    : 'Re-run phase 3 (composited/safari-risk) for this page to verify a fix';
-  actions.appendChild(hint);
-  body.appendChild(actions);
-  div.appendChild(body);
-  return div;
+  const badge = document.createElement('span');
+  badge.className = 'badge';
+  badge.style.background = COLORS[f.severity];
+  badge.textContent = f.severity;
+  li.appendChild(badge);
+
+  const conf = document.createElement('span');
+  conf.className = `confidence ${f.confidence}`;
+  conf.textContent = f.confidence;
+  li.appendChild(conf);
+
+  if (f.status === 'not_verified') {
+    const nv = document.createElement('span');
+    nv.className = 'badge';
+    nv.style.background = '#555';
+    nv.textContent = 'not verified';
+    li.appendChild(nv);
+  }
+
+  const text = document.createElement('span');
+  text.className = 'issue-text';
+  text.textContent = f.before;
+  li.appendChild(text);
+
+  return li;
 }
 
 function escapeHtml(s) {

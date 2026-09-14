@@ -43,4 +43,52 @@ button:disabled{opacity:.4;cursor:not-allowed}
 .confidence.heuristic{background:transparent;color:var(--muted);border:1px dashed var(--line)}
 
 /* No re-check here: a static hint instead of a fake action, in place of audit-seo's button. */
-.hint{color:var(--muted);font-size:12px;font-style:italic}
+.hint{color:var(--muted);font-size:12px;font-style:italic;margin-top:8px}
+
+/* Cards: one per animated element (page, where), ranked worst-first by cost score, mirroring
+   optimize-assets' card style but kept as narrow/utilitarian as this app already was. */
+.group h2 small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--muted)}
+.card{position:relative}
+.severity-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto;
+  margin-top:5px}
+.card-title{font-size:14px;font-weight:600;color:var(--text);word-break:break-all;
+  margin-bottom:6px}
+.card-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.score{color:var(--muted);font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  cursor:help}
+.cat-chip{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:10px;
+  text-transform:uppercase;letter-spacing:.02em;padding:2px 6px;border-radius:4px;
+  white-space:nowrap}
+
+/* One <li> per finding inside a card, worst-first. */
+.issues{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.issues li{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.issues li input[type=checkbox]{margin:0}
+.issues li.resolved{opacity:.5}
+.issues li.resolved .issue-text{text-decoration:line-through}
+.issue-text{flex:1;min-width:0}
+
+/* Top-offenders strip: the five highest-scoring groups site-wide, each a compact chip that
+   scrolls to and briefly highlights the matching card below. */
+#top-offenders{margin-bottom:28px}
+#top-offenders h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);
+  margin:0 0 8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.offender-chip{display:flex;align-items:center;gap:6px;background:var(--card);
+  border:1px solid var(--line);border-radius:999px;padding:6px 12px;color:var(--text);
+  font:inherit;font-size:12px;cursor:pointer;max-width:320px}
+.offender-chip:hover{border-color:var(--muted)}
+.offender-chip .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.offender-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.offender-score{color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* A single tasteful transition, in an app about animation cost: outline + opacity only, and
+   only ever triggered from JS after checking prefers-reduced-motion. */
+.card.pulse{animation:pulse-highlight 1.5s ease-out}
+@keyframes pulse-highlight{
+  0%{outline:2px solid var(--critical);outline-offset:2px;opacity:.7}
+  100%{outline:2px solid transparent;outline-offset:2px;opacity:1}
+}
+@media (prefers-reduced-motion: reduce){
+  .card.pulse{animation:none}
+}
