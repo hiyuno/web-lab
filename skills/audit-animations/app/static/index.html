@@ -16,6 +16,7 @@
   <label><input type="checkbox" value="composited" checked> Composited</label>
   <label><input type="checkbox" value="runtime" checked> Runtime</label>
   <label><input type="checkbox" value="safari-risk" checked> Safari-risk</label>
+  <select id="page"><option value="">Todas las páginas</option></select>
   <select id="severity">
     <option value="">Todas las severidades</option>
     <option value="critical">Critical</option>
@@ -25,6 +26,7 @@
     <option value="info">Info</option>
   </select>
   <label><input type="checkbox" id="hide-resolved"> Ocultar resueltos</label>
+  <select id="sort"><option value="severity">Orden: peor primero</option><option value="page">Orden: por página A-Z</option></select>
 </div>
 <main id="list"></main>
 <script src="/app.js"></script>

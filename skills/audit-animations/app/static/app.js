@@ -12,7 +12,48 @@ async function load() {
   const r = await fetch('/api/findings');
   data = await r.json();
   document.getElementById('site').textContent = data.site;
+
+  // Populate page filter with unique pages, sorted: home first, then alphabetical,
+  // with .mobile variants immediately after their desktop version.
+  const uniquePages = [...new Set(data.findings.map(f => f.page))];
+  const pageOrder = buildPageOrder(uniquePages);
+  const pageSelect = document.getElementById('page');
+  for (const page of pageOrder) {
+    const opt = document.createElement('option');
+    opt.value = page;
+    opt.textContent = page;
+    pageSelect.appendChild(opt);
+  }
+
   render();
+}
+
+// Build page order: home first, then alphabetical by base name (without .mobile),
+// with .mobile variants immediately after their desktop counterpart.
+function buildPageOrder(pages) {
+  const bases = new Map(); // base name -> [desktop, mobile]
+  for (const page of pages) {
+    const isMobile = page.endsWith('.mobile');
+    const baseName = isMobile ? page.slice(0, -7) : page;
+    if (!bases.has(baseName)) bases.set(baseName, [null, null]);
+    if (isMobile) bases.get(baseName)[1] = page;
+    else bases.get(baseName)[0] = page;
+  }
+
+  // Sort base names: 'home' first, then alphabetical
+  const sorted = [...bases.keys()].sort((a, b) => {
+    if (a === 'home') return -1;
+    if (b === 'home') return 1;
+    return a.localeCompare(b);
+  });
+
+  const ordered = [];
+  for (const baseName of sorted) {
+    const [desktop, mobile] = bases.get(baseName);
+    if (desktop) ordered.push(desktop);
+    if (mobile) ordered.push(mobile);
+  }
+  return ordered;
 }
 
 function counts() {
@@ -72,11 +113,14 @@ function render() {
     .filter(c => c.checked).map(c => c.value);
   const severity = document.getElementById('severity').value;
   const hideResolved = document.getElementById('hide-resolved').checked;
+  const pageFilter = document.getElementById('page').value;
+  const sortMode = document.getElementById('sort').value;
 
   const matches = f => {
     if (!cats.includes(f.category)) return false;
     if (severity && f.severity !== severity) return false;
     if (hideResolved && f.status === 'resolved') return false;
+    if (pageFilter && f.page !== pageFilter) return false;
     return true;
   };
 
@@ -98,7 +142,23 @@ function render() {
     if (!byPage.has(g.page)) byPage.set(g.page, []);
     byPage.get(g.page).push(g);
   }
-  for (const [page, pageGroups] of byPage) {
+
+  // Order pages according to sort mode
+  let orderedPages = [...byPage.entries()];
+  if (sortMode === 'page') {
+    // Use page selector order (populated in load())
+    const pageOptions = [...document.getElementById('page').options].map(o => o.value).slice(1); // skip "Todas"
+    orderedPages.sort((a, b) => pageOptions.indexOf(a[0]) - pageOptions.indexOf(b[0]));
+  } else {
+    // sortMode === 'severity': sort by highest score descending
+    orderedPages.sort((a, b) => {
+      const maxA = Math.max(...a[1].map(g => g.score), 0);
+      const maxB = Math.max(...b[1].map(g => g.score), 0);
+      return maxB - maxA;
+    });
+  }
+
+  for (const [page, pageGroups] of orderedPages) {
     pageGroups.sort((a, b) => b.score - a.score);
     const worstOfPage = pageGroups.reduce((w, g) =>
       (g.worst && (!w || order(g.worst) < order(w))) ? g.worst : w, null);
