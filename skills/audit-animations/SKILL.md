@@ -46,6 +46,7 @@ them is marked `not_verified`, loudly, so the report never passes off a throttle
   - `scripts/check_runtime.py` phase 4 — Chrome-measured findings
   - `scripts/build_report.py` phase 5
   - `app/server.py` phase 6, the checklist app
+  - `scripts/overlay.py` phase 6, optional — "Ver en la web" overlay snippet
 
 ## Phase 0 · Inputs
 
@@ -193,6 +194,35 @@ background Bash launch and `navigate` to `http://localhost:8773`. Verify with
 State plainly: unlike `/audit-seo`'s checklist, this one has **no re-check button** — every
 finding needs a rendered page and a live trace, so "fixed" is marked by the user, not verified
 by the app. Re-running phases 3 and 4 for that page is the only real re-check.
+
+## Phase 6 · Ver en la web (optional)
+
+For a user who wants to *see* findings instead of reading a table, paint them on top of the
+live page as boxes:
+
+```bash
+python3 <skill>/scripts/overlay.py --out <out> --page <slug> [--min-severity medium] [--max 60] > overlay.js
+```
+
+`--page` is the exact slug from `report.json` (`home`, `home.mobile`, etc. — mobile passes are
+their own slug, not a flag). The script keeps only findings whose `where` is a real element
+selector (drops `whole page`/`site-wide` and runtime findings located by time or event, like
+`frame @ 12ms`), groups the rest by selector so one element gets one box even when several
+checks fired on it, and prioritizes every `high`/`critical` selector before filling the rest of
+`--max` with `medium` ones in report order.
+
+The printed file is one self-contained JS expression — data included, no `fetch` — because the
+browser pane cannot fetch `localhost` audit files from the live site's own origin. `navigate` to
+the page the snippet was generated for (selectors are page-specific), then paste the whole file
+into `javascript_tool`. It returns `{painted, unresolved, high, medium}`: `painted` is boxes
+actually drawn, `unresolved` is selectors that did not resolve on this load (truncated selectors
+from the report's own 90-character `where` cap resolve to a CSS syntax error here — a real
+possibility on this site, not a bug in the snippet; report `unresolvedDetail` to see which). The
+overlay paints a legend panel top-right with counts and two buttons — "Siguiente ▶" scrolls to
+and blinks the next `high`/`critical` box (also callable as `window.__beizerOverlayNext()`),
+"✕" removes the overlay. Running the snippet again replaces any overlay already on the page;
+`prefers-reduced-motion` turns the blink into a plain scroll. Purely a demo/QA aid — it paints
+`report.json`, it produces no new findings and writes nothing under `findings/`.
 
 ## Common pitfalls
 

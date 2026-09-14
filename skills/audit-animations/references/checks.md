@@ -21,6 +21,11 @@ event (`frame @ 12ms`, `event: pointerover`). `check_runtime.py` fills the locat
 findings it can — those whose `where` is a real selector — from the `X` lines of the same page's
 phase 3 raw file, which `collect_animations.js` produces when it is given `resolveSelectors`.
 
+`where` itself is capped at 90 characters (ending in `…` past that) so `report.json` stays a
+sane size at 1000+ findings — `scripts/overlay.py` ("Ver en la web") relies on `where` as a
+live `document.querySelector` argument, so a truncated one is a real, expected cause of an
+`unresolved` box there, not a bug in that script.
+
 ## Composited
 
 | Check | Script | Criterion | Why |
