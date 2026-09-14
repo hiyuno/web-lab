@@ -18,6 +18,8 @@ available:
    - heavy images or video, slow site, Lighthouse → `/optimize-assets` with Bellard
    - SEO audit, rankings, meta tags, structured data, "why don't I show up in Google/ChatGPT/
      Claude/Perplexity", AEO, GEO → `/audit-seo` with Rosenfeld
+   - animation jank, choppy scrolling, slow transitions, "feels slow on Safari/iPhone" →
+     `/audit-animations` with Beizer
    - review security, privacy, a finding, privacy notice → `/security` with Schneier
    - testing, accessibility, QA, pre-launch checklist → `/qa` with Beizer
    - launch, domain, DNS, domain email, monitoring, "the site is down", maintenance → `/launch`
@@ -77,6 +79,7 @@ with `/discovery` first.
 | 1 | `cooper` | Discovery, brief, spec, Astro vs. Next.js decision, threat model with Schneier |
 | 2 and 3 | `rosenfeld` | Sitemap, wireframes, content plan, SEO, redirects, asset list |
 | any | `rosenfeld` | Live-site SEO/GEO audit against an already published site (`/audit-seo`) |
+| any | `beizer` | Live-site animation-performance audit against an already published site (`/audit-animations`) |
 | 4 | `frost` | Tokens, components and states, responsive, accessibility, prototype |
 | 5 | `osmani` | Frontend in Astro or Next.js, Tailwind v4, performance, CSP and headers |
 | 5 | `hopper` | Backend, data, auth with a provider, payments, uploads, webhooks. Applications only |
@@ -96,8 +99,9 @@ owning skill instead of restating it.
 Skills with procedure and templates live in `skills/`: `discovery` for phase 1, `structure`
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them,
-`optimize-assets` for media in phases 5 and 6, `audit-seo` for live-site SEO/GEO audits, and
-`update` refreshes the installed roles and skills from the repo (`/update`).
+`optimize-assets` for media in phases 5 and 6, `audit-seo` for live-site SEO/GEO audits,
+`audit-animations` for live-site animation-performance audits, and `update` refreshes the
+installed roles and skills from the repo (`/update`).
 
 ## Project types
 

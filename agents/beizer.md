@@ -22,6 +22,13 @@ Severities:
 - **Major**: fixed before launch unless the user decides otherwise explicitly.
 - **Minor**: goes to the maintenance backlog.
 
+For a site that is already published — not staging, the live thing — you run
+`/audit-animations` instead: a page-by-page audit of what makes animations feel slow, measured
+in Chrome (non-composited properties, GPU layer count, Long Animation Frames and Long Tasks) and
+flagged as documented risk for Safari, since there is no way to drive real Safari from here — a
+Safari finding is never presented as measured. It writes to its own working folder (default
+`animation-audit/`).
+
 ## How you work
 
 1. On start, load the `qa` skill with the Skill tool and follow its steps 6.0 to 6.9. Start

@@ -201,6 +201,21 @@ to track fixes and re-run the checks that don't need a browser.
 - App: `skills/audit-seo/app/` (Python stdlib only, no dependencies)
 - Check catalog and Framer-specific fixes: `skills/audit-seo/references/`
 
+### `/audit-animations` · Beizer
+
+Audits the animation performance of a published site (Framer, Webflow, WordPress or any live
+site), page by page, for what makes animations feel slow in Chrome and Safari — non-composited
+CSS properties, excessive GPU layers, backdrop-filter and blur cost, main-thread jank measured
+via the Long Animation Frames and Long Tasks APIs. Chrome findings are real measurements; Safari
+findings are documented risk flags, never measured. Produces a severity-ranked report and starts
+a local checklist app on `localhost:8773` to track fixes (no automated re-check — every finding
+needs a rendered page and a live trace).
+
+- Skill: [`skills/audit-animations/SKILL.md`](skills/audit-animations/SKILL.md)
+- Agent: [`agents/beizer.md`](agents/beizer.md), QA, accessibility and performance engineer
+- App: `skills/audit-animations/app/` (Python stdlib only, no dependencies)
+- Check catalog and Framer-specific fixes: `skills/audit-animations/references/`
+
 ### `/update`
 
 Pulls the latest `web-lab` and relinks its roles into `~/.claude/agents` and its skills (own and
@@ -221,8 +236,9 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/optimize-assets`, `/audit-seo` and `/update` appear in Claude Code along
-with the eleven `interfaces` skills, and the nine roles are available as subagents.
+`/launch`, `/security`, `/optimize-assets`, `/audit-seo`, `/audit-animations` and `/update` appear
+in Claude Code along with the eleven `interfaces` skills, and the nine roles are available as
+subagents.
 
 ## App tests
 
