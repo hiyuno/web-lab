@@ -48,6 +48,26 @@ that's blurred (a smaller card instead of a full-width band), or flatten the sec
 if it doesn't need to react to what's behind it. There's no UI setting that makes a live
 backdrop-blur cheap — the fix is always doing less of it.
 
+## Code component or override using Framer Motion's `x`/`y`/`scale`/`rotate` shorthand
+
+A code component or override that animates via Framer Motion/Motion's shorthand `animate` props
+— `animate={{ x: 100 }}`, or `y`, `scale`, `rotate` — is not hardware-accelerated the way a plain
+CSS `transform` transition is: the library resolves each frame's value in a
+`requestAnimationFrame` callback on the main thread, then writes the resolved `transform` string
+to the element's inline `style` every frame. This is exactly the pattern this skill's
+`styleWrites`/`R`-line detectors are built to catch (a rAF-driven library rewriting inline styles
+outside `document.getAnimations()`'s view) — but it does not trip `unsupported_property` or
+`runtime_non_composited_write` here, because `transform` itself is already in the compositor-safe
+allowlist. The cost survives anyway: driving `transform` from main-thread JS every frame instead
+of via WAAPI or a CSS transition still costs a main-thread task per frame, per
+`emil-design-eng`'s "CSS animations beat JS under load" point — under load (page still loading,
+other scripts busy) those frames are exactly where drops show up, even though nothing here is a
+non-composited property. Fix: rewrite the `animate` prop with the full `transform` string
+(`animate={{ transform: "translateX(100px)" }}`), which Motion hands off to native
+hardware-accelerated handling; or drop Motion for this element in favor of a CSS transition or
+the Web Animations API, and reserve Motion's JS-driven engine for interactions that genuinely
+need spring physics or need to stay interruptible mid-gesture.
+
 ## Sticky section with a filter/blend-mode ancestor
 
 Move the `filter`/`backdrop-filter`/`mix-blend-mode` effect off the ancestor of the sticky

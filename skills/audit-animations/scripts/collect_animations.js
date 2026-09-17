@@ -335,6 +335,20 @@
   }
 
   // ---- F lines ----
+  // Trailing size fields, F-lines only: blur cost scales with the blurred pixel AREA, not the
+  // radius alone (a 24x24px icon at blur(20px) is cheap; an 800x400px hero at blur(12px) isn't),
+  // and check_safari.py's blur_radius_large needs the element's rendered size to tell those
+  // apart. Added here as F-line-specific fields rather than folded into the shared metaFields()
+  // helper, so L/A/R/P/X lines don't all carry two extra always-empty columns for a size question
+  // that only matters for filter/backdrop-filter findings. Appended AFTER metaFields()'s three
+  // fields, so the field count only grows and a parser reading just the first N fields of an F
+  // line keeps working unchanged.
+  function renderedSize(el) {
+    try {
+      const r = el.getBoundingClientRect();
+      return [String(Math.round(r.width)), String(Math.round(r.height))];
+    } catch { return [EMPTY, EMPTY]; }
+  }
   const fSeen = new Set();
   for (const el of candidateEls) {
     const sel = selectorFor(el);
@@ -350,7 +364,7 @@
       if (fSeen.has(key)) continue;
       fSeen.add(key);
       const value = esc(val.length > 40 ? val.slice(0, 40) + '…' : val);
-      pushLine(['F', sel, kind, value, ...metaFields(el)].join('|'));
+      pushLine(['F', sel, kind, value, ...metaFields(el), ...renderedSize(el)].join('|'));
     }
   }
 

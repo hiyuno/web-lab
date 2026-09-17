@@ -20,6 +20,14 @@ LAYER_THRESHOLD = 20  # same threshold as check_page.py's layer_promotion
 
 BLUR_RE = re.compile(r"blur\(\s*([\d.]+)", re.I)
 
+# blur_radius_large's own calibration, not a browser or spec standard. Blur cost scales with the
+# blurred pixel AREA, not the radius alone: a small element (e.g. a 24x24px icon) blurred heavily
+# is cheap, a large one (e.g. an 800x400px hero) blurred moderately is expensive — better-ui's
+# icon-transition recipe uses blur(4px) on icon-sized elements as normal, cheap polish, and this
+# qualifier keeps that pattern from ever being flagged even at a much larger radius.
+SMALL_BLUR_AREA_PX2 = 4000       # ~64x64px; under this, a moderate blur is a known-cheap pattern
+HIGH_BLUR_RADIUS_ALWAYS_FLAG = 24  # at/above this radius, flag regardless of size
+
 
 def check_backdrop_filter_animated(data, page):
     animating = {r["selector"] for r in data["A"]} | {r["selector"] for r in data["R"]}
@@ -78,20 +86,33 @@ def check_blur_radius_large(data, page):
             continue
         if radius < 10:
             continue
+        rendered_area = row.get("rendered_area")
+        # Skip the small-and-not-extreme case: a rendered_area of None (older raw file, or an
+        # element whose getBoundingClientRect() couldn't be read) falls back to today's
+        # radius-only behavior rather than silently dropping the finding.
+        if (rendered_area is not None and rendered_area < SMALL_BLUR_AREA_PX2
+                and radius < HIGH_BLUR_RADIUS_ALWAYS_FLAG):
+            continue
         key = (row["selector"], row["kind"])
         if key in seen:
             continue
         seen.add(key)
         is_animating = row["selector"] in animating
+        size_note = f", {rendered_area}px² rendered area" if rendered_area is not None else ""
         out.append(finding(
             severity="medium" if is_animating else "low", category="safari-risk", page=page,
             where=row["selector"],
-            before=f"{row['kind']}: {row['value']} ({radius}px blur)"
+            before=f"{row['kind']}: {row['value']} ({radius}px blur{size_note})"
                    f"{' on an animating element' if is_animating else ''}.",
-            after="Keep blur radius under 10px where possible.",
+            after="Keep blur radius under 10px where possible, or shrink the blurred area if a "
+                  "large radius is required.",
             why="Never measured here. Framer's own site-optimization help page recommends "
                 "keeping blur values below 10 to maintain performance — this applies beyond "
-                "Framer too, since it reflects a real GPU cost rather than a platform quirk.",
+                "Framer too, since it reflects a real GPU cost rather than a platform quirk. "
+                "Blur cost scales with blurred pixel area, not radius alone (this skill's own "
+                f"qualifier: {SMALL_BLUR_AREA_PX2}px² and under is skipped unless the radius is "
+                f"{HIGH_BLUR_RADIUS_ALWAYS_FLAG}px+) — a small icon-sized blur is a known-cheap "
+                "pattern, not a risk.",
             source="blur_radius_large", confidence="documented", **loc(row),
         ))
     return out

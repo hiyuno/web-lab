@@ -9,7 +9,7 @@ finding-worthy element, pipe-delimited, first field a type tag:
     A|<selector>|<props>|<composite>|<playbackRate>|<iterationStart>|<playState>|<layer>|<text>|<y>
     R|<selector>|<props>|<layer>|<text>|<y>
     L|<selector>|<reason>|<layer>|<text>|<y>
-    F|<selector>|<kind>|<value>|<layer>|<text>|<y>
+    F|<selector>|<kind>|<value>|<layer>|<text>|<y>|<w>|<h>
     P|<selector>|<position>|<layer>|<text>|<y>
     X|<selector>|<layer>|<text>|<y>
     S|scroll|<count>
@@ -19,6 +19,13 @@ empty: <layer> is the `data-framer-name` path of the element and its ancestors j
 (what the Framer editor's Layers panel shows), <text> the first 40 characters of its own or its
 nearest ancestor's text, <y> its absolute vertical position in the page in CSS px. Raw files
 written before these fields existed parse fine — the three values come back as None.
+
+F lines additionally carry <w>/<h>, the element's rendered size in CSS px from
+getBoundingClientRect(), appended AFTER the three locator fields so the format stays additive —
+a parser reading only the first few F fields still works. Used by check_safari.py's
+blur_radius_large to weigh blur cost by blurred area, not radius alone. `-`/absent (e.g. a raw
+file from before this field existed) parses to `rendered_area=None`, which falls back to
+radius-only behavior rather than crashing.
 
 - A: a Web Animations API animation from document.getAnimations(). <props> is a comma-joined
   list of animated CSS property names (camelCase, as returned by getKeyframes()).
@@ -74,6 +81,18 @@ def _meta(fields, start):
     return {"layer": layer, "text": text, "y": y}
 
 
+def _rendered_area(fields, start):
+    """F lines only: the <w>/<h> fields collect_animations.js appends after the locator fields,
+    combined into a px² area. None (not 0) when either is missing/unparseable — an old raw file
+    predating this field, or a getBoundingClientRect() that threw — so callers can fall back to
+    radius-only behavior instead of treating an unknown size as a zero-area element."""
+    w = parse_int_field(fields[start]) if len(fields) > start else None
+    h = parse_int_field(fields[start + 1]) if len(fields) > start + 1 else None
+    if w is None or h is None:
+        return None
+    return w * h
+
+
 def loc(row):
     """Pull just the locator keys out of a parsed row, as kwargs for common.finding()."""
     return {"layer": row.get("layer"), "text": row.get("text"), "y": row.get("y")}
@@ -116,7 +135,7 @@ def parse_raw(path):
         elif tag == "F" and len(rest) >= 3:
             selector, kind, value = rest[:3]
             data["F"].append({"selector": selector, "kind": kind, "value": value,
-                               **_meta(rest, 3)})
+                               **_meta(rest, 3), "rendered_area": _rendered_area(rest, 6)})
         elif tag == "P" and len(rest) >= 2:
             selector, position = rest[:2]
             data["P"].append({"selector": selector, "position": position, **_meta(rest, 2)})
