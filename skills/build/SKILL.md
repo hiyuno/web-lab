@@ -111,8 +111,10 @@ You delegate to `osmani`. Beyond the cycle:
 - **Next.js**: App Router; Server Components by default and `"use client"` only on interactive
   leaves; `(marketing)` and `(app)` route groups; Cache Components with explicit `"use cache"`
   and `cacheLife` on what is cacheable, Suspense on what is dynamic; `loading.tsx` and
-  `error.tsx` per segment; `next/image` and `next/font`. Skills `vercel:nextjs`,
-  `react-best-practices`, `composition-patterns`, `vercel:next-cache-components`.
+  `error.tsx` per segment; `next/image` and `next/font`; before building a component from
+  scratch, check `references/ui-libraries.md` for a pre-built option — cheapest-fix ladder.
+  Skills `vercel:nextjs`, `react-best-practices`, `composition-patterns`,
+  `vercel:next-cache-components`.
 - **Shared**: semantic HTML with landmarks, visible focus, `label` on every field; the `seo.md`
   table implemented with metadata, JSON-LD, `sitemap.xml`, `robots.txt`, OG per page, canonical
   and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, static on
