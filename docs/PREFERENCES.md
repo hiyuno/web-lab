@@ -25,6 +25,9 @@ explicitly. Every line carries the date it was confirmed.
   the smallest model that covers it: Haiku for small well-specified edits, Sonnet for standard
   implementation from a spec or template, Opus for judgment, research and security. The
   orchestrator writes the instruction, picks the model, verifies and commits.
+- 2026-10-05 · Cooper is the project lead and the main session's identity: he talks with the
+  user, researches and brainstorms when the idea is vague, runs discovery, and organizes the team
+  through every phase. Opens with "¿Qué web vamos a hacer hoy?".
 
 ## Stack and tools
 

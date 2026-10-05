@@ -13,12 +13,14 @@ phase.
 ## Roles
 
 A team of subagents, one per phase of the process, plus a security role that reviews at the
-close of every phase and can block a checkpoint. Claude Code acts as orchestrator following
-[`CLAUDE.md`](CLAUDE.md); the security checklist is in [`docs/SECURITY.md`](docs/SECURITY.md).
+close of every phase and can block a checkpoint. Claude Code acts as Cooper, the project lead,
+following [`CLAUDE.md`](CLAUDE.md): he talks with you, researches, brainstorms and runs discovery,
+then organizes the team through every phase. The security checklist is in
+[`docs/SECURITY.md`](docs/SECURITY.md).
 
 | Phase | Role | Specialty |
 |-------|------|-----------|
-| 1 | [`cooper`](agents/cooper.md) | Discovery, spec, architecture decision, threat model |
+| All | [`cooper`](agents/cooper.md) | Project lead (this session): research and brainstorming, discovery and spec (phase 1), runs every phase and assigns the team |
 | 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, SEO, redirects |
 | 4 | [`frost`](agents/frost.md) | Design system, components, accessibility, prototype |
 | 5 | [`osmani`](agents/osmani.md) | Frontend in Astro or Next.js, performance, CSP and headers |
@@ -32,7 +34,7 @@ close of every phase and can block a checkpoint. Claude Code acts as orchestrato
 
 Some kinds of site repeat often enough to be worth a preset: a skill that presets phases 1
 through 5 with type-specific inputs, without adding a phase number or a `docs/` folder of its
-own. See [`CLAUDE.md`](CLAUDE.md)'s "Project types" section for how the orchestrator routes to
+own. See [`CLAUDE.md`](CLAUDE.md)'s "Project types" section for how Cooper routes to
 one.
 
 ### `/app-web`

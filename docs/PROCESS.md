@@ -2,7 +2,7 @@
 
 Reference for the process web-lab follows to build a website, from a static site to an app. It
 is the base on which the repo's skills and agents are built: each phase has its own skill and
-Claude Code acts as orchestrator between them.
+Claude Code acts as Cooper, the project lead, between them.
 
 ## Summary
 
@@ -85,7 +85,7 @@ ten to fifteen pages with a CMS.
 
 ## Roles and security
 
-Each phase has a role in [`agents/`](../agents/) and the orchestrator coordinates them per
+Each phase has a role in [`agents/`](../agents/) and Cooper, the project lead, coordinates them per
 [`CLAUDE.md`](../CLAUDE.md). **Schneier**, the security role, reviews at the close of every
 phase with the checklist in [`SECURITY.md`](SECURITY.md): a critical finding blocks the phase
 and a high one blocks the launch. Skills with procedure and templates are added phase by phase:
