@@ -39,7 +39,8 @@ only required to be met. What was not tested in the browser is reported as **Not
 0. Read this project's own `docs/learnings.md` (osmani's and hopper's sections, if they have
    entries) and `<web-lab>/docs/PREFERENCES.md`.
 1. Read `docs/01-discovery/spec.md`, `architecture-decision.md` and `threat-model.md`;
-   `docs/03-content/seo.md`, `assets.md`, `legal.md` and the briefs; `docs/04-design/tokens.css`,
+   `docs/03-content/seo.md`, `measurement-plan.md` (Ellis's events to instrument), `assets.md`,
+   `legal.md` and the briefs; `docs/04-design/tokens.css`,
    `components/`, `templates/`, `accessibility.md`, `motion.md` and the prototype. If the design
    is not approved, stop and propose `/design-system`.
 2. Confirm with the user: framework per the decision, package manager (pnpm by default),
@@ -129,7 +130,12 @@ You delegate to `osmani`. Beyond the cycle:
   and `hreflang` — all to **Sullivan**'s spec (`skills/seo`): server-rendered HTML for crawlers
   that don't run JS, the structured-data types that matter, and the AI-crawler robots policy
   (allow the retrieval/search bots, training bots are the user's choice). You implement, he owns
-  the criteria. Headers and CSP with `references/headers.md` (nonce on Next.js, `security.csp`
+  the criteria. **Analytics and events**: implement the events in **Ellis**'s measurement plan
+  (`docs/03-content/measurement-plan.md`, `skills/growth`) with the tool and mode it names
+  (Plausible cookieless, or PostHog cookieless/consent-aware), fired once with the right
+  properties and **consent-gated per stage 3** (nothing non-essential before consent; GPC honoured
+  — `references/headers.md`). Ellis owns the plan and validates the events on staging; you wire
+  them. Headers and CSP with `references/headers.md` (nonce on Next.js, `security.csp`
   on Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
   external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client;
   motion follows `docs/04-design/motion.md`: where it marks GSAP, follow
@@ -173,8 +179,10 @@ You delegate to `hopper`. With `references/dal.md` as the pattern. For `app-web`
 ## Step 5.6 · Staging integration
 
 Real content from the briefs loaded into collections or CMS; Bellard's assets in place;
-redirects responding 301; forms reaching their destination; analytics and consent banner
-working; legal pages published at their URLs; custom 404. The `main` preview is what Beizer
+redirects responding 301; forms reaching their destination; the analytics events from Ellis's
+measurement plan firing once with the right properties and consent-gated (nothing non-essential
+before consent, GPC honoured), which Ellis validates on staging; legal pages published at their
+URLs; custom 404. The `main` preview is what Beizer
 tests. Open it and walk the main flows in `flows.md`.
 
 ## Step 5.7 · Definition of done

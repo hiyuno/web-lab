@@ -25,6 +25,8 @@ lines; nobody edits web-lab from a project.
 
 ## sullivan
 
+## ellis
+
 ## frost
 
 ## osmani

@@ -35,6 +35,9 @@ which of four things it is:
    - visual design, tokens, components, prototype → `/design-system` with Frost
    - build or fix code, CI, database, login → `/build` with Osmani and, if there is a server,
      Hopper
+   - analytics, metrics, KPIs, measurement plan, events, tracking, conversion, CRO, funnel, A/B
+     test, experiment, feature flag, PostHog, "is it working", "how many signed up", "why don't
+     people convert" → `/growth` with Ellis
 3. **Resuming a project in progress** → read the project's `docs/`, say which phase it is in and
    what is missing for the next checkpoint.
 4. **Improving web-lab itself** (roles, skills, process, learnings, preferences) → `/web-master`,
@@ -169,6 +172,7 @@ Full rules in `<web-lab>/docs/LADDER.md`.
 | 5 and 6 | `bellard` | Image and video audit and optimization |
 | 6 | `beizer` | E2E tests, accessibility, performance, dependency, secret and header scanners |
 | 6 and periodic post-launch | `mallory` | Authorized offensive testing (red team) of the user's own staging, identity first. Report-only; the offensive peer of Schneier |
+| 1, 2, 5, 8 | `ellis` | Growth, analytics, CRO and experimentation owner: turns the spec's success metrics into a measurement plan (north-star, funnel, events) before build, specs the events Osmani implements and validates them on staging, owns the CRO hypotheses/evidence, the A/B-test and feature-flag method, the analytics-tool choice (PostHog default, cookieless for simple sites), and the 30/60/90 post-launch review. Sullivan owns acquisition/search; Ellis owns on-site conversion. Reviews; Frost, Rosenfeld and Osmani do the work |
 | All | `schneier` | Threat model, per-phase review, compliance, launch sign-off. Can block |
 | 7 and 8 | `allspaw` | Deployment, domain, DNS, monitoring, backups, runbook, maintenance |
 
@@ -191,7 +195,10 @@ phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of 
 `offensive` for Mallory's authorized pentest of the user's own staging in phase 6 and
 periodically after launch, `seo` for Sullivan's cross-phase SEO/AEO/GEO method and the single
 source of the search criteria (title/meta limits, keyword research, structured data, AI-crawler
-robots policy, the post-launch SEO cycle), `optimize-assets` for media in phases 5 and 6,
+robots policy, the post-launch SEO cycle), `growth` for Ellis's cross-phase measurement method
+and the single source of the measurement criteria (the measurement-plan method, the
+analytics-tool choice, the CRO ruleset, the experimentation method, the 30/60/90 post-launch
+review), `optimize-assets` for media in phases 5 and 6,
 `audit-seo` for Sullivan's heavy live-site SEO/GEO audit,
 `audit-animations` for live-site animation-performance audits, and `update` refreshes the
 installed roles and skills from the repo (`/update`). `global-audit` is a cross-phase routine,
@@ -241,6 +248,7 @@ approve coverage you did not inspect.
 | Performance: budget, Core Web Vitals, images and video | `build` (budget) and `optimize-assets` (media) |
 | Content, copy, legal pages | `content` |
 | SEO, AEO/GEO, keyword research, structured data for search, title/meta limits, AI-crawler robots policy | `seo` (Sullivan) |
+| Measurement plan, analytics and events, CRO hypotheses/evidence, experimentation, north-star and funnel, the 30/60/90 review | `growth` (Ellis) |
 | Domain, DNS, email, monitoring, incidents | `launch` |
 
 **Escalation triggers.** Serious on sight, whatever the style guide or the deadline says: an

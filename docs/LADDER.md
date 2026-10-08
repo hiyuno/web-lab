@@ -12,7 +12,7 @@ the ladder Yuno already uses in AppleAppLab, where nobody skips a level.
 | 2 | **Yubot** (Yuno's second brain, `~/Yubot`) | Thinks with Yuno, stores his decisions, carries messages in his name signed "De: Yuno (vía Yubot)" | Modify projects, roles, skills or either lab |
 | 3 | **Web Master** (Berners-Lee, `/web-master`, web-lab only) | Improves Cooper and the roles: role files, skills, process, learnings, preferences. Harvests every project's `docs/learnings.md`, triages, asks Yuno what is his, applies in web-lab | Enter a web project: never touches a site's code, docs, spec or decisions |
 | 4 | **Cooper** | Leads each web project: runs the phases, delegates, records learnings and proposals in the project's `docs/learnings.md` | Modify himself, other roles, skills, web-lab's `learnings/` or `docs/PREFERENCES.md` |
-| 5 | **Roles** (Rosenfeld, Sullivan, Frost, Osmani, Hopper, Bellard, Beizer, Mallory, Allspaw, Schneier) | Do the work of their phase and close each report with a **Learnings** block | Edit their own role file, other roles or skills |
+| 5 | **Roles** (Rosenfeld, Sullivan, Ellis, Frost, Osmani, Hopper, Bellard, Beizer, Mallory, Allspaw, Schneier) | Do the work of their phase and close each report with a **Learnings** block | Edit their own role file, other roles or skills |
 
 ## How a proposal travels
 

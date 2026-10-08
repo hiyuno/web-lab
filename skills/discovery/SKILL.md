@@ -161,6 +161,14 @@ Write `spec.md` with the template. It is the project's source of truth, so:
 Delegate the long drafting to a general-purpose agent with `sonnet` (give it `agents/cooper.md`'s criteria and the interview notes) if the interview was extensive; you check
 that every story comes from something the user said.
 
+The spec's success metrics seed the **measurement plan**, owned by **Ellis** (`skills/growth`):
+from the brief's business goals and these stories, Ellis sets the north-star, the conversion
+funnel and the events to track — decided now, in phases 1-2, so build measures the right thing
+from day one. The spec names that the plan exists (`spec.md`'s non-functional / metrics section
+points to `docs/03-content/measurement-plan.md`); Ellis writes the plan itself, so do not draft
+events here. On a project with no conversion goal beyond page views, note that cookieless
+analytics will suffice and Ellis confirms it.
+
 ## Step 1.7 · Plan
 
 Write `plan.md`: the eight phases with estimated duration for this project, which role leads

@@ -4,8 +4,9 @@ Date: [yyyy-mm-dd] · Author: Allspaw · Alerts go to: [name] via [channel] · B
 
 Principle: few alerts, all actionable. Alert when the user's experience is compromised, not on
 every blip. The SEO/search signals below (indexing, Core Web Vitals, AI citations) feed
-**Sullivan**'s post-launch SEO cycle (`skills/seo`, "Post-launch SEO cycle"); Allspaw watches,
-Sullivan decides the SEO work.
+**Sullivan**'s post-launch SEO cycle (`skills/seo`, "Post-launch SEO cycle"); the product and
+conversion signals (north-star, funnel, goals) feed **Ellis**'s 30/60/90 review (`skills/growth`).
+Allspaw watches; Sullivan decides the SEO work, Ellis the product/conversion work.
 
 ## What is watched
 
@@ -30,8 +31,11 @@ Sullivan decides the SEO work.
 
 ## Analytics
 
-- Tool: [Plausible / Fathom / Vercel Analytics / GA4 with consent]
-- Annotation "Launch [date]" · Goals: [spec conversions]
+Tool, events and goals are Ellis's measurement plan (`docs/03-content/measurement-plan.md`,
+`skills/growth`); honour its consent mode (cookieless, or behind the Klaro banner, GPC always).
+
+- Tool: [Plausible / Fathom / Vercel Analytics / PostHog — per the measurement plan]
+- Annotation "Launch [date]" · Goals: [the funnel / north-star from the measurement plan]
 
 ## Baseline (before cutover, if there was a site)
 

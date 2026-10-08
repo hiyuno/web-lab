@@ -41,6 +41,13 @@ Accessibility rules are owned by `better-accessibility`, performance budget by `
 by `/optimize-assets`, security/privacy and the verdict by `/security` (`CLAUDE.md`, rule
 ownership). This routine only schedules and consolidates them.
 
+**Not in this sweep: Ellis's growth/metrics review.** The 30/60/90 product-and-conversion review
+(`skills/growth`) needs live production traffic, so it cannot run in a pre-launch pass over
+staging — there is nothing to measure yet. It is phase-8, post-launch work (`/launch` step 7.8,
+`skills/growth` "30/60/90 post-launch review"), run alongside Sullivan's post-launch SEO cycle,
+not here. What this sweep does cover on the measurement side is nothing of its own: the
+events-fire-and-consent check is part of `a11y`/QA's own run (`/qa` step 6.3, Ellis's spec).
+
 ## Modes
 
 | Command | What it does |

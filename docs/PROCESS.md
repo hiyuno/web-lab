@@ -62,14 +62,14 @@ post-launch monitoring.
 
 | # | Phase | Deliverables | Checkpoint | Role |
 |---|-------|--------------|------------|------|
-| 1 | Discovery | Brief: goals, audience, user tasks, competitors, metrics, constraints. Written spec. Content vs. app decision. | Approve goals, metrics and stack before designing | `cooper` + `schneier` |
-| 2 | Structure | Sitemap, page hierarchy, intent per page, wireframes of key templates | Sign off the structure to avoid rework | `rosenfeld` + `sullivan` (SEO IA/URL/redirect review) |
+| 1 | Discovery | Brief: goals, audience, user tasks, competitors, metrics, constraints. Written spec. Content vs. app decision. | Approve goals, metrics and stack before designing | `cooper` + `schneier` + `ellis` (measurement plan seeded from the success metrics) |
+| 2 | Structure | Sitemap, page hierarchy, intent per page, wireframes of key templates | Sign off the structure to avoid rework | `rosenfeld` + `sullivan` (SEO IA/URL/redirect review) + `ellis` (north-star, funnel and events written before build) |
 | 3 | Content | Messages per page, sections, asset list (photos, video, icons), SEO alignment | Content direction approved before visual design | `rosenfeld` + `sullivan` (keyword research, AEO/GEO, schema, title/meta) |
 | 4 | UX/UI design | Component system, responsive rules, states, documented accessibility, prototype | Design QA including mobile behavior | `frost` |
-| 5 | Development | Code with Core Web Vitals in mind, CMS if applicable, content integrated in staging | Staging review: performance, accessibility, content | `osmani`, `hopper` (apps), `bellard` (media) + `sullivan` (SSR, JSON-LD, robots, sitemaps spec) |
-| 6 | QA | Functional, browsers and devices, performance, automated and manual accessibility; for apps with accounts, an authorized offensive pass on staging | Test report and verified pre-launch checklist | `beizer`, `mallory` (apps) + `schneier` + `sullivan` (SEO portion) |
+| 5 | Development | Code with Core Web Vitals in mind, CMS if applicable, content integrated in staging | Staging review: performance, accessibility, content | `osmani`, `hopper` (apps), `bellard` (media) + `sullivan` (SSR, JSON-LD, robots, sitemaps spec) + `ellis` (events implemented to spec, consent-gated; validated on staging) |
+| 6 | QA | Functional, browsers and devices, performance, automated and manual accessibility; for apps with accounts, an authorized offensive pass on staging | Test report and verified pre-launch checklist | `beizer`, `mallory` (apps) + `schneier` + `sullivan` (SEO portion) + `ellis` (events-fire and consent-gating check, run by Beizer) |
 | 7 | Launch | Checklist executed, 301 redirect map, analytics validated, sitemap in Search Console | Go-live with Schneier's sign-off | `allspaw` + `schneier` |
-| 8 | Maintenance | Maintenance plan, content owner, iteration with data | Periodic review | `allspaw` + `sullivan` (post-launch SEO cycle) |
+| 8 | Maintenance | Maintenance plan, content owner, iteration with data | Periodic review | `allspaw` + `sullivan` (post-launch SEO cycle) + `ellis` (30/60/90 metric review) |
 
 Typical duration: four to six weeks for a small site, eight to thirteen for a marketing site of
 ten to fifteen pages with a CMS.
@@ -104,6 +104,10 @@ staging in phase 6 and periodically after launch, and
 [`seo`](../skills/seo/SKILL.md) is Sullivan's cross-phase SEO/AEO/GEO method and the single source
 of the search criteria the phase skills cite (phases 2, 3, 5, 6 and 8); the heavy live-site sweep
 is [`audit-seo`](../skills/audit-seo/SKILL.md).
+[`growth`](../skills/growth/SKILL.md) is Ellis's cross-phase measurement method and the single
+source of the measurement criteria the phase skills cite (phases 1, 2, 5, 6 and 8): the
+measurement-plan method, the analytics-tool choice, the CRO ruleset, the experimentation method
+and the 30/60/90 post-launch review.
 [`global-audit`](../skills/global-audit/SKILL.md) is a cross-phase routine, not a phase skill —
 like `security` and `offensive`: Cooper runs it on demand or as the mandatory pre-launch pass to
 run the heavy analyses together over one shared exploration and consolidate them into one board.

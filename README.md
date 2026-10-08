@@ -23,6 +23,7 @@ then organizes the team through every phase. The security checklist is in
 | All | [`cooper`](agents/cooper.md) | Project lead (this session): research and brainstorming, discovery and spec (phase 1), runs every phase and assigns the team |
 | 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, redirects |
 | 2, 3, 5, 6, 8 | [`sullivan`](agents/sullivan.md) | SEO, AEO and GEO owner: criteria across phases, keyword research, structured data, the live-site audit. Reviews; others do the work |
+| 1, 2, 5, 8 | [`ellis`](agents/ellis.md) | Growth, analytics, CRO and experimentation owner: measurement plan, events, funnel, A/B tests, feature flags, the 30/60/90 review. Reviews; others do the work |
 | 4 | [`frost`](agents/frost.md) | Design system, components, accessibility, prototype |
 | 5 | [`osmani`](agents/osmani.md) | Frontend in Astro or Next.js, performance, CSP and headers |
 | 5 | [`hopper`](agents/hopper.md) | Backend, data, auth with Better Auth, payments with providers. Applications only |
@@ -239,6 +240,23 @@ as part of `/global-audit`'s pre-launch pass.
 - App: `skills/audit-seo/app/` (Python stdlib only, no dependencies)
 - Check catalog and Framer-specific fixes: `skills/audit-seo/references/`
 
+### `/growth` · Ellis
+
+Cross-phase (like `/security` and `/seo`), the single source of web-lab's measurement criteria.
+Carries the measurement-plan method (business goal → north-star → funnel → events and properties,
+with a fixed naming convention), the analytics-tool choice (PostHog as the all-in-one default,
+cookieless analytics like Plausible for simple sites, with the decision criteria and consent
+modes), the evidence-based CRO ruleset (conversion hypotheses and evidence; layout and copy stay
+with Frost and Rosenfeld), the A/B-test and feature-flag method with honest small-traffic
+guidance, and the 30/60/90-day post-launch review that closes the loop against the spec's goals.
+Sullivan owns acquisition/search; Ellis owns on-site conversion of that traffic. The plan lives in
+`content`'s `measurement-plan.md`, Osmani implements it, Beizer checks it. Small tweaks go
+owner-direct; the heavy conversion review runs post-launch when there is traffic.
+
+- Skill: [`skills/growth/SKILL.md`](skills/growth/SKILL.md)
+- Agent: [`agents/ellis.md`](agents/ellis.md), growth, analytics, CRO and experimentation lead
+- References: `skills/growth/references/` (measurement plan, CRO checklist, experiment spec)
+
 ### `/audit-animations` · Beizer
 
 Audits the animation performance of a published site (Framer, Webflow, WordPress or any live
@@ -302,9 +320,9 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/offensive`, `/seo`, `/optimize-assets`, `/audit-seo`,
+`/launch`, `/security`, `/offensive`, `/seo`, `/growth`, `/optimize-assets`, `/audit-seo`,
 `/audit-animations`, `/global-audit` and `/update` appear in Claude Code along with the eleven
-`interfaces` skills, and the eleven roles are available as subagents. `/web-master` is not
+`interfaces` skills, and the twelve roles are available as subagents. `/web-master` is not
 installed: it is available only in a session opened in web-lab.
 
 ## App tests

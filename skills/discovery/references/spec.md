@@ -68,6 +68,10 @@ Criteria:
 | Email | | | |
 | Analytics | | | |
 
+How success is measured — the north-star, the funnel and the events behind these goals — lives in
+the **measurement plan**, owned by Ellis (`skills/growth`): `docs/03-content/measurement-plan.md`.
+Decided in phases 1-2, implemented by Osmani in phase 5, checked by Beizer in phase 6.
+
 ## 8. Non-functional requirements
 
 | Id | Requirement | Value | How it is verified |

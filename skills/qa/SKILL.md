@@ -25,7 +25,9 @@ You or the `beizer` subagent run almost everything. What needs a person with a r
 (screen reader, physical phones) you ask the user for with a script. Schneier interprets the
 security part in 6.9; **Sullivan** (`skills/seo`) owns and interprets the SEO portion — the crawl's
 metadata/robots/sitemap checks against `seo.md` and, when run, the `/audit-seo` output — and
-decides what blocks, the way Schneier does for security. You run the checks; he reads them.
+decides what blocks, the way Schneier does for security. **Ellis** (`skills/growth`) owns the
+events-fire-and-consent-gating check against `docs/03-content/measurement-plan.md` (step 6.3): you
+run it, he reads it and decides what blocks. You run the checks; the owners read them.
 
 ## Calibration and hand-off
 
@@ -54,7 +56,8 @@ You set the severity; the user sets the priority.
 1. Confirm staging exists (the `main` preview on Vercel) with real content and green CI. If not,
    stop and hand it back to `/build`.
 2. Read `docs/01-discovery/spec.md` (acceptance criteria and NFRs), `docs/02-structure/flows.md`
-   and `redirects.md`, `docs/03-content/seo.md` and `assets.md`, `docs/04-design/accessibility.md`
+   and `redirects.md`, `docs/03-content/seo.md`, `measurement-plan.md` (Ellis's events to verify)
+   and `assets.md`, `docs/04-design/accessibility.md`
    and `docs/05-development/frontend.md` (budget, headers) and `backend.md` if any. The
    `threat-model.md` to know what to test harder.
 
@@ -90,8 +93,9 @@ WebKit with Playwright, on desktop and a 375 viewport. Tests live in the repo's 
 What the spec does not say too: empty, very long, odd characters, double click, slow network
 (`page.route` with a delay), expired session, back button. Forms: valid and invalid submission,
 the email reaches the inbox (ask the user to confirm) and not spam, the data appears at its
-destination. Analytics: the tag loads once, the conversion fires once, with consent rejected
-nothing loads that should not (check in the network tab).
+destination. Analytics (against Ellis's measurement plan, `docs/03-content/measurement-plan.md`): each event
+fires once with the right properties, the conversion fires once, and with consent rejected nothing
+non-essential loads (check in the network tab). Ellis owns this check and reads the result.
 
 ## Step 6.4 · Accessibility
 

@@ -69,9 +69,11 @@ JSON-LD is `type="application/ld+json"` and is **not** blocked by CSP; it does n
 
 ## Consent and Global Privacy Control
 
-Third parties on the CSP allowlist that set non-essential cookies (ads, non-cookieless analytics,
-embeds) must not load before consent. The default is a **consent banner** with Accept and Reject
-equally easy; the reference tool is **Klaro** (open source, BSD-3-Clause, self-hosted — no SaaS
+Which analytics tool and events load here is **Ellis**'s measurement plan
+(`docs/03-content/measurement-plan.md`, `skills/growth`); this file owns only the banner, the GPC
+wiring and the CSP origin. Third parties on the CSP allowlist that set non-essential cookies (ads,
+non-cookieless analytics, embeds) must not load before consent. The default is a **consent banner**
+with Accept and Reject equally easy; the reference tool is **Klaro** (open source, BSD-3-Clause, self-hosted — no SaaS
 dependency; configure each service with its purpose and load its script only on consent via
 `data-name`/`type="text/plain" data-type`). **Exception:** a site with **cookieless analytics
 only** (e.g. Plausible) sets no non-essential cookies and needs no banner.

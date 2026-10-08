@@ -147,8 +147,12 @@ Console and Bing, home indexing requested. Someone watches traffic and errors fo
 ## Step 7.8 · The first 30 days
 
 The SEO/AEO follow-up here — coverage, positions, AI citations, refreshing decaying content — is
-the **post-launch SEO cycle owned by Sullivan** (`skills/seo`, "Post-launch SEO cycle"). You run
-the ops and watch the signals; he decides the SEO work and what goes back as tasks.
+the **post-launch SEO cycle owned by Sullivan** (`skills/seo`, "Post-launch SEO cycle"). The
+product and conversion follow-up — the north-star and funnel against the spec's goals, the CRO
+evidence and the first experiments — is the **30/60/90 review owned by Ellis** (`skills/growth`,
+"30/60/90 post-launch review"). Both run in this window alongside your ops and cite each other:
+Sullivan reads search and citation signals, Ellis reads product and conversion ones. You run the
+ops and watch the signals; they decide the SEO and growth work and what goes back as tasks.
 
 - Days 1 to 14: Search Console daily: coverage per template, "discovered, not indexed", crawl
   errors, 404s that reveal forgotten redirects. Errors and availability daily.
@@ -167,7 +171,8 @@ With `references/maintenance.md`: a calendar with an owner per task.
 - Continuous: Dependabot (Renovate if monorepo) with weekly grouping and same-day security
   patches; CI decides whether they merge. Major versions as a planned task.
 - Monthly: `domain_check.py` and `launch_check.py` against production; field Core Web Vitals;
-  index coverage; forms tested; backups verified; far expiries.
+  index coverage; forms tested; backups verified; far expiries; the product/conversion metric
+  review (Ellis's 30/60/90 first, then quarterly — `skills/growth`), alongside Sullivan's SEO cycle.
 - Quarterly, with `schneier`: rotation of rotatable secrets; review of access to registrar, DNS,
   hosting, repository, analytics and payments; remove what is not needed. Departures the same
   day.
