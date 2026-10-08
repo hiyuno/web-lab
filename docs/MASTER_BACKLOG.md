@@ -8,7 +8,10 @@ Statuses: `pending, do not apply yet` · `ready` · `in progress` · `done` · `
 
 ## 2026-10-05 · App → web brand package contract
 
-- **Status:** pending, do not apply yet.
+- **Status:** in progress. 2026-10-08: v1 proposed in `docs/app-brand-package.md` (trimmed from
+  Frost's draft); questions sent to App Master through Yuno. No skill changes until agreed.
+  2026-10-08: revised with Yuno's answers and App Master's seven adjustments; v1 final, ready to
+  sign; App Master confirmed every open point the same day. Awaiting Yuno's signature (commit).
 - **Deliverable:** `docs/app-brand-package.md`, the contract for what an app hands to its website.
 - **Coordinated with:** App Master (AppleAppLab). AppleAppLab produces the package (App Master's
   side); web-lab consumes it in `/app-web` and `/design-system` (Web Master's side). Changes are
