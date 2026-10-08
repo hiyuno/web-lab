@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 2: site-wide checks (not tied to one page).
+"""Step 2: site-wide checks (not tied to one page).
 
 - robots.txt: presence, and per-bot rule for classic search bots and the AI bots that matter in
   2026 (training crawlers vs. retrieval/answer crawlers — see references/checks.md).

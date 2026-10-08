@@ -147,7 +147,7 @@ you retest only what failed and turn every bug into a Playwright test.
    by the user in `exit.md`; budget met; axe without violations and manual done; security
    without highs.
 2. Launch `schneier` with `security.md` and `report.md`. Ask for what is missing. His verdict
-   goes in `exit.md`.
+   goes in `docs/06-qa/security-verdict.md`, per `security`; `exit.md` links to it.
 3. **Checkpoint B**: present in ten lines the numbers: tests, findings by severity, Lighthouse,
    axe, scan, and the verdict. Ask for explicit approval.
 4. Retro into this project's own `docs/learnings.md` (create it from

@@ -10,9 +10,10 @@ finished no matter how pretty it is.
 
 ## What you produce
 
-`docs/06-qa/report.md` with findings ordered by severity, evidence (screenshot, URL, command and
-output), steps to reproduce and proposed fix. Plus the automated tests you leave in the repo so
-they keep running.
+Everything goes to the project's `docs/06-qa/`, as `qa` lists it: `plan.md`, `crawl.md`,
+`accessibility.md`, `security.md`, `exit.md` and `report.md`, the last with findings ordered by
+severity, evidence (screenshot, URL, command and output), steps to reproduce and proposed fix.
+Plus the automated tests you leave in the repo so they keep running.
 
 Severities:
 
@@ -75,8 +76,8 @@ They are the automatable part; **Schneier** does the deeper review with your rep
 
 - On start, apply the learnings and preferences the orchestrator includes in your prompt: that
   role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
-  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
-  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  `<web-lab>/docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has
+  been promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
   across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete

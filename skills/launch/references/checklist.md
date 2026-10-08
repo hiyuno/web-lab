@@ -43,7 +43,7 @@ Date: [yyyy-mm-dd] · Author: Allspaw · Every item with the date and who verifi
 - [ ] Window: [day and time], midweek, early
 - [ ] Rollback deadlines: web/DNS 2 h · email 24 h
 - [ ] `cutover-runbook.md` complete with who does each step
-- [ ] Schneier's verdict: [approved | with conditions] · [date]
+- [ ] Schneier's verdict in `security-verdict.md`: [approved | with conditions] · [date]
 
 ## Signatures
 Allspaw: [date] · Schneier: [date] · User (go-live authorized): [date]

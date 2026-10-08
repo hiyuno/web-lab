@@ -1,4 +1,4 @@
-// Phase 2: run in the page with the browser javascript_tool. Synchronous on purpose: a hidden
+// Step 2: run in the page with the browser javascript_tool. Synchronous on purpose: a hidden
 // browser pane throttles setTimeout to once per second (or per minute), so any sleep-based
 // scroll loop times out. Instead it scrolls to the bottom and back without waiting and reads
 // URLs straight from the DOM (src/srcset/video src are present even before lazy-load fires).

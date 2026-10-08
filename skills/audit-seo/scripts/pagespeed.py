@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 4: Core Web Vitals via the public PageSpeed Insights API.
+"""Step 4: Core Web Vitals via the public PageSpeed Insights API.
 
 No API key required for low-volume use (a handful of pages); pass GOOGLE_PAGESPEED_API_KEY in
 the environment to raise the quota if the audit covers many pages. Field data (real users, CrUX)

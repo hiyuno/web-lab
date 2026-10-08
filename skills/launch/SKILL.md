@@ -118,7 +118,8 @@ With `references/monitoring.md`:
   how it is reverted.
 - `references/checklist.md` complete with the date and who verified each item.
 - Launch `schneier` with `domain.md`, `checklist.md` and `monitoring.md`. He reviews phase 7 of
-  `docs/SECURITY.md`. His signature goes in `checklist.md`.
+  `docs/SECURITY.md`. His verdict goes in `docs/07-launch/security-verdict.md`, per `security`;
+  `checklist.md` links to it.
 
 **Checkpoint A**: the user approves runbook, window and rollback deadlines. Go-live authorized.
 

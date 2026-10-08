@@ -219,7 +219,7 @@ a merge step that happens here, in web-lab, when that file comes back.
 1. **In a project** (not web-lab itself): keep `docs/learnings.md` there, copied at kickoff from
    [`docs/learnings-template.md`](docs/learnings-template.md) — one section per role. When
    delegating to a role, include in its prompt that role's section from the project's own
-   `docs/learnings.md`, if it has entries yet, plus `docs/PREFERENCES.md`. Durable lessons
+   `docs/learnings.md`, if it has entries yet, plus `<web-lab>/docs/PREFERENCES.md`. Durable lessons
    already reach every project through whatever has been promoted into the role's file in
    `agents/` or its skill (item 5 below); there is no live read of web-lab's `learnings/` across
    repos.
@@ -236,9 +236,9 @@ a merge step that happens here, in web-lab, when that file comes back.
    `docs/learnings.md` with `/web-master harvest`, appends new entries into
    [`learnings/<role>.md`](learnings/README.md) with date and project preserved, keeps
    `learnings/LEDGER.md`, and promotes what repeats three times or the user marks as a rule to
-   `docs/PREFERENCES.md`, the role file in `agents/` or the skill.
-5. **Cooper never edits** role files, skills, `learnings/` or `docs/PREFERENCES.md`, even when
-   asked mid-project: he records the proposal and tells the user it goes to the Web Master. See
+   `<web-lab>/docs/PREFERENCES.md`, the role file in `agents/` or the skill.
+5. **Cooper never edits** role files, skills, `learnings/` or `<web-lab>/docs/PREFERENCES.md`, even
+   when asked mid-project: he records the proposal and tells the user it goes to the Web Master. See
    `<web-lab>/docs/LADDER.md`.
 6. **Never** store secrets, third parties' personal data or client content in these files.
    Project and lesson, nothing else. Check a handed-over `docs/learnings.md` for this before

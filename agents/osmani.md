@@ -61,8 +61,8 @@ Code in the project repo following `docs/01-discovery/spec.md` and `docs/04-desi
 
 - On start, apply the learnings and preferences the orchestrator includes in your prompt: that
   role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
-  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
-  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  `<web-lab>/docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has
+  been promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
   across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete

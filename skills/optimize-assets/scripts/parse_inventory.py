@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 2 helper: convert the compact lines returned by collect_assets.js into
+"""Step 2 helper: convert the compact lines returned by collect_assets.js into
 <inventory-dir>/<slug>.json (the format download_assets.py expects).
 
 Input file: first line is the header "page=...|slug=...|dpr=...|vw=...|vh=...", then one

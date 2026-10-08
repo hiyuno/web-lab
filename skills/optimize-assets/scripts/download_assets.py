@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 3: download every asset from the per-page inventory JSON files.
+"""Step 3: download every asset from the per-page inventory JSON files.
 
 Layout produced under --out:
   <slug>/            assets used by exactly one page

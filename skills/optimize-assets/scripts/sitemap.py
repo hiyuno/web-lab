@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 1: list the pages of a live site.
+"""Step 1: list the pages of a live site.
 
 Reads /sitemap.xml (following sitemap indexes), then complements it with same-origin links
 found on the home page, so pages missing from the sitemap still show up.

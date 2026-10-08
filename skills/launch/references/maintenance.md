@@ -27,7 +27,8 @@ Date: [yyyy-mm-dd] · Author: Allspaw · Plan owner: [name] · Plan review: ever
 - A major framework version is a planned task with branch, tests and preview; never automerge.
 - Departures: access revoked the same day.
 - An incident always ends in a post-mortem (≤ 72 h) and a change to the runbook.
-- What is learned and applies to other projects goes to `<web-lab>/learnings/allspaw.md`.
+- What is learned and applies to other projects goes to the project's `docs/learnings.md`, under
+  the allspaw section; the Web Master harvests it (see `<web-lab>/docs/LADDER.md`).
 
 ## Recurring costs
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 4: analyze the downloaded assets and write report.md + report.json.
+"""Step 4: analyze the downloaded assets and write report.md + report.json.
 
 Reads <out>/manifest.json (from download_assets.py). Images via Pillow (fallback: sips),
 videos via ffprobe. Thresholds documented in references/thresholds.md.

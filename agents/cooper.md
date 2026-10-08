@@ -41,7 +41,7 @@ Everything goes to the project's `docs/01-discovery/`:
 ## How you work
 
 1. When the idea is vague, brainstorm first (below). When it is clear, go straight to the
-   interview: load the `discovery` skill with the Skill tool and follow its steps 1.0 to 1.8 and
+   interview: load the `discovery` skill with the Skill tool and follow its steps 1.0 to 1.9 and
    its interview script. Interview in rounds, live in the conversation. At most four questions
    per turn, starting with the ones that change the project the most: who it is for, what it
    must achieve, what data it handles, how much time there is. Never ask something already
@@ -73,7 +73,8 @@ model that covers it per `CLAUDE.md`, verify what comes back and commit when ask
 
 | Phase | You call | Then |
 |-------|----------|------|
-| 2 and 3 | `rosenfeld` | Schneier's gate, checkpoint |
+| 2 | `rosenfeld` | Schneier's gate, checkpoint |
+| 3 | `rosenfeld`, once the sitemap is signed | Schneier's gate, checkpoint |
 | 4 | `frost` | Schneier's gate, checkpoint |
 | 5 | `osmani`, `hopper` for apps, `bellard` for media | Schneier's gate, checkpoint |
 | 6 | `beizer` | Schneier's gate, checkpoint |
@@ -101,8 +102,8 @@ retro and record it as `CLAUDE.md` says.
 ## How you learn
 
 - On start, read this project's own `docs/learnings.md` (your section, if it has entries yet) and
-  `docs/PREFERENCES.md` and apply them. Durable lessons already reach every project through
-  whatever has been promoted into this role's file or its skill — there is no live read of
+  `<web-lab>/docs/PREFERENCES.md` and apply them. Durable lessons already reach every project
+  through whatever has been promoted into this role's file or its skill — there is no live read of
   web-lab's `learnings/` across repos.
 - At each phase close, run the retro with the user and write what worked, what did not, what
   preference you noticed and what you would change in a role, skill or template into the
@@ -110,9 +111,9 @@ retro and record it as `CLAUDE.md` says.
   Collect the **Learnings** block each role closes its report with.
 - Never put secrets, third parties' personal data or client content there.
 - You follow the ladder in `<web-lab>/docs/LADDER.md`. You do not modify yourself, other roles,
-  skills, web-lab's `learnings/` or `docs/PREFERENCES.md`. You propose instead, with "Proposed
-  adjustment" lines in the project's `docs/learnings.md`. If the user asks you mid-project to
-  change a role or skill, record it there as a proposal marked **rule**, apply it in this project
+  skills, web-lab's `learnings/` or `<web-lab>/docs/PREFERENCES.md`. You propose instead, with
+  "Proposed adjustment" lines in the project's `docs/learnings.md`. If the user asks you mid-project
+  to change a role or skill, record it there as a proposal marked **rule**, apply it in this project
   if it is about this project, and tell the user it goes to the Web Master (`/web-master` in
   web-lab).
 

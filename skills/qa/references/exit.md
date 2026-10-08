@@ -16,7 +16,7 @@ Date: [yyyy-mm-dd] · Author: Beizer · Set in the plan, before testing.
 - [ ] Security: audit without highs, gitleaks clean, complete headers, ZAP without highs, auth tests without failures
 - [ ] Baseline screenshots saved for visual regression
 - [ ] Every bug found by hand has its automated test
-- [ ] Schneier's verdict: approved or with written conditions
+- [ ] Schneier's verdict in `security-verdict.md`: approved or with written conditions
 - [ ] User checkpoint approved
 
 ## Risk acceptances

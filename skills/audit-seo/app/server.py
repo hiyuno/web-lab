@@ -2,7 +2,7 @@
 """Local checklist app: shows the audit-seo report.json findings, lets you check them off as
 you fix them in Framer, and re-runs the site-wide checks (robots.txt, sitemap.xml, HTTPS, 404,
 favicon, llms.txt) on demand since those don't need a browser. Per-page content checks and
-PageSpeed need a fresh render/API call, so their "re-check" tells you to re-run the skill phase
+PageSpeed need a fresh render/API call, so their "re-check" tells you to re-run the skill step
 instead of faking a result.
 
 State lives in <audit>/checklist.json (id -> "open"|"resolved"), separate from report.json so

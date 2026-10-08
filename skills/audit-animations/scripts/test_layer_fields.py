@@ -165,7 +165,7 @@ class TestSelectorNeverEllipsisTruncated(unittest.TestCase):
     """Regression guard for the probe_runtime.js / collect_animations.js selectorFor fix.
 
     The old `sel.slice(0, 90) + '…'` truncation produced invalid CSS: document.querySelector
-    throws on a selector ending in "…", so phase 3 never resolves it and it never appears as an
+    throws on a selector ending in "…", so step 3 never resolves it and it never appears as an
     X line, and apply_layers() matches `where` to an X-line selector by plain string equality —
     so a single truncated selector silently drops that finding's layer path (this is the exact
     "~30 runtime findings with no layer path" bug). This suite can't run the real browser-side
@@ -174,7 +174,7 @@ class TestSelectorNeverEllipsisTruncated(unittest.TestCase):
     """
 
     def test_a_truncated_selector_never_enriches_from_a_clean_x_line(self):
-        # `layers` stands in for phase 3's X lines, which — post-fix — can never contain "…".
+        # `layers` stands in for step 3's X lines, which — post-fix — can never contain "…".
         # `where` stands in for a hypothetical pre-fix runtime finding: same element, but with
         # its selector cut mid-token. The two must not match.
         layers = {"div.framer-abc>span.magnetichover-card": {

@@ -62,4 +62,4 @@ non-repudiation, detectability, disclosure, unawareness, non-compliance) if ther
 - Reviewed against `docs/SECURITY.md` phase 1: [ ]
 - Threats without a response: [none]
 - Accepted risks and by whom: see `docs/SECURITY-risks.md`
-- Schneier's verdict: [approved | with conditions | blocked] · [reason]
+- Schneier's verdict, from `security-verdict.md`: [approved | with conditions | blocked]

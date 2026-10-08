@@ -32,8 +32,8 @@ against one.
 1. **One piece.** The whole home is not a piece; the hero or the product card is. Start with the
    one that defines the others and offer the rest as later rounds.
 2. **Read the ground.** Editorial guide, wireframes, tokens if they exist, the user's tastes in
-   `docs/PREFERENCES.md`. With no prior brand: neutral grays, one accent and the system font, and
-   say so.
+   `<web-lab>/docs/PREFERENCES.md`. With no prior brand: neutral grays, one accent and the system
+   font, and say so.
 3. **Name the axis and the three positions before writing code.** Names that say the direction:
    `Quiet`, `Editorial`, `Dense`; never `Option A`. Three by default; five only if the space calls
    for it.

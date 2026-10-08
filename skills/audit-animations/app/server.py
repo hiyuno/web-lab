@@ -3,9 +3,9 @@
 categories (composited, runtime, safari-risk), and lets you check them off as you fix them.
 
 Unlike audit-seo's checklist app, there is NO re-check capability here at all: every finding in
-this skill needs a rendered page plus a live browser trace (Phase 3's collect_animations.js or
-Phase 4's probe_runtime.js), and this static Python server cannot open a browser. Re-checking a
-finding means re-running that phase of the skill, not clicking a button here — the UI says so
+this skill needs a rendered page plus a live browser trace (Step 3's collect_animations.js or
+Step 4's probe_runtime.js), and this static Python server cannot open a browser. Re-checking a
+finding means re-running that step of the skill, not clicking a button here — the UI says so
 instead of faking an action.
 
 State lives in <audit>/checklist.json (id -> "open"|"resolved"), separate from report.json so

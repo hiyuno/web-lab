@@ -1,4 +1,4 @@
-// Phase 3: run in the page with the browser javascript_tool, one call per page, AFTER the page
+// Step 3: run in the page with the browser javascript_tool, one call per page, AFTER the page
 // has loaded. Fully synchronous — same technique as optimize-assets/collect_assets.js: a
 // hidden/backgrounded pane throttles setTimeout (and rAF) to ~1/sec or ~1/min, so this never
 // awaits a sleep. The scroll below only needs to have *happened* by the time synchronous code
@@ -6,8 +6,8 @@
 // a plain `for` loop with no delay, immediately followed by the mutation read.
 // Options (edit the final line of this file to pass them):
 //   resolveSelectors: string[] — CSS selectors to look up and emit as `X` lines, so a finding
-//   that already has a selector (e.g. a phase 4 runtime finding) can be given its Framer layer
-//   path without re-running the expensive phase 4 trace.
+//   that already has a selector (e.g. a step 4 runtime finding) can be given its Framer layer
+//   path without re-running the expensive step 4 trace.
 ((opts) => {
   opts = opts || {};
   const MAX_LINES = 500; // cap so a pathological page (huge DOM, animation-heavy) truncates
@@ -22,7 +22,7 @@
   // Short, readable selector: tagName(.upTo2Classes)?(:nth-of-type(n))? per ancestor, up to
   // SELECTOR_MAX_DEPTH levels deep. IMPORTANT: this must stay behaviorally identical to
   // probe_runtime.js's copy of the same function (duplicated there — that script has no module
-  // system to share it through) — phase 4's runtime findings carry a `where` selector generated
+  // system to share it through) — step 4's runtime findings carry a `where` selector generated
   // by that copy, and check_runtime.py's apply_layers() matches it against this file's X lines
   // by plain string equality, so any divergence between the two silently breaks the match.
   //
@@ -188,7 +188,7 @@
   // perform) — it will typically emit nothing for the common case of a rAF-scheduled or
   // scroll-event-driven write (which includes Framer Motion's hybrid engine), even though that
   // is exactly the case R lines exist to catch. Left in per spec rather than silently dropped,
-  // because it is cheap and occasionally does catch something; Phase 4's probe_runtime.js has
+  // because it is cheap and occasionally does catch something; Step 4's probe_runtime.js has
   // the multi-second real-time window this needs and would be the right place to add an
   // equivalent style-mutation observer if this gap needs closing for real.
   const mo = new MutationObserver(() => {});
@@ -207,7 +207,7 @@
   // ---- X lines: resolve caller-supplied selectors to layer coordinates ----
   // Emitted FIRST so the MAX_LINES cap can never drop them: these answer a question the caller
   // asked explicitly (give me the layer path for these exact selectors, which came from findings
-  // a previous phase already produced), unlike the discovery lines below. A selector that
+  // a previous step already produced), unlike the discovery lines below. A selector that
   // selectorFor() truncated with "…" is not valid CSS and will throw — skipped, not guessed.
   for (const sel of (opts.resolveSelectors || []).slice(0, 60)) {
     let el = null;

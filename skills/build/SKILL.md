@@ -62,8 +62,9 @@ One day that saves weeks. With `references/structure.md` for each framework's fo
    preview is staging. `deploy-to-vercel` or `vercel:deploy` skills if needed.
 6. `main` branch protection: green CI and one review before merging.
 7. Dependabot or Renovate with weekly grouping and immediate security patches.
-8. The project's `CLAUDE.md`: stack, commands, where the docs are, this skill's rules. Start from
-   web-lab's.
+8. The project's `CLAUDE.md` is Cooper's: if it is missing, copy `<web-lab>/CLAUDE.md` as it is
+   (its "Using Cooper in another project"); if it exists, never overwrite or edit it. Stack,
+   commands and where the docs are go in `docs/05-development/frontend.md` ("How to run it").
 9. First commit: "chore: scaffold" with all of the above. Verify the preview comes up.
 
 ## Step 5.2 · Task plan
@@ -72,12 +73,13 @@ One day that saves weeks. With `references/structure.md` for each framework's fo
 python3 <skill>/scripts/tasks_from_spec.py docs/01-discovery/spec.md > docs/05-development/tasks.md
 ```
 
-Generates one section per story with its acceptance criteria turned into test cases and an
-empty task table. Complete each task with `references/task.md`: context, goal, criteria,
-constraints, track (frontend or backend), dependencies and test command. Tasks the size of a
-reviewable pull request: one component, one template, one action, one integration. Order by
-dependencies; foundation first, then base components (button, field, link), then templates, then
-flows.
+Generates one section per story with its acceptance criteria turned into test cases and an empty
+task table. If the project has `seo-audit/tasks.md` or `animation-audit/tasks.md` (from `/audit-seo`
+or `/audit-animations`), add their rows to `tasks.md` under their own section. Complete each task
+with `references/task.md`: context, goal, criteria, constraints, track (frontend or backend),
+dependencies and test command. Tasks the size of a reviewable pull request: one component, one
+template, one action, one integration. Order by dependencies; foundation first, then base components
+(button, field, link), then templates, then flows.
 
 **Checkpoint A**: the user approves the task plan and order. Here you see whether something in
 the spec does not fit the deadline; it is decided before writing code.
@@ -125,8 +127,9 @@ You delegate to `osmani`. Beyond the cycle:
 - **Budget** that CI enforces with `lighthouserc.json`: HTML 50 KB, CSS 60 KB, initial JS
   150 KB compressed, fonts 80 KB, above-the-fold images 200 KB; LCP 2.5 s, INP 200 ms, CLS 0.1
   on simulated mobile. If a pull request breaks it, it is not merged.
-- Images and video: ask `bellard` for the variants with `/optimize-assets` over `assets.md`; you
-  place them with correct `width`, `height`, `sizes`, `loading` and `fetchpriority`.
+- Images and video: ask `bellard` for the variants with `/optimize-assets` in its project asset
+  list mode (`docs/03-content/assets.md` plus the project's media folder); you place them with
+  correct `width`, `height`, `sizes`, `loading` and `fetchpriority`.
 
 ## Step 5.5 · Backend track · Hopper (applications only)
 

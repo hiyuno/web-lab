@@ -330,8 +330,8 @@ function renderCard(g) {
     const needsRuntime = unresolvedShown.some(f => f.category === 'runtime');
     const needsPhase3 = unresolvedShown.some(f => f.category !== 'runtime');
     const parts = [];
-    if (needsPhase3) parts.push('phase 3 (composited/safari-risk)');
-    if (needsRuntime) parts.push('phase 4 (runtime)');
+    if (needsPhase3) parts.push('step 3 (composited/safari-risk)');
+    if (needsRuntime) parts.push('step 4 (runtime)');
     const hint = document.createElement('div');
     hint.className = 'hint';
     hint.textContent = `Re-run ${parts.join(' and ')} for this page to verify a fix`;

@@ -10,20 +10,32 @@ design comes after both.
 
 ## What you produce
 
-Everything goes to the project's `docs/02-structure/` and `docs/03-content/`:
+Phase 2 goes to the project's `docs/02-structure/`, as `structure` lists it (templates in its
+`references/`):
 
+- `inventory.md` (redesigns only): what the current site has and what each page is worth.
+- `flows.md`: one flow per user task.
+- `organization.md`: groups, labels and keywords, from card sorting.
 - `sitemap.md`: page hierarchy with final URL, one-sentence intent per page and the template it
   uses. Always includes the legal pages: privacy notice, terms, cookies if applicable, and 404.
-- `wireframes/`: one file per key template (home, interior, listing, detail, form). Structured
-  text or Mermaid is enough; if the user has Pencil, Stitch or Figma available, use them.
-- `content-plan.md`: per page, main message, sections, proof (testimonials, figures, logos),
-  call to action, and who writes each text and by when.
-- `seo.md`: primary and secondary keyword per page, titles and meta descriptions, schema to use
-  (Organization, Article, Product, FAQ), internal linking strategy.
-- `assets.md`: list of images, video, icons and illustrations with target dimensions, so
-  **Bellard** prepares them in phase 5.
 - `redirects.md` only on redesigns: old URL to new URL map, no exceptions. Every URL lost throws
   away years of ranking.
+- `wireframes/<template>.md`: one per key template (home, interior, listing, detail, form).
+  Structured text or Mermaid is enough; if the user has Pencil, Stitch or Figma available, use
+  them.
+- `validation.md`: card sorting and tree testing results.
+
+Phase 3 goes to the project's `docs/03-content/`, as `content` lists it:
+
+- `editorial-guide.md` and `messages.md`: voice and tone, value proposition and main message per
+  page.
+- `matrix.md` and `briefs/<slug>.md`: the content matrix, one row per page, and one brief per
+  page with sections, proof, call to action and the real copy.
+- `seo.md`: primary and secondary keyword per page, titles and meta descriptions, schema to use
+  (Organization, Article, Product, FAQ), internal linking strategy.
+- `legal.md`: the legal pages, with Schneier.
+- `assets.md`: list of images, video, icons and illustrations with target dimensions, so
+  **Bellard** prepares them in phase 5.
 
 For a site that is already published — not the phase 2-3 spec, the live thing — you run
 `/audit-seo` instead: a page-by-page audit against classic technical/on-page SEO and Core Web
@@ -65,8 +77,8 @@ project already has `docs/03-content/`, also copy the report's summary into
 
 - On start, apply the learnings and preferences the orchestrator includes in your prompt: that
   role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
-  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
-  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  `<web-lab>/docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has
+  been promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
   across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete

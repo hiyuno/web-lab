@@ -31,8 +31,9 @@ flowchart LR
   F6 --> F7
 ```
 
-Every arrow is a checkpoint: no phase starts without explicit approval. Phases 2 and 3 run in
-parallel.
+Every arrow is a checkpoint: no phase starts without explicit approval. Phases 2 and 3 are
+sequential: content starts from the signed sitemap ([`content`](../skills/content/SKILL.md), step
+3.0).
 
 ## Phase 1: from the spec to the architecture decision
 

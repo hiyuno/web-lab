@@ -1,4 +1,4 @@
-// Phase 2: run once per audit, on the home page, via the browser javascript_tool.
+// Step 2: run once per audit, on the home page, via the browser javascript_tool.
 //
 // Why the race: an rAF-based sampler that a tool call `await`s directly can hang for the full
 // 45s tool timeout if the browser pane is hidden/backgrounded, because a hidden tab throttles

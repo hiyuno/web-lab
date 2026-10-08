@@ -1,6 +1,6 @@
 ---
 name: optimize-assets
-description: Bellard, web image and video specialist. Audits a published site (Framer, Webflow, Squarespace, WordPress or any live site) or a local media folder, page by page, downloads every image and video, says which ones are too heavy and why (weight, dimensions vs. on-screen size, format, codec, bitrate, useless audio) and starts a local app to convert them with one click (WebP, H.264 MP4, covers, version history) ready to re-upload. Use this skill whenever the user wants to optimize, compress, resize or audit images or video of a site or project, "download all the images from my site", improve load speed, Lighthouse or Core Web Vitals due to media weight, extract video covers or posters, or asks which format or size to use for the web, even without saying the word "optimize". Works in phases with user checkpoints.
+description: Bellard, web image and video specialist. Audits a published site (Framer, Webflow, Squarespace, WordPress or any live site) or a local media folder, page by page, downloads every image and video, says which ones are too heavy and why (weight, dimensions vs. on-screen size, format, codec, bitrate, useless audio) and starts a local app to convert them with one click (WebP, H.264 MP4, covers, version history) ready to re-upload. Use this skill whenever the user wants to optimize, compress, resize or audit images or video of a site or project, "download all the images from my site", improve load speed, Lighthouse or Core Web Vitals due to media weight, extract video covers or posters, or asks which format or size to use for the web, even without saying the word "optimize". Works in steps with user checkpoints.
 ---
 
 # /optimize-assets · Bellard
@@ -13,11 +13,11 @@ in MB and percentages, and you never touch an original.
 The result of this skill is twofold: a folder with the assets organized by page and a report
 that says what to optimize, and a local app where the user converts with one click.
 
-## Golden rule: in phases, with checkpoints
+## Golden rule: in steps, with checkpoints
 
-Run the phases in order and **stop at the end of each one** to show the result and wait for the
+Run the steps in order and **stop at the end of each one** to show the result and wait for the
 user's "go ahead". Downloading and analyzing take time and the user usually wants to prune the
-page list or exclude things before downloading anything. Never jump from phase 1 to phase 3
+page list or exclude things before downloading anything. Never jump from step 1 to step 3
 without explicit confirmation, even if it seems obvious.
 
 Reply and write the report in the language the user uses.
@@ -31,19 +31,21 @@ Reply and write the report in the language the user uses.
   `scripts/analyze_assets.py` degrades gracefully if something is missing. Check at the start:
   `for t in python3 ffmpeg ffprobe; do command -v $t; done; python3 -c "import PIL"`.
 - Scripts (paths relative to this skill's folder):
-  - `scripts/sitemap.py` phase 1
-  - `scripts/collect_assets.js` + `scripts/parse_inventory.py` phase 2
-  - `scripts/download_assets.py` phase 3
-  - `scripts/manifest_from_folder.py` phase 3 alternative, when there is a folder and no site
-  - `scripts/analyze_assets.py` phase 4
-  - `app/server.py` phase 5, the conversion app
+  - `scripts/sitemap.py` step 1
+  - `scripts/collect_assets.js` + `scripts/parse_inventory.py` step 2
+  - `scripts/download_assets.py` step 3
+  - `scripts/manifest_from_folder.py` step 3 alternative, when there is a folder and no site
+  - `scripts/analyze_assets.py` step 4
+  - `app/server.py` step 5, the conversion app
 
-## Phase 0 · Inputs
+## Step 0 · Inputs
 
 Before touching anything, read this project's own `docs/learnings.md` (bellard's section, if it
 has entries) and `<web-lab>/docs/PREFERENCES.md` and apply them. Then confirm with the user:
 
-1. URL of the published site, **or** the local media folder if there is no site.
+1. URL of the published site, **or** the local media folder if there is no site, **or** the
+   project asset list: a web-lab project's `docs/03-content/assets.md` plus its media folder
+   (what `/build` 5.4 asks for).
 2. Working folder (propose `<cwd>/assets-audit/`). Everything generated lives there:
    `inventory/`, one folder per page, `_shared/`, `manifest.json`, `report.md`.
 3. Protected, draft or excluded pages (e.g. `/404`, legal).
@@ -51,7 +53,7 @@ has entries) and `<web-lab>/docs/PREFERENCES.md` and apply them. Then confirm wi
 
 If they already gave this in the conversation, do not ask again.
 
-## Phase 1 · Sitemap
+## Step 1 · Sitemap
 
 ```bash
 python3 <skill>/scripts/sitemap.py <site-url> --json > <out>/inventory/pages.json
@@ -68,7 +70,7 @@ hand in the same format.
 Show the list as a numbered table (slug, URL, source) and ask which to remove or add.
 **Checkpoint.**
 
-## Phase 2 · Per-page inventory (no download)
+## Step 2 · Per-page inventory (no download)
 
 Set the desktop viewport with `resize_window` (1440x900); the default panel is narrow and
 rendered sizes would come out as a mobile layout. Then, for each page:
@@ -87,7 +89,7 @@ Why compact lines and no waits: the built-in browser blocks requests to localhos
 (`ERR_BLOCKED_BY_CLIENT`), so the page cannot dump JSON to disk; and with the panel hidden Chrome
 throttles timers to one per second or per minute, so any scroll with `sleep` exceeds the 45 s
 timeout. The collector reads `src`/`srcset`/`video src` from the DOM, which exist even if
-lazy-load has not fired. Real dimensions come from the downloaded file in phase 4.
+lazy-load has not fired. Real dimensions come from the downloaded file in step 4.
 
 If the user asked for a mobile pass, repeat with `resize_window preset=mobile` and save to
 `<slug>.mobile.json`.
@@ -95,7 +97,7 @@ If the user asked for a mobile pass, repeat with `resize_window preset=mobile` a
 When done, show a table: page, number of images, number of videos, and the site's unique totals
 (an asset used on several pages counts once). **Checkpoint.**
 
-## Phase 3 · Download
+## Step 3 · Download
 
 ```bash
 python3 <skill>/scripts/download_assets.py --inventory <out>/inventory --out <out> [--also-served]
@@ -108,7 +110,7 @@ python3 <skill>/scripts/download_assets.py --inventory <out>/inventory --out <ou
 - `--also-served` also downloads the served variant to compare how much the CDN already saves.
 - Writes `manifest.json` with original URL, pages, local file, bytes and metadata.
 
-**No site, local folder**: skip phases 1-3 and generate the manifest directly:
+**No site, local folder**: skip steps 1-3 and generate the manifest directly:
 
 ```bash
 python3 <skill>/scripts/manifest_from_folder.py <media-folder> --out <out>
@@ -118,9 +120,14 @@ Uses each subfolder as a "page" and copies nothing; the manifest points to the f
 are. Without rendered-size data, the analysis is limited to weight, format and absolute
 dimensions.
 
+**Project asset list**: the same command over the project's media folder. Then match each
+`assets.md` row to its file and report, next to the analysis, rows with no file yet and files
+over the row's target dimensions (twice the target at most, per the format recommendations
+below). Converted variants go to the folder `/build` places them from.
+
 Report how many files and MB were downloaded and how many failed. **Checkpoint.**
 
-## Phase 4 · Analysis and report
+## Step 4 · Analysis and report
 
 ```bash
 python3 <skill>/scripts/analyze_assets.py --out <out>
@@ -137,12 +144,13 @@ read it if the user asks why something is flagged or wants to adjust the criteri
 
 Present, in this order: summary (assets, MB per type, critical / review / ok), top 10-15
 offenders with a concrete recommendation, per-page table, and ffmpeg or sips commands ready to
-copy (models in `references/thresholds.md`). Send `report.md` with `SendUserFile`.
+copy (models in `references/thresholds.md`). If the environment has a tool to send files to the
+user, send `report.md` with it; otherwise give its path.
 
-Do not convert anything on your own in this phase. **Checkpoint**: ask whether they want to open
+Do not convert anything on your own in this step. **Checkpoint**: ask whether they want to open
 the app to convert.
 
-## Phase 5 · Conversion app
+## Step 5 · Conversion app
 
 The app reads `report.json` and shows every asset with thumbnail, traffic light, issues, three
 fixed sizes (images 2560/2048/1024 px, videos 1080p/720p/480p), recommended preset highlighted,

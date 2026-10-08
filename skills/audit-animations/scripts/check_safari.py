@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 2: per-page "safari-risk" checks against the same raw line file as check_page.py.
+"""Step 3: per-page "safari-risk" checks against the same raw line file as check_page.py.
 
 Reuses check_page.py's parse_raw() — same file, same format, same directory, so importing it
 locally avoids re-implementing the parser. See check_page.py's module docstring for the raw

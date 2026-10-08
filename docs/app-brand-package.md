@@ -1,8 +1,9 @@
 # App brand package · contract
 
-Status: v1 final, ready to sign · 2026-10-08 · Agreed by the Web Master and App Master through
-Yuno, based on Frost's draft (2026-10-05); App Master confirmed and closed his open items on
-2026-10-08. Signing = Yuno's commit. web-lab skills change only after signing.
+Status: v1 signed 2026-10-08 (commit 1eabf63); web-lab side applied 2026-10-08 (7b58e73) · Agreed
+by the Web Master and App Master through Yuno, based on Frost's draft (2026-10-05); App Master
+confirmed and closed his open items on 2026-10-08. Signing = Yuno's commit. web-lab skills change
+only after signing.
 
 The app brand package is what an AppleAppLab app hands to web-lab so its website starts from the
 app's real colors, type, shape, materials, motion and brand assets instead of from a blank style

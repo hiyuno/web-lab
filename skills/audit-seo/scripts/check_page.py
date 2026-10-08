@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Phase 3: per-page checks against a saved copy of the rendered HTML.
+"""Step 3: per-page checks against a saved copy of the rendered HTML.
 
 Takes the *rendered* HTML (after JS ran) so it works on Framer/Webflow/React sites, not just
 static markup. The calling skill saves it with the browser tool's javascript_tool
-(`document.documentElement.outerHTML`) before calling this script — see SKILL.md phase 3.
+(`document.documentElement.outerHTML`) before calling this script — see SKILL.md step 3.
 
 Usage: check_page.py --html page.html --url https://example.com/pricing --slug pricing --out <workdir>
 """

@@ -10,21 +10,22 @@ property of the system.
 
 ## What you produce
 
-Everything goes to the project's `docs/04-design/`:
+Everything goes to the project's `docs/04-design/`, as `design-system` lists it (templates in its
+`references/`):
 
-- `tokens.md`: color (light and dark mode), typography, spacing, radii, shadows, animation
-  durations. Each token with a semantic name and value. It is the source for Tailwind v4 in
-  phase 5.
-- `components.md`: component inventory with variants and states: default, hover, visible
+- `visual-direction.md`: the chosen direction, and the preset or brand package it starts from.
+- `tokens.tokens.json` (W3C DTCG, three tiers, light and dark mode, declared contrast pairs) and
+  `tokens.css`, generated from it. `tokens.css` is the source for Tailwind v4 in phase 5.
+- `components/<name>.md`: one per component with variants and states: default, hover, visible
   focus, active, disabled, loading, error, empty, selected. A component without an error state
   is not finished.
-- `responsive.md`: breakpoints, how each template behaves on mobile, tablet and desktop, what
-  collapses and what reorders.
-- `accessibility.md`: contrast verified per token, minimum touch target sizes (24 by 24 px per
-  WCAG 2.2), focus order, planned alt text, reduced-motion behavior.
-- Prototype of the key templates. Use the `design` skill, Pencil, Stitch or Figma if available;
-  otherwise static HTML with the tokens applied. The prototype uses the same components that
-  will be built.
+- `templates/<template>.md`: one per sitemap template at 375, 768 and 1280, with its page states.
+- `accessibility.md`: the system-level WCAG 2.2 AA check of tokens and components.
+- `motion.md`: what animates, with which tokens, CSS or GSAP, and the reduced-motion alternative.
+- `prototype/`: the prototype of the key templates in code, with the same components that will
+  be built (or a branch of the project repo Osmani continues). Anthropic's `design` skill, if
+  available, Pencil, Stitch or Figma are for exploring; the delivered prototype is the code one.
+- `qa.md`: the design QA and the usability test result.
 
 ## How you work
 
@@ -64,8 +65,8 @@ Everything goes to the project's `docs/04-design/`:
 
 - On start, apply the learnings and preferences the orchestrator includes in your prompt: that
   role's section from the current project's own `docs/learnings.md`, if it has entries yet, and
-  `docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has been
-  promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
+  `<web-lab>/docs/PREFERENCES.md`. Durable lessons already reach every project through whatever has
+  been promoted into this role's file or its skill — there is no live read of web-lab's `learnings/`
   across repos.
 - On finish, close your report with a **Learnings** block: what worked, what did not, what user
   preference you noticed and what you would change in your role, skill or templates. Concrete

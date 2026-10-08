@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 6 (optional) "Ver en la web": paint a page's findings on top of the live site.
+"""Step 6 (optional) "Ver en la web": paint a page's findings on top of the live site.
 
 Reads the merged `report.json` (built by build_report.py), keeps only the findings for one
 page whose `where` is a real element selector (drops "whole page"/"site-wide" page-level

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 2: per-page "runtime" checks against a browser-measured JSON probe file.
+"""Step 4: per-page "runtime" checks against a browser-measured JSON probe file.
 
 Input is a JSON file (not pipe-lines — this one is small and structured), produced by a
 browser-side probe script owned by another task, with this shape:
@@ -36,10 +36,10 @@ the numbers untrustworthy as a real-device signal.
 Framer layer coordinates: runtime findings are measured, not collected, so they carry no DOM
 node — only a `where` string. The ones whose `where` is a real CSS selector
 (`runtime_non_composited_write`) are enriched afterwards from the `X` lines of the same page's
-phase 3 raw file, which phase 3 produced by resolving exactly these selectors in the live page.
+step 3 raw file, which step 3 produced by resolving exactly these selectors in the live page.
 Pass `--layers <out>/raw/<slug>.txt`, or let it default to that path when it exists. Findings
 whose `where` is not a selector ("whole page", "frame @ 12ms", "event: pointerover") keep
-`layer`/`text`/`y` as null, and so do selectors phase 3 could not resolve.
+`layer`/`text`/`y` as null, and so do selectors step 3 could not resolve.
 
 Usage: check_runtime.py --json <out>/runtime/<slug>.json --slug <slug> --out <out>
        [--layers <out>/raw/<slug>.txt]
@@ -154,7 +154,7 @@ def check_non_composited_write(payload, page, status, note):
 
 
 def load_layers(path):
-    """Read the `X` lines of a phase 3 raw file: selector -> {layer, text, y}."""
+    """Read the `X` lines of a step 3 raw file: selector -> {layer, text, y}."""
     if not path or not os.path.exists(path):
         return {}
     try:
@@ -216,7 +216,7 @@ def main():
     ap.add_argument("--slug", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--layers", default=None,
-                     help="phase 3 raw file whose X lines resolve this page's selectors to "
+                     help="step 3 raw file whose X lines resolve this page's selectors to "
                           "Framer layer paths (default: <out>/raw/<slug>.txt if it exists)")
     a = ap.parse_args()
 

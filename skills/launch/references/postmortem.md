@@ -49,4 +49,5 @@ Contributing causes, not "the cause". Ask "why?" until you reach the system.
 
 ## Learnings for web-lab
 
-What applies to other projects goes to `<web-lab>/learnings/allspaw.md`.
+What applies to other projects goes to the project's `docs/learnings.md`, under the allspaw
+section; the Web Master harvests it (see `<web-lab>/docs/LADDER.md`).

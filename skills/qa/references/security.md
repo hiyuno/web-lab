@@ -83,4 +83,5 @@ With two test users A and B:
 
 ## Schneier's verdict
 
-[approved | with conditions | blocked] · [reason] · [date]
+Lives in `security-verdict.md` (`security` skill). Here only its line:
+[approved | with conditions | blocked] · [date]

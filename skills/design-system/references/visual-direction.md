@@ -32,7 +32,7 @@ Every attribute in the editorial guide implies visual decisions.
 
 - Admires (and why): [ ]
 - Dislikes (and why): [ ]
-- Prior preferences from `docs/PREFERENCES.md` that apply: [ ]
+- Prior preferences from `<web-lab>/docs/PREFERENCES.md` that apply: [ ]
 
 ## Variants
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 3: merge every findings/*.json into report.json + report.md.
+"""Step 5: merge every findings/*.json into report.json + report.md.
 
 Follows web-lab's shared report format (CLAUDE.md "Shared review method"): one table per
 category, ordered by severity then reach, ending in a one-word verdict. Three tables here

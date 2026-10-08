@@ -1,4 +1,4 @@
-// Phase 4: Chrome-measured runtime trace. Split into two separate javascript_tool calls because
+// Step 4: Chrome-measured runtime trace. Split into two separate javascript_tool calls because
 // this needs to observe activity over several seconds, and a browser pane that goes hidden/
 // backgrounded during that span throttles rAF/setTimeout to as little as once per second or once
 // per minute — so nothing here is ever `await`ed inside a single tool call. install() starts
@@ -11,7 +11,7 @@
 //
 //   1) Install (fire-and-forget, once per page trace). Last line of the pasted script:
 //        })('install', { hoverSelectors: ['.card', '#nav a'] });
-//      hoverSelectors is optional: up to 5 CSS selector strings pulled from phase 3's A/R lines
+//      hoverSelectors is optional: up to 5 CSS selector strings pulled from step 3's A/R lines
 //      for this page. Omit the key, or pass [], to skip the synthetic hover pass. Returns
 //      immediately: {"started": true}
 //
@@ -83,7 +83,7 @@
     // Style-write observer: catches rAF-driven inline-style animations (e.g. Framer Motion's
     // hybrid engine, which writes `element.style.x = ...` directly from a requestAnimationFrame
     // callback rather than through the Web Animations API) that document.getAnimations() never
-    // sees at all. collect_animations.js (phase 3) attempts the same idea with a MutationObserver
+    // sees at all. collect_animations.js (step 3) attempts the same idea with a MutationObserver
     // too, but does it inside one synchronous script with no event-loop turn between .observe()
     // and .takeRecords() — so no rAF callback, scroll dispatch, or mutation delivery can happen
     // in between, and it almost never fires. This install()/drain() pair is the one place in this
@@ -110,7 +110,7 @@
       //
       // Never truncate a token with an ellipsis: `sel.slice(0, 90) + '…'` used to produce
       // invalid CSS that document.querySelector throws on, which is exactly why ~30 runtime
-      // findings were coming back with no layer path — phase 3 never resolves an invalid
+      // findings were coming back with no layer path — step 3 never resolves an invalid
       // selector, so it never appears as an X line either. Instead, trim whole ancestor segments
       // from the LEFT (outermost first) until the selector is short enough, preferring the most
       // specific (longest) candidate that both fits SELECTOR_MAX_LEN and resolves uniquely; if
@@ -240,7 +240,7 @@
       setTimeout(step, STEP_MS);
     })();
 
-    // Optional synthetic hover pass on up to 5 selectors carried over from phase 3 — delayed so
+    // Optional synthetic hover pass on up to 5 selectors carried over from step 3 — delayed so
     // it lands mid-trace instead of competing with whatever the page itself does right after
     // load. Silently skipped (per-selector) if a selector doesn't resolve to an element.
     if (Array.isArray(opts.hoverSelectors) && opts.hoverSelectors.length) {

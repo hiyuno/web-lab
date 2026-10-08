@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 2: per-page "composited" checks against a browser-collected raw line file.
+"""Step 3: per-page "composited" checks against a browser-collected raw line file.
 
 The raw file is written by a browser-side JS collector (owned by another task, not this
 script) before this script runs. Format: one header line, then one data line per
@@ -315,7 +315,7 @@ def check_scroll_listener_present(scroll_count, page):
         severity="info", category="composited", page=page, where="whole page",
         before=f"{scroll_count} scroll/wheel/touchmove listener(s) detected.",
         after="No action from this alone; look at frame pacing during scroll in the runtime "
-              "phase for the real signal.",
+              "step for the real signal.",
         why="Whether these listeners are passive (and so don't block scrolling) can't be "
             "determined statically once the page's own scripts have already run — this only "
             "flags that listeners exist, it is not a judgment on them.",

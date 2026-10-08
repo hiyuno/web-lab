@@ -44,8 +44,10 @@ procedure and the checkpoint.
 - Installed skills you use as the case requires: `ui-ux-pro-max` for styles, palettes and font
   pairs; `interface-design` for products and work interfaces; `web-design-guidelines` to review
   against the guidelines; `apple-design` and `emil-design-eng` for motion and detail;
-  `pick-ui-library` to choose the component base; Anthropic's `design` for canvas sketches if the
-  user wants to touch things visually.
+  Anthropic's `design` skill, if available, for canvas sketches when the user wants to touch
+  things visually (otherwise sketch straight in the code prototype, step 4.7).
+- `skills/build/references/ui-libraries.md`: the catalog of optional pre-built component sources
+  for Next.js/React, to check before specifying a component from scratch.
 - MCPs if the user has them connected: Pencil, Stitch, Figma.
 - `torph` (MIT, dependency-free text/number morphing for React, Vue, Svelte and vanilla JS,
   https://torph.lochie.me): wired into the style lab's Voting board vote count and Pricing's
@@ -177,12 +179,13 @@ fixed. No color is adjusted by eye.
 
 ## Step 4.3 · Components
 
-Inventory from the component annotations in the wireframes. Choose the base with
-`pick-ui-library`: shadcn/ui over Radix for Next.js applications, Astro components for content
-sites. Build bottom up, one file per component with `references/component.md`: anatomy,
-variants, sizes, and **all** states: default, hover, visible focus, active, disabled, loading,
-error, empty, selected. Plus behavior with long and short copy, changes per breakpoint, and
-accessibility notes: role, accessible name, keyboard, what the screen reader announces.
+Inventory from the component annotations in the wireframes. Choose the base: shadcn/ui over Radix
+for Next.js applications, Astro components for content sites; for Next.js, check
+`skills/build/references/ui-libraries.md` first. Build bottom up, one file per component with
+`references/component.md`: anatomy, variants, sizes, and **all** states: default, hover, visible
+focus, active, disabled, loading, error, empty, selected. Plus behavior with long and short copy,
+changes per breakpoint, and accessibility notes: role, accessible name, keyboard, what the screen
+reader announces.
 
 With a brand package, in `mirror` the components are rebuilt from the key-screen captures and
 the tokens; in `adapted` the captures are reference and the source for the site's screenshots
@@ -217,8 +220,8 @@ interruptible, everything with an alternative under `prefers-reduced-motion`. Us
 and `emil-design-eng` for judgment and `find-animation-opportunities` if the user wants more life.
 
 Mark in the project's `motion.md` (started from `references/motion.md`) which motion is plain CSS
-and which needs GSAP, per `docs/PREFERENCES.md`: hover, press and focus states always stay CSS;
-GSAP only for what CSS cannot do well (timelines, scroll-driven animation, text splitting, SVG
+and which needs GSAP, per `<web-lab>/docs/PREFERENCES.md`: hover, press and focus states always stay
+CSS; GSAP only for what CSS cannot do well (timelines, scroll-driven animation, text splitting, SVG
 drawing, inertia/drag). A site that uses GSAP also gets Lenis smooth scroll. The implementation
 recipe lives in `skills/build/references/motion-gsap.md`.
 
@@ -228,7 +231,8 @@ In code, with the real components and copy: HTML with Tailwind v4 and `tokens.cs
 sites; shadcn with Next.js if it is an application. Clickable for the main flows in `flows.md`.
 Lives in `docs/04-design/prototype/` or, better, as a branch of the project repo that Osmani
 continues. Open it in the built-in browser at 375 and 1280 and, if possible, on a real phone. The
-`design` canvas, Pencil, Stitch or v0 are for exploring; the delivered prototype is the code one.
+`design` canvas (if available), Pencil, Stitch or v0 are for exploring; the delivered prototype is
+the code one.
 
 ## Step 4.8 · Break, design QA and testing with people
 
