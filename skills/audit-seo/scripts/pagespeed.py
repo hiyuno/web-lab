@@ -41,15 +41,15 @@ def check(url, slug, strategy, key):
         code = e.code
         findings.append(finding(
             severity="low", category="classic", page=slug, where=url,
-            before=f"PageSpeed Insights respondió {code} (posible rate limit o URL no accesible "
-                   "públicamente).",
-            after="Reintentar más tarde o exportar `GOOGLE_PAGESPEED_API_KEY` para subir la "
-                  "cuota.", why="", source="pagespeed", status="not_verified"))
+            before=f"PageSpeed Insights returned {code} (possible rate limit or URL not publicly "
+                   "accessible).",
+            after="Retry later or export `GOOGLE_PAGESPEED_API_KEY` to raise the quota.",
+            why="", source="pagespeed", status="not_verified"))
         return findings
     except Exception as e:
         findings.append(finding(
             severity="low", category="classic", page=slug, where=url,
-            before=f"No se pudo consultar PageSpeed Insights: {e}", after="Reintentar.",
+            before=f"Could not query PageSpeed Insights: {e}", after="Retry.",
             why="", source="pagespeed", status="not_verified"))
         return findings
 
@@ -61,13 +61,12 @@ def check(url, slug, strategy, key):
         score = ((lh.get("categories") or {}).get("performance") or {}).get("score")
         findings.append(finding(
             severity="info", category="classic", page=slug, where=url,
-            before="Sin datos de campo (CrUX) suficientes para esta página u origen — tráfico "
-                   "insuficiente para que Google reporte Core Web Vitals reales.",
-            after=f"Referencia de laboratorio (Lighthouse, no ranking real): performance score "
-                  f"{round((score or 0) * 100)}/100. Revisar de nuevo cuando el sitio tenga más "
-                  "tráfico.",
-            why="Google usa datos de campo (CrUX, 28 días, p75) para ranking, no el score de "
-                "laboratorio.", source="pagespeed", status="not_verified"))
+            before="Not enough field data (CrUX) for this page or origin — insufficient traffic "
+                   "for Google to report real Core Web Vitals.",
+            after=f"Lab reference (Lighthouse, not real ranking): performance score "
+                  f"{round((score or 0) * 100)}/100. Check again when the site has more traffic.",
+            why="Google uses field data (CrUX, 28 days, p75) for ranking, not the lab score.",
+            source="pagespeed", status="not_verified"))
         return findings
 
     for key_name, unit in (("LARGEST_CONTENTFUL_PAINT_MS", "LCP"),
@@ -84,11 +83,11 @@ def check(url, slug, strategy, key):
             unit_label = "ms" if unit != "CLS" else ""
             findings.append(finding(
                 severity=severity, category="classic", page=slug, where=url,
-                before=f"{unit} = {v}{unit_label} ({field_source} data, categoría {category}).",
-                after=f"Optimizar hasta estar bajo {good}{unit_label} en el percentil 75 real de "
-                      "usuarios.",
-                why="Core Web Vitals es un factor de ranking directo desde 2021; INP (no FID) es "
-                    "el estándar de responsividad en 2026.", source="pagespeed"))
+                before=f"{unit} = {v}{unit_label} ({field_source} data, category {category}).",
+                after=f"Optimize to stay under {good}{unit_label} at the real 75th percentile of "
+                      "users.",
+                why="Core Web Vitals has been a direct ranking factor since 2021; INP (not FID) "
+                    "is the responsiveness standard in 2026.", source="pagespeed"))
     return findings
 
 

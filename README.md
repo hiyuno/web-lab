@@ -21,7 +21,8 @@ then organizes the team through every phase. The security checklist is in
 | Phase | Role | Specialty |
 |-------|------|-----------|
 | All | [`cooper`](agents/cooper.md) | Project lead (this session): research and brainstorming, discovery and spec (phase 1), runs every phase and assigns the team |
-| 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, SEO, redirects |
+| 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, redirects |
+| 2, 3, 5, 6, 8 | [`sullivan`](agents/sullivan.md) | SEO, AEO and GEO owner: criteria across phases, keyword research, structured data, the live-site audit. Reviews; others do the work |
 | 4 | [`frost`](agents/frost.md) | Design system, components, accessibility, prototype |
 | 5 | [`osmani`](agents/osmani.md) | Frontend in Astro or Next.js, performance, CSP and headers |
 | 5 | [`hopper`](agents/hopper.md) | Backend, data, auth with Better Auth, payments with providers. Applications only |
@@ -210,16 +211,31 @@ covers, comparator, version history and configurable output folder.
 - App: `skills/optimize-assets/app/` (Python stdlib + Pillow + ffmpeg, no npm dependencies)
 - Analysis thresholds: `skills/optimize-assets/references/thresholds.md`
 
-### `/audit-seo` · Rosenfeld
+### `/seo` · Sullivan
+
+Cross-phase (like `/security`), the single source of web-lab's search criteria. Carries the
+method and the canonical title/meta length limits, the free-first keyword/query research
+procedure, the AEO/GEO checklist (answer-first, schema/JSON-LD, citable structure, E-E-A-T), the
+robots.txt policy for AI crawlers, the structured-data types that matter in 2026, and the
+post-launch SEO follow-up cycle. Other skills cite it; the heavy live-site sweep is `/audit-seo`
+and the per-page SEO file is `content`'s `seo.md`. Small copy/meta tweaks go owner-direct; the
+sweep runs on demand or in `/global-audit`.
+
+- Skill: [`skills/seo/SKILL.md`](skills/seo/SKILL.md)
+- Agent: [`agents/sullivan.md`](agents/sullivan.md), SEO, AEO and GEO lead
+- References: `skills/seo/references/` (keyword research, AEO/GEO + AI-crawler robots)
+
+### `/audit-seo` · Sullivan
 
 Audits the SEO of a published site (Framer, Webflow, WordPress or any live site), page by page,
 against 2026 technical/on-page SEO, structured data and Core Web Vitals, plus AI-search/GEO
 findability (robots.txt for AI crawlers, `llms.txt`, citable content structure, freshness
 signals). Produces a severity-ranked report and starts a local checklist app on `localhost:8772`
-to track fixes and re-run the checks that don't need a browser.
+to track fixes and re-run the checks that don't need a browser. The heavy sweep: runs on demand or
+as part of `/global-audit`'s pre-launch pass.
 
 - Skill: [`skills/audit-seo/SKILL.md`](skills/audit-seo/SKILL.md)
-- Agent: [`agents/rosenfeld.md`](agents/rosenfeld.md), information architect and content strategist
+- Agent: [`agents/sullivan.md`](agents/sullivan.md), SEO, AEO and GEO lead
 - App: `skills/audit-seo/app/` (Python stdlib only, no dependencies)
 - Check catalog and Framer-specific fixes: `skills/audit-seo/references/`
 
@@ -286,10 +302,10 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/offensive`, `/optimize-assets`, `/audit-seo`, `/audit-animations`,
-`/global-audit` and `/update` appear in Claude Code along with the eleven `interfaces` skills, and
-the ten roles are available as subagents. `/web-master` is not installed: it is available only in
-a session opened in web-lab.
+`/launch`, `/security`, `/offensive`, `/seo`, `/optimize-assets`, `/audit-seo`,
+`/audit-animations`, `/global-audit` and `/update` appear in Claude Code along with the eleven
+`interfaces` skills, and the eleven roles are available as subagents. `/web-master` is not
+installed: it is available only in a session opened in web-lab.
 
 ## App tests
 

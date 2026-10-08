@@ -3,7 +3,9 @@
 Date: [yyyy-mm-dd] · Author: Allspaw · Alerts go to: [name] via [channel] · Backup: [name]
 
 Principle: few alerts, all actionable. Alert when the user's experience is compromised, not on
-every blip.
+every blip. The SEO/search signals below (indexing, Core Web Vitals, AI citations) feed
+**Sullivan**'s post-launch SEO cycle (`skills/seo`, "Post-launch SEO cycle"); Allspaw watches,
+Sullivan decides the SEO work.
 
 ## What is watched
 

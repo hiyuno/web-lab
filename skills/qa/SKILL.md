@@ -23,7 +23,9 @@ against the user's own staging, never production or third parties. Reply in the 
 
 You or the `beizer` subagent run almost everything. What needs a person with a real device
 (screen reader, physical phones) you ask the user for with a script. Schneier interprets the
-security part in 6.9.
+security part in 6.9; **Sullivan** (`skills/seo`) owns and interprets the SEO portion — the crawl's
+metadata/robots/sitemap checks against `seo.md` and, when run, the `/audit-seo` output — and
+decides what blocks, the way Schneier does for security. You run the checks; he reads them.
 
 ## Calibration and hand-off
 

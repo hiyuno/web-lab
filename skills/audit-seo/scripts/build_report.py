@@ -24,7 +24,7 @@ def load_all(out_dir):
 
 def table(rows):
     if not rows:
-        return "_No hay hallazgos en esta categoría._\n"
+        return "_No findings in this category._\n"
     lines = ["| Severity | Where | Before | After | Why |",
              "|---|---|---|---|---|"]
     for r in rows:
@@ -45,25 +45,25 @@ def render(site, findings):
     has_critical = any(f["severity"] == "critical" for f in verified)
     counts = {s: sum(f["severity"] == s for f in verified) for s in SEVERITY_ORDER}
 
-    out = [f"# Auditoría SEO/GEO — {site}", ""]
-    out.append(f"**Resumen:** {counts['critical']} critical · {counts['high']} high · "
+    out = [f"# SEO/GEO audit — {site}", ""]
+    out.append(f"**Summary:** {counts['critical']} critical · {counts['high']} high · "
                 f"{counts['medium']} medium · {counts['low']} low · {counts['info']} info. "
-                f"{len(not_verified)} hallazgo(s) no verificado(s) (no cuentan para el veredicto).")
+                f"{len(not_verified)} not-verified finding(s) (do not count toward the verdict).")
     out.append("")
-    out.append("## SEO clásico (Google y buscadores tradicionales)")
+    out.append("## Classic SEO (Google and traditional search engines)")
     out.append("")
     out.append(table(classic))
     out.append("## AI search / GEO-AEO (ChatGPT, Claude, Perplexity, AI Overviews)")
     out.append("")
     out.append(table(geo))
     if not_verified:
-        out.append("## No verificado")
+        out.append("## Not verified")
         out.append("")
-        out.append("Se intentó revisar pero no se pudo confirmar (tráfico insuficiente, rate "
-                    "limit, fetch fallido). No cuenta como hallazgo ni como aprobado.")
+        out.append("Attempted but could not be confirmed (insufficient traffic, rate limit, "
+                    "failed fetch). Counts as neither a finding nor a pass.")
         out.append("")
         out.append(table(not_verified))
-    out.append(f"\n**Veredicto: {'Blocked' if has_critical else 'Approved'}**\n")
+    out.append(f"\n**Verdict: {'Blocked' if has_critical else 'Approved'}**\n")
     return "\n".join(out)
 
 

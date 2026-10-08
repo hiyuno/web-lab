@@ -10,7 +10,7 @@ Date: [yyyy-mm-dd] · Author: Allspaw · Plan owner: [name] · Plan review: ever
 | Continuous | Alerts | respond per incidents.md | | | |
 | Monthly | Site health | `domain_check.py` + `launch_check.py` against production | | | |
 | Monthly | Field Core Web Vitals | Speed Insights / CrUX vs budget | | | |
-| Monthly | Indexing | Search Console: coverage, 404, enhancements | | | |
+| Monthly | Indexing + SEO cycle | Search Console coverage/404/positions, AI citations, decaying content — per Sullivan's post-launch SEO cycle (`skills/seo`) | | | |
 | Monthly | Forms and email | test submission; arrives and not in spam | | | |
 | Monthly | Backups | verify they run; test restore every 6 months | | | |
 | Monthly | Expiries | domain > 60 days, certificate > 14 days | | | |

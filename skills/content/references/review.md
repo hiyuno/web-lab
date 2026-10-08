@@ -26,6 +26,8 @@ convinced".
 
 ## SEO
 
+Limits owned by `skills/seo` ("Title and meta length").
+
 - [ ] Title 50-60, unique, keyword first
 - [ ] Meta description 120-160 with a call to action
 - [ ] H1 aligned with intent and keyword

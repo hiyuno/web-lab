@@ -62,9 +62,8 @@ class State:
         if not target:
             raise ValueError("unknown finding")
         if target["source"] not in RECHECKABLE:
-            raise ValueError("Este hallazgo necesita volver a correr la fase 3/4 del skill "
-                              "(requiere navegador o la API de PageSpeed), no se puede re-chequear "
-                              "solo desde aquí.")
+            raise ValueError("This finding needs the skill's step 3/4 re-run (requires a browser "
+                              "or the PageSpeed API); it cannot be re-checked from here alone.")
         import check_site
         site = self.report["site"]
         fn = getattr(check_site, target["source"])

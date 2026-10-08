@@ -126,7 +126,10 @@ You delegate to `osmani`. Beyond the cycle:
   `vercel:next-cache-components`.
 - **Shared**: semantic HTML with landmarks, visible focus, `label` on every field; the `seo.md`
   table implemented with metadata, JSON-LD, `sitemap.xml`, `robots.txt`, OG per page, canonical
-  and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, `security.csp`
+  and `hreflang` — all to **Sullivan**'s spec (`skills/seo`): server-rendered HTML for crawlers
+  that don't run JS, the structured-data types that matter, and the AI-crawler robots policy
+  (allow the retrieval/search bots, training bots are the user's choice). You implement, he owns
+  the criteria. Headers and CSP with `references/headers.md` (nonce on Next.js, `security.csp`
   on Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
   external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client;
   motion follows `docs/04-design/motion.md`: where it marks GSAP, follow

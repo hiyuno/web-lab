@@ -2,6 +2,10 @@
 
 Date: [yyyy-mm-dd] · Author: Rosenfeld · Implemented by Osmani in phase 5; validated by Beizer in phase 6.
 
+> SEO/AEO/GEO criteria and the title/meta length limits below are owned by **Sullivan**
+> (`skills/seo`). Rosenfeld fills this file; the numbers and the schema/keyword method come from
+> there. For a published site, the heavy audit is `/audit-seo`.
+
 ## Per-page table
 
 | URL | Title (50-60) | Meta description (120-160) | H1 | Keyword | Canonical | Schema | OG image |

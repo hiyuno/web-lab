@@ -19,8 +19,9 @@ which of four things it is:
 2. **Improving an existing project** → route by what the user describes; ask which part only if
    it is unclear:
    - heavy images or video, slow site, Lighthouse → `/optimize-assets` with Bellard
-   - SEO audit, rankings, meta tags, structured data, "why don't I show up in Google/ChatGPT/
-     Claude/Perplexity", AEO, GEO → `/audit-seo` with Rosenfeld
+   - SEO, AEO, GEO, keywords, schema, rankings, meta tags, structured data, "why don't I show up
+     in Google/ChatGPT/Claude/Perplexity" → **Sullivan** (`/seo` for the method and owner-direct
+     tweaks; `/audit-seo` for the heavy live-site sweep)
    - animation jank, choppy scrolling, slow transitions, "feels slow on Safari/iPhone" →
      `/audit-animations` with Beizer
    - review security, privacy, a finding, privacy notice → `/security` with Schneier
@@ -159,8 +160,8 @@ Full rules in `<web-lab>/docs/LADDER.md`.
 | Phase | Role | What it does |
 |-------|------|--------------|
 | All | `cooper` | Project lead (this session): talks with you, research and brainstorming, discovery and spec (phase 1: brief, spec, Astro vs. Next.js decision, threat model with Schneier), runs every phase and assigns the team |
-| 2 and 3 | `rosenfeld` | Sitemap, wireframes, content plan, SEO, redirects, asset list |
-| any | `rosenfeld` | Live-site SEO/GEO audit against an already published site (`/audit-seo`) |
+| 2 and 3 | `rosenfeld` | Sitemap, wireframes, content plan, copy, redirects, asset list |
+| 2, 3, 5, 6, 8 | `sullivan` | SEO, AEO and GEO owner: crawlable IA and URL review, keyword research, answer-first/schema/citable structure, SSR + JSON-LD + AI-crawler robots + sitemaps + CWV budget spec, the SEO portion of QA, the post-launch SEO cycle. Owns the title/meta limits and the live-site audit (`/audit-seo`). Reviews; Rosenfeld and Osmani do the work |
 | any | `beizer` | Live-site animation-performance audit against an already published site (`/audit-animations`) |
 | 4 | `frost` | Tokens, components and states, responsive, accessibility, prototype |
 | 5 | `osmani` | Frontend in Astro or Next.js, Tailwind v4, performance, CSP and headers |
@@ -188,8 +189,10 @@ Skills with procedure and templates live in `skills/`: `discovery` for phase 1, 
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them,
 `offensive` for Mallory's authorized pentest of the user's own staging in phase 6 and
-periodically after launch, `optimize-assets` for media in phases 5 and 6, `audit-seo` for
-live-site SEO/GEO audits,
+periodically after launch, `seo` for Sullivan's cross-phase SEO/AEO/GEO method and the single
+source of the search criteria (title/meta limits, keyword research, structured data, AI-crawler
+robots policy, the post-launch SEO cycle), `optimize-assets` for media in phases 5 and 6,
+`audit-seo` for Sullivan's heavy live-site SEO/GEO audit,
 `audit-animations` for live-site animation-performance audits, and `update` refreshes the
 installed roles and skills from the repo (`/update`). `global-audit` is a cross-phase routine,
 not a phase role — like `security` and `offensive`: Cooper runs it on demand, or as the
@@ -236,7 +239,8 @@ approve coverage you did not inspect.
 | Surfaces, radii, shadows, icons, motion aesthetics | `better-ui` |
 | Security and privacy: threats, risk severity, verdict, accepted risks | `security` |
 | Performance: budget, Core Web Vitals, images and video | `build` (budget) and `optimize-assets` (media) |
-| Content, SEO, legal pages | `content` |
+| Content, copy, legal pages | `content` |
+| SEO, AEO/GEO, keyword research, structured data for search, title/meta limits, AI-crawler robots policy | `seo` (Sullivan) |
 | Domain, DNS, email, monitoring, incidents | `launch` |
 
 **Escalation triggers.** Serious on sight, whatever the style guide or the deadline says: an

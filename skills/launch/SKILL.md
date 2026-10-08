@@ -146,6 +146,10 @@ Console and Bing, home indexing requested. Someone watches traffic and errors fo
 
 ## Step 7.8 · The first 30 days
 
+The SEO/AEO follow-up here — coverage, positions, AI citations, refreshing decaying content — is
+the **post-launch SEO cycle owned by Sullivan** (`skills/seo`, "Post-launch SEO cycle"). You run
+the ops and watch the signals; he decides the SEO work and what goes back as tasks.
+
 - Days 1 to 14: Search Console daily: coverage per template, "discovered, not indexed", crawl
   errors, 404s that reveal forgotten redirects. Errors and availability daily.
 - Days 15 to 30: weekly review. Raise the TTL back when everything is stable.

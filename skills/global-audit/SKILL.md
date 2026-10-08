@@ -1,6 +1,6 @@
 ---
 name: global-audit
-description: Cooper's umbrella routine. Runs web-lab's heavy analyses together — SEO/GEO (/audit-seo, Rosenfeld), accessibility (/qa, Beizer), the authorized offensive pass (/offensive, Mallory) and performance/Lighthouse (/qa against /build's budget), plus Schneier's security consolidation — over ONE shared repo-and-staging exploration, so no agent re-reads everything. Runs only on demand or as the mandatory pre-launch pass; triages away what does not apply with a one-line reason, but never skips the pre-launch security and offensive run. Consolidates every finding into one severity-ranked board in docs/06-qa/global-audit.md, citing each analysis's own output file — it consolidates and orders, it never invents severities. Modes: /global-audit (all that apply), /global-audit <names> (seo, a11y, security, offensive, perf), /global-audit status (re-read outputs, refresh the board, no re-run). Use when the user says "audit everything", "how is the site", "review it all before launch", or wants the heavy analyses run together.
+description: Cooper's umbrella routine. Runs web-lab's heavy analyses together — SEO/GEO (/audit-seo, Sullivan), accessibility (/qa, Beizer), the authorized offensive pass (/offensive, Mallory) and performance/Lighthouse (/qa against /build's budget), plus Schneier's security consolidation — over ONE shared repo-and-staging exploration, so no agent re-reads everything. Runs only on demand or as the mandatory pre-launch pass; triages away what does not apply with a one-line reason, but never skips the pre-launch security and offensive run. Consolidates every finding into one severity-ranked board in docs/06-qa/global-audit.md, citing each analysis's own output file — it consolidates and orders, it never invents severities. Modes: /global-audit (all that apply), /global-audit <names> (seo, a11y, security, offensive, perf), /global-audit status (re-read outputs, refresh the board, no re-run). Use when the user says "audit everything", "how is the site", "review it all before launch", or wants the heavy analyses run together.
 ---
 
 # /global-audit · Cooper
@@ -31,7 +31,7 @@ It is not run on every edit. A small change goes straight to its owning agent (`
 
 | Name | Owner | Skill / source | What it measures |
 |------|-------|----------------|------------------|
-| `seo` | Rosenfeld | [`/audit-seo`](../audit-seo/SKILL.md) | Technical/on-page SEO, structured data, Core Web Vitals, AI-search/GEO findability |
+| `seo` | Sullivan | [`/audit-seo`](../audit-seo/SKILL.md) | Technical/on-page SEO, structured data, Core Web Vitals, AI-search/GEO findability |
 | `a11y` | Beizer | [`/qa`](../qa/SKILL.md) step 6.4 | Automated (axe) and manual (keyboard, screen reader) accessibility, WCAG 2.2 AA |
 | `perf` | Beizer | [`/qa`](../qa/SKILL.md) step 6.5, against [`/build`](../build/SKILL.md)'s budget | Lighthouse and CrUX against LCP/INP/CLS/JS budget |
 | `offensive` | Mallory | [`/offensive`](../offensive/SKILL.md) | Authorized adversarial pentest of the user's own staging, identity first |
@@ -57,7 +57,7 @@ Models are set per analysis by `CLAUDE.md`'s model table and the ladder below, n
 |-------|-------|------|
 | 0 · Scope & triage | **Cooper** | Which analyses apply, which outputs are fresh, in what order to explore |
 | 1 · Shared exploration | **Cooper** (delegates the scripted parts) | Runs each inventory command **once** and hands its output to every analysis |
-| 2 · Analyses | each owner (Rosenfeld, Beizer ×2, Mallory, Schneier) | Each consumes the shared output instead of re-collecting it; produces its own file |
+| 2 · Analyses | each owner (Sullivan, Beizer ×2, Mallory, Schneier) | Each consumes the shared output instead of re-collecting it; produces its own file |
 | 3 · Board | **Cooper** | Writes `docs/06-qa/global-audit.md` and makes one consolidated summary |
 
 Respect the ladder (`docs/LADDER.md`): the roles do the work, Cooper consolidates, nobody edits
@@ -138,7 +138,7 @@ letting two analyses each hit the wall.
 
 Each runs its own skill, but starts from the shared output instead of re-collecting it:
 
-- **`seo`** → Rosenfeld, `/audit-seo` from step 2 onward (step 1 is already done). The scripted
+- **`seo`** → Sullivan, `/audit-seo` from step 2 onward (step 1 is already done). The scripted
   per-page checks run under `sonnet`; synthesizing the report and its verdict is `opus`
   (judgment). Writes `docs/06-qa/seo/report.md` (or the audit's own folder).
 - **`a11y`** → Beizer, `/qa` step 6.4: axe over the saved rendered HTML, plus the manual

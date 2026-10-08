@@ -88,7 +88,9 @@ The heart of the phase. With the `references/organization.md` template:
    change.
 6. For SEO, a hub-and-cluster structure: one pillar page per topic, its satellite pages linked
    to each other and back to the pillar with descriptive anchors. Keywords per page are
-   assigned here and refined in phase 3.
+   assigned here and refined in phase 3. The SEO-relevant IA, URL design and (on redesigns) the
+   redirect map are reviewed by **Sullivan**, the SEO/AEO/GEO owner (`skills/seo`); you do the IA
+   work, he signs off the search angle.
 
 ## Step 2.4 · Sitemap and navigation
 

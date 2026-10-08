@@ -17,6 +17,9 @@ Writes: [name] · Due: [yyyy-mm-dd] · Approver: [name] · Round: 0/2 · Status:
 
 ## SEO
 
+Limits per `skills/seo` ("Title and meta length"): title 50-60 chars (~600px), meta 120-160
+(~920px desktop). Keyword and schema method are Sullivan's (`skills/seo`).
+
 - Primary keyword: [primary keyword]
 - Secondary: [ ]
 - Question the page answers: [ ]

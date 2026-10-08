@@ -1,6 +1,6 @@
 const COLORS = {critical:'var(--critical)',high:'var(--high)',medium:'var(--medium)',
   low:'var(--low)',info:'var(--info)'};
-const CAT_LABEL = {classic:'SEO clásico', geo:'GEO / AEO'};
+const CAT_LABEL = {classic:'Classic SEO', geo:'GEO / AEO'};
 
 let data = null;
 
@@ -73,14 +73,14 @@ function renderItem(f) {
     <span class="badge" style="background:${COLORS[f.severity]}">${f.severity}</span>
     ${notVerified ? '<span class="badge" style="background:#555">not verified</span>' : ''}
     <div class="where">${f.page} · ${escapeHtml(f.where)}</div>
-    <div class="before"><strong>Antes:</strong> ${escapeHtml(f.before)}</div>
-    <div class="after"><strong>Después:</strong> ${escapeHtml(f.after)}</div>
+    <div class="before"><strong>Before:</strong> ${escapeHtml(f.before)}</div>
+    <div class="after"><strong>After:</strong> ${escapeHtml(f.after)}</div>
     ${f.why ? `<div class="why">${escapeHtml(f.why)}</div>` : ''}
   `;
   const actions = document.createElement('div');
   actions.className = 'actions';
   const btn = document.createElement('button');
-  btn.textContent = f.recheckable ? 'Re-check' : 'Re-check no disponible aquí';
+  btn.textContent = f.recheckable ? 'Re-check' : 'Re-check not available here';
   btn.disabled = !f.recheckable;
   btn.onclick = () => recheck(f.id, btn);
   actions.appendChild(btn);

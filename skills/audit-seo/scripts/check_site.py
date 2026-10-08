@@ -61,21 +61,21 @@ def check_robots(site):
     if code != 200 or not body:
         findings.append(finding(
             severity="high", category="classic", page="site", where="/robots.txt",
-            before="No responde con 200 o el archivo no existe.",
-            after="Publicar un /robots.txt válido, aunque sea solo `User-agent: *\\nAllow: /` "
-                  "más la línea `Sitemap:`.",
-            why="Sin robots.txt los crawlers asumen acceso total, pero no hay forma de declarar "
-                "el sitemap ni de dar reglas distintas a bots de IA.", source="check_robots"))
+            before="Does not return 200 or the file does not exist.",
+            after="Publish a valid /robots.txt, even if only `User-agent: *\\nAllow: /` plus the "
+                  "`Sitemap:` line.",
+            why="Without robots.txt crawlers assume full access, but there is no way to declare "
+                "the sitemap or give different rules to AI bots.", source="check_robots"))
         return findings
 
     rules = parse_robots(body)
     if "sitemap:" not in body.lower():
         findings.append(finding(
             severity="medium", category="classic", page="site", where="/robots.txt",
-            before="No declara `Sitemap:`.",
-            after="Agregar `Sitemap: " + urllib.parse.urljoin(site, "/sitemap.xml") + "`.",
-            why="Aunque Google suele encontrar el sitemap solo, declararlo explícito ayuda a "
-                "todos los motores y a los bots de IA que sí lo respetan.", source="check_robots"))
+            before="Does not declare `Sitemap:`.",
+            after="Add `Sitemap: " + urllib.parse.urljoin(site, "/sitemap.xml") + "`.",
+            why="Although Google usually finds the sitemap on its own, declaring it explicitly "
+                "helps every engine and the AI bots that do respect it.", source="check_robots"))
 
     blocked_training = [b for b in TRAINING_BOTS if bot_disallowed_root(rules, b)]
     blocked_retrieval = [b for b in RETRIEVAL_BOTS if bot_disallowed_root(rules, b)]
@@ -84,20 +84,20 @@ def check_robots(site):
     if blocked_retrieval:
         findings.append(finding(
             severity="high", category="geo", page="site", where="/robots.txt",
-            before=f"Bloquea a bots de recuperación en vivo: {', '.join(blocked_retrieval)}.",
-            after="Permitir estos user-agents (o quitar la regla que los bloquea) si quieres "
-                  "aparecer citado en respuestas de ChatGPT/Claude/Perplexity.",
-            why="Estos bots no entrenan modelos, solo buscan y citan en tiempo real. "
-                "Bloquearlos te saca de esas respuestas por completo.", source="check_robots"))
+            before=f"Blocks live-retrieval bots: {', '.join(blocked_retrieval)}.",
+            after="Allow these user-agents (or remove the rule that blocks them) if you want to "
+                  "be cited in ChatGPT/Claude/Perplexity answers.",
+            why="These bots do not train models, they only search and cite in real time. "
+                "Blocking them removes you from those answers entirely.", source="check_robots"))
     if open_training:
         findings.append(finding(
             severity="info", category="geo", page="site", where="/robots.txt",
-            before=f"Permite crawlers de entrenamiento: {', '.join(open_training)}.",
-            after="Decisión del usuario, no un error: bloquear estos user-agents (ej. "
-                  "`User-agent: GPTBot\\nDisallow: /`) evita que tu contenido entre a datasets "
-                  "de entrenamiento sin afectar tu aparición en respuestas de IA en vivo.",
-            why="Entrenamiento y respuesta en vivo son bots distintos; se pueden decidir por "
-                "separado.", source="check_robots", status="not_verified"))
+            before=f"Allows training crawlers: {', '.join(open_training)}.",
+            after="User's decision, not an error: blocking these user-agents (e.g. "
+                  "`User-agent: GPTBot\\nDisallow: /`) keeps your content out of training "
+                  "datasets without affecting your appearance in live AI answers.",
+            why="Training and live answering are different bots; they can be decided "
+                "separately.", source="check_robots", status="not_verified"))
     return findings
 
 
@@ -105,11 +105,11 @@ def check_sitemap(site, has_sitemap):
     if not has_sitemap:
         return [finding(
             severity="critical", category="classic", page="site", where="/sitemap.xml",
-            before="No existe o no responde con 200/XML válido.",
-            after="Publicar un sitemap.xml con todas las páginas indexables. En Framer se genera "
-                  "solo; confirmar en Settings → SEO que esté habilitado.",
-            why="El sitemap es la forma más directa de decirle a Google qué páginas indexar y "
-                "cuándo cambiaron.", source="check_sitemap")]
+            before="Does not exist or does not return 200/valid XML.",
+            after="Publish a sitemap.xml with every indexable page. On Framer it is generated "
+                  "automatically; confirm in Settings → SEO that it is enabled.",
+            why="The sitemap is the most direct way to tell Google which pages to index and when "
+                "they changed.", source="check_sitemap")]
     return []
 
 
@@ -119,13 +119,13 @@ def check_llms_txt(site):
         return []
     return [finding(
         severity="low", category="geo", page="site", where="/llms.txt",
-        before="No existe.",
-        after="Publicar un /llms.txt (Markdown: H1 con el nombre del sitio, un resumen en "
-              "blockquote, y links a las páginas más importantes) vía el bloque de código "
-              "personalizado de Framer o un archivo estático.",
-        why="Convención abierta propuesta en 2024 (llmstxt.org) para orientar a los LLM. Ningún "
-            "laboratorio grande confirma usarla en producción todavía — es barata de hacer y no "
-            "hace daño, pero no la trates como bloqueante.", source="check_llms_txt")]
+        before="Does not exist.",
+        after="Publish an /llms.txt (Markdown: H1 with the site name, a blockquote summary, and "
+              "links to the most important pages) via Framer's custom code block or a static "
+              "file.",
+        why="Open convention proposed in 2024 (llmstxt.org) to orient LLMs. No major lab "
+            "confirms using it in production yet — it is cheap and harmless, but do not treat it "
+            "as a blocker.", source="check_llms_txt")]
 
 
 def check_https(site):
@@ -134,8 +134,9 @@ def check_https(site):
     if p.scheme != "https":
         findings.append(finding(
             severity="critical", category="classic", page="site", where=site,
-            before="El sitio no carga sobre HTTPS.", after="Forzar HTTPS con certificado SSL.",
-            why="HTTPS es un factor de ranking desde 2014 y un requisito básico de confianza.",
+            before="The site does not load over HTTPS.", after="Force HTTPS with an SSL "
+            "certificate.",
+            why="HTTPS has been a ranking factor since 2014 and is a basic trust requirement.",
             source="check_https"))
         return findings
     http_url = urllib.parse.urlunsplit(("http", p.netloc, p.path or "/", "", ""))
@@ -143,10 +144,10 @@ def check_https(site):
     if code not in (301, 308):
         findings.append(finding(
             severity="high", category="classic", page="site", where=http_url,
-            before=f"http:// responde {code} en vez de redirigir 301/308 a https://.",
-            after="Configurar redirect permanente de http a https.",
-            why="Sin este redirect, enlaces o bookmarks antiguos en http se sirven duplicados o "
-                "rotos.", source="check_https"))
+            before=f"http:// returns {code} instead of redirecting 301/308 to https://.",
+            after="Configure a permanent redirect from http to https.",
+            why="Without this redirect, old http links or bookmarks are served duplicated or "
+                "broken.", source="check_https"))
     return findings
 
 
@@ -157,11 +158,11 @@ def check_404(site):
     if code == 200:
         return [finding(
             severity="medium", category="classic", page="site", where=url,
-            before="Una URL inexistente responde 200 en vez de 404.",
-            after="Configurar una página 404 real (o Framer: revisar la página 404 del sitio) "
-                  "que responda con status 404.",
-            why="Un 'soft 404' hace que Google indexe URLs basura y diluye la relevancia del "
-                "sitio.", source="check_404")]
+            before="A non-existent URL returns 200 instead of 404.",
+            after="Configure a real 404 page (or on Framer: review the site's 404 page) that "
+                  "returns a 404 status.",
+            why="A 'soft 404' makes Google index junk URLs and dilutes the site's relevance.",
+            source="check_404")]
     return []
 
 
@@ -170,7 +171,7 @@ def check_favicon(site):
     if code != 200 or not body:
         return [finding(
             severity="info", category="classic", page="site", where=site,
-            before="No se pudo cargar el home para revisar el favicon.", after="Reintentar.",
+            before="Could not load the home to check the favicon.", after="Retry.",
             why="", source="check_favicon", status="not_verified")]
     has_link = re.search(r'(?is)<link[^>]+rel=["\']?[^"\'>]*icon[^"\'>]*["\']?[^>]*>', body)
     if has_link:
@@ -180,10 +181,10 @@ def check_favicon(site):
         return []
     return [finding(
         severity="low", category="classic", page="site", where=site,
-        before="No hay `<link rel=\"icon\">` ni /favicon.ico.",
-        after="Subir un favicon (Framer: Settings → General → Icon).",
-        why="Sin favicon el sitio se ve incompleto en pestañas, marcadores y resultados de "
-            "búsqueda.", source="check_favicon")]
+        before="No `<link rel=\"icon\">` and no /favicon.ico.",
+        after="Upload a favicon (Framer: Settings → General → Icon).",
+        why="Without a favicon the site looks incomplete in tabs, bookmarks and search "
+            "results.", source="check_favicon")]
 
 
 def main():

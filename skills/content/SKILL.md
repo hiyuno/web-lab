@@ -27,8 +27,9 @@ approval) runs in the main conversation. Long drafting and per-page SEO are dele
 
 ## Calibration and hand-off
 
-Exact: title of 50 to 60 characters, meta of 120 to 160, one H1, direct answer of 40 to 60
-words, two rounds and one approver. A claim without a source is not published, a copied legal
+Exact: title of 50 to 60 characters, meta of 120 to 160 (the canonical limits owned by
+`skills/seo`, "Title and meta length" — cite them, do not re-set them here), one H1, direct
+answer of 40 to 60 words, two rounds and one approver. A claim without a source is not published, a copied legal
 page is not published. A word change you simply like better is not a finding in review.
 Interface writing (buttons, errors, empty states, capitalization) follows the rules in
 `better-writing`; here the brand voice is set and the pages' content is produced.
@@ -104,7 +105,11 @@ Update the matrix: status `draft`.
 
 ## Step 3.5 · Per-page SEO
 
-With the `references/seo.md` template, delegable to `rosenfeld`:
+The search criteria here — keyword research, the AEO/GEO checklist (answer-first, citable
+structure, E-E-A-T), the structured-data types that matter, and the canonical title/meta numbers
+— are owned by **Sullivan** in `skills/seo`; you write the copy and fill `seo.md`, he sets and
+reviews the criteria. For a published site his heavy audit is `/audit-seo`. With the
+`references/seo.md` template, delegable to `rosenfeld`:
 
 - Unique title, 50 to 60 characters, keyword first, brand last if it fits.
 - Meta description, 120 to 160 characters, with a call to action.

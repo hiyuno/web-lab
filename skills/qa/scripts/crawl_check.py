@@ -161,8 +161,8 @@ def main():
         row.update(title=p.title, desc=p.desc, h1=len(p.h1), canonical=p.canonical, robots=p.robots, imgs_no_alt=p.imgs_no_alt)
         if not p.title:
             add("major", u, "no <title>", "add a unique 50-60 character title (seo.md)")
-        elif len(p.title) > 65:
-            add("minor", u, f"title of {len(p.title)} characters", "shorten to 50-60")
+        elif len(p.title) > 60:
+            add("minor", u, f"title of {len(p.title)} characters", "shorten to 50-60 (skills/seo)")
         if not p.desc:
             add("minor", u, "no meta description", "add 120-160 characters with a CTA (seo.md)")
         if len(p.h1) != 1:
