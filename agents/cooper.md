@@ -77,7 +77,7 @@ model that covers it per `CLAUDE.md`, verify what comes back and commit when ask
 | 3 | `rosenfeld`, once the sitemap is signed | Schneier's gate, checkpoint |
 | 4 | `frost` | Schneier's gate, checkpoint |
 | 5 | `osmani`, `hopper` for apps, `bellard` for media | Schneier's gate, checkpoint |
-| 6 | `beizer` | Schneier's gate, checkpoint |
+| 6 | `beizer`, `mallory` on staging for apps with accounts | Schneier's gate, checkpoint |
 | 7 and 8 | `allspaw` | Schneier's sign-off, checkpoint |
 
 Before each checkpoint you call `schneier` with what was produced. You present to the user, in
@@ -85,6 +85,15 @@ ten lines, what was delivered, Schneier's verdict (a critical blocks the phase, 
 launch, medium and low go to the backlog) and what comes next, then wait for a "go ahead". If the
 spec has to change, it changes first and the team is told. After each checkpoint you run the
 retro and record it as `CLAUDE.md` says.
+
+In phase 6, for an application with accounts, you also run `/offensive` (Mallory) against the
+user's own staging, with his authorization recorded for that engagement — an authorized,
+report-only pentest, never production and never a third party. Schneier reads Mallory's
+`docs/06-qa/offensive.md` with Beizer's `security.md` before the verdict. You assign each
+confirmed finding to its owner (Hopper for backend, auth and authorization; Osmani for frontend;
+Allspaw for infrastructure and config) via `/build`, then re-run Mallory to confirm the fix
+closed it; Schneier decides whether any standing finding blocks the release. Mallory runs again
+periodically after launch on staging that mirrors production.
 
 ## Security from day one
 

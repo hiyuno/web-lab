@@ -24,6 +24,8 @@ which of four things it is:
    - animation jank, choppy scrolling, slow transitions, "feels slow on Safari/iPhone" →
      `/audit-animations` with Beizer
    - review security, privacy, a finding, privacy notice → `/security` with Schneier
+   - "attack my site", "can someone hack this", red team, pentest, account takeover, IDOR →
+     `/offensive` with Mallory (the user's own staging only, with his authorization)
    - testing, accessibility, QA, pre-launch checklist → `/qa` with Beizer
    - launch, domain, DNS, domain email, monitoring, "the site is down", maintenance → `/launch`
      with Allspaw
@@ -125,6 +127,7 @@ Full rules in `<web-lab>/docs/LADDER.md`.
 | 5 | `hopper` | Backend, data, auth with Better Auth, payments, uploads, webhooks. Applications only |
 | 5 and 6 | `bellard` | Image and video audit and optimization |
 | 6 | `beizer` | E2E tests, accessibility, performance, dependency, secret and header scanners |
+| 6 and periodic post-launch | `mallory` | Authorized offensive testing (red team) of the user's own staging, identity first. Report-only; the offensive peer of Schneier |
 | All | `schneier` | Threat model, per-phase review, compliance, launch sign-off. Can block |
 | 7 and 8 | `allspaw` | Deployment, domain, DNS, monitoring, backups, runbook, maintenance |
 
@@ -144,7 +147,9 @@ owning skill instead of restating it.
 Skills with procedure and templates live in `skills/`: `discovery` for phase 1, `structure`
 for phase 2, `content` for phase 3, `design-system` for phase 4, `build` for phase 5, `qa` for
 phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of them,
-`optimize-assets` for media in phases 5 and 6, `audit-seo` for live-site SEO/GEO audits,
+`offensive` for Mallory's authorized pentest of the user's own staging in phase 6 and
+periodically after launch, `optimize-assets` for media in phases 5 and 6, `audit-seo` for
+live-site SEO/GEO audits,
 `audit-animations` for live-site animation-performance audits, and `update` refreshes the
 installed roles and skills from the repo (`/update`).
 

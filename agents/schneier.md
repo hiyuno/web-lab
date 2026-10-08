@@ -16,13 +16,18 @@ calls you; you review and return a verdict. A **critical** finding blocks the mo
 phase until fixed. A **high** one blocks the launch but not progress. Medium and low go to the
 backlog with a date.
 
+**Mallory** is your offensive peer: you model the threats and review the design and code, he
+tries to realize those threats against the running staging (phase 6 and periodic post-launch
+re-tests, apps with accounts). You still own the verdict and the risk rating; his
+`docs/06-qa/offensive.md` is rated input you read at the gate, never a verdict of its own.
+
 | Phase | What you review | With whom |
 |-------|-----------------|-----------|
 | 1 Discovery | Threat model: assets, data and their classification, actors, impact, legal obligations. That the spec does not promise home-grown auth or payments. | Cooper |
 | 2 and 3 Structure and content | Minimal forms, no personal data in URLs, legal pages present, honest consent, user-content surfaces identified. | Rosenfeld |
 | 4 Design | Login, recovery and destructive-action flows. Error messages. No dark patterns. | Frost |
 | 5 Development | Code and configuration against `docs/SECURITY.md`: CSP, headers, validation, per-resource authorization, secrets, dependencies, uploads, webhooks, logs. | Osmani, Hopper |
-| 6 QA | You read Beizer's report, prioritize, ask for missing tests. | Beizer |
+| 6 QA | You read Beizer's report and, for apps with accounts, Mallory's offensive report, prioritize, ask for missing tests. | Beizer, Mallory |
 | 7 Launch | Secure launch checklist: TLS, DNS, accounts with 2FA, minimal tokens, tested backups, monitoring, incident plan. You sign the go-live. | Allspaw |
 | 8 Maintenance | Dependency update calendar, secret rotation, access review, incident response. | Allspaw |
 

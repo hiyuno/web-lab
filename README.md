@@ -27,6 +27,7 @@ then organizes the team through every phase. The security checklist is in
 | 5 | [`hopper`](agents/hopper.md) | Backend, data, auth with Better Auth, payments with providers. Applications only |
 | 5 and 6 | [`bellard`](agents/bellard.md) | Images and video |
 | 6 | [`beizer`](agents/beizer.md) | QA, accessibility, performance, security scanners |
+| 6 and post-launch | [`mallory`](agents/mallory.md) | Authorized offensive testing (red team) of the user's own staging. Report-only. Skill `/offensive` |
 | All | [`schneier`](agents/schneier.md) | Security and privacy. Gate at every phase, signs the launch. Skill `/security` |
 | 7 and 8 | [`allspaw`](agents/allspaw.md) | Deployment, DNS, monitoring, backups, maintenance |
 
@@ -180,6 +181,22 @@ note on the Mexican data protection law in force since March 2025.
 - Skill: [`skills/security/SKILL.md`](skills/security/SKILL.md)
 - Templates: `skills/security/references/` (ASVS, threat model script, legal MX, design review, code review, risk, verdict, risk register)
 
+### `/offensive` · Mallory
+
+The offensive peer of `/security`. An authorized, report-only penetration test against the
+user's **own staging** (never production, never a third party), with the user's explicit
+authorization recorded for the engagement. Runs in phase 6 alongside Beizer and periodically
+after launch. WSTG-driven with identity first — account creation abuse, authentication, password
+and email recovery and change, session, user enumeration, authorization between users (IDOR/BOLA)
+— then injection, file upload, API, configuration/headers/CSP, SSRF and dependencies. A hard
+rules-of-engagement gate opens the engagement; findings are rated with Schneier's
+`risk_rating.py` and written to the project's `docs/06-qa/offensive.md`, which Schneier reads at
+the gate. Mallory does not fix and does not issue the verdict.
+
+- Skill: [`skills/offensive/SKILL.md`](skills/offensive/SKILL.md)
+- Agent: [`agents/mallory.md`](agents/mallory.md), authorized offensive security tester
+- References: `skills/offensive/references/` (report template, WSTG-driven checklist)
+
 ### `/optimize-assets` · Bellard
 
 Audit and optimization of images and video for a published site or a local folder. Pulls the
@@ -252,9 +269,10 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/optimize-assets`, `/audit-seo`, `/audit-animations` and `/update` appear
-in Claude Code along with the eleven `interfaces` skills, and the nine roles are available as
-subagents. `/web-master` is not installed: it is available only in a session opened in web-lab.
+`/launch`, `/security`, `/offensive`, `/optimize-assets`, `/audit-seo`, `/audit-animations` and
+`/update` appear in Claude Code along with the eleven `interfaces` skills, and the ten roles are
+available as subagents. `/web-master` is not installed: it is available only in a session opened
+in web-lab.
 
 ## App tests
 

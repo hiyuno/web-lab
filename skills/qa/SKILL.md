@@ -146,16 +146,21 @@ you retest only what failed and turn every bug into a Playwright test.
 1. Verify `references/exit.md`: zero blockers and criticals; majors fixed or accepted in writing
    by the user in `exit.md`; budget met; axe without violations and manual done; security
    without highs.
-2. Launch `schneier` with `security.md` and `report.md`. Ask for what is missing. His verdict
-   goes in `docs/06-qa/security-verdict.md`, per `security`; `exit.md` links to it.
-3. **Checkpoint B**: present in ten lines the numbers: tests, findings by severity, Lighthouse,
+2. For an application with accounts, Cooper also runs `/offensive` (Mallory) against the user's
+   own staging: an authorized, report-only offensive pass, identity first, that writes
+   `docs/06-qa/offensive.md`. It is Mallory's engagement, not yours; you keep running the
+   defensive scans in 6.6, he runs the adversarial pass.
+3. Launch `schneier` with `security.md`, `report.md` and, when it exists, `offensive.md`. Ask for
+   what is missing. His verdict goes in `docs/06-qa/security-verdict.md`, per `security`;
+   `exit.md` links to it.
+4. **Checkpoint B**: present in ten lines the numbers: tests, findings by severity, Lighthouse,
    axe, scan, and the verdict. Ask for explicit approval.
-4. Retro into this project's own `docs/learnings.md` (create it from
+5. Retro into this project's own `docs/learnings.md` (create it from
    `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the beizer section.
    Record preferences and proposed adjustments (preferences as "Preference" entries, marked rule
    when the user says always; changes as "Proposed adjustment"); the Web Master harvests it and
    decides promotion (see `<web-lab>/docs/LADDER.md`).
-5. With approval, say what comes next: phase 7 with Allspaw.
+6. With approval, say what comes next: phase 7 with Allspaw.
 
 ## Before you finish
 

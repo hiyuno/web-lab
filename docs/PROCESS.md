@@ -67,7 +67,7 @@ post-launch monitoring.
 | 3 | Content | Messages per page, sections, asset list (photos, video, icons), SEO alignment | Content direction approved before visual design | `rosenfeld` |
 | 4 | UX/UI design | Component system, responsive rules, states, documented accessibility, prototype | Design QA including mobile behavior | `frost` |
 | 5 | Development | Code with Core Web Vitals in mind, CMS if applicable, content integrated in staging | Staging review: performance, accessibility, content | `osmani`, `hopper` (apps), `bellard` (media) |
-| 6 | QA | Functional, browsers and devices, performance, automated and manual accessibility | Test report and verified pre-launch checklist | `beizer` + `schneier` |
+| 6 | QA | Functional, browsers and devices, performance, automated and manual accessibility; for apps with accounts, an authorized offensive pass on staging | Test report and verified pre-launch checklist | `beizer`, `mallory` (apps) + `schneier` |
 | 7 | Launch | Checklist executed, 301 redirect map, analytics validated, sitemap in Search Console | Go-live with Schneier's sign-off | `allspaw` + `schneier` |
 | 8 | Maintenance | Maintenance plan, content owner, iteration with data | Periodic review | `allspaw` |
 
@@ -97,7 +97,9 @@ and a high one blocks the launch. Skills with procedure and templates are added 
 [`build`](../skills/build/SKILL.md) for phase 5,
 [`qa`](../skills/qa/SKILL.md) for phase 6,
 [`launch`](../skills/launch/SKILL.md) for phases 7 and 8,
-[`security`](../skills/security/SKILL.md) for Schneier's gates in all of them, and
+[`security`](../skills/security/SKILL.md) for Schneier's gates in all of them,
+[`offensive`](../skills/offensive/SKILL.md) for Mallory's authorized pentest of the user's own
+staging in phase 6 and periodically after launch, and
 [`optimize-assets`](../skills/optimize-assets/SKILL.md) for media in phases 5 and 6.
 
 ## Sources
