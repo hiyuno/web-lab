@@ -111,8 +111,8 @@ from a coherent style, palette and font pair. If there is no brand, the minimum 
 wordmark, palette and typography.
 
 **Checkpoint A**: the user picks the variant; it is promoted to the system and the others are
-deleted. What they say about what they like and dislike goes to `docs/PREFERENCES.md` if it is
-general.
+deleted. If they say something about what they like or dislike in general, record it in
+`docs/learnings.md` as a "Preference" entry (marked rule if always so).
 
 ## Step 4.2 · Tokens
 
@@ -207,8 +207,8 @@ fails is fixed in the system, not on the page, and that task is retested.
    Ask for explicit approval.
 4. Retro into this project's own `docs/learnings.md` (create it from
    `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the frost section.
-   Bring the file to a web-lab session at project close so it merges into the persistent
-   learnings there. Confirmed visual tastes to `docs/PREFERENCES.md`.
+   Record confirmed visual tastes as "Preference" entries (marked rule if always so); the Web
+   Master harvests it and decides promotion (see `<web-lab>/docs/LADDER.md`).
 5. With approval, say what comes next: phase 5 with Osmani, and Hopper if there is a server,
    starting from this package and the prototype.
 

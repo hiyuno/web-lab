@@ -152,8 +152,9 @@ you retest only what failed and turn every bug into a Playwright test.
    axe, scan, and the verdict. Ask for explicit approval.
 4. Retro into this project's own `docs/learnings.md` (create it from
    `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the beizer section.
-   Bring the file to a web-lab session at project close so it merges into the persistent
-   learnings there.
+   Record preferences and proposed adjustments (preferences as "Preference" entries, marked rule
+   when the user says always; changes as "Proposed adjustment"); the Web Master harvests it and
+   decides promotion (see `<web-lab>/docs/LADDER.md`).
 5. With approval, say what comes next: phase 7 with Allspaw.
 
 ## Before you finish

@@ -183,10 +183,10 @@ With the phase approved, three questions to the user: what worked, what did not,
 what preference of theirs we discovered. Write the result, plus what you observed,
 into this project's own `docs/learnings.md` (create it from
 `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the cooper
-section, with date and project. Bring the file to a web-lab session at project
-close so it merges into the persistent learnings there. Confirmed preferences go to
-`docs/PREFERENCES.md`. If something repeated three times, propose promoting it to
-the role or this skill.
+section, with date and project. Record preferences and proposed adjustments in
+`docs/learnings.md` (preferences as "Preference" entries, marked rule when the user
+says always; changes as "Proposed adjustment"); the Web Master harvests it and
+decides promotion (see `<web-lab>/docs/LADDER.md`).
 
 ## Before you finish
 

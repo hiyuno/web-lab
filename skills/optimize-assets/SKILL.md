@@ -173,9 +173,10 @@ If the user asks "optimize everything" from the chat, use the app's batch button
 `POST /api/convert-batch {"ids":[...]}` with the criticals; do not reimplement the conversion.
 
 When this pass is done, retro into this project's own `docs/learnings.md` (create it from
-`<web-lab>/docs/learnings-template.md` if it does not exist yet), under the bellard section;
-bring the file to a web-lab session so it merges into the persistent
-`<web-lab>/learnings/bellard.md`.
+`<web-lab>/docs/learnings-template.md` if it does not exist yet), under the bellard section.
+Record preferences and proposed adjustments (preferences as "Preference" entries, marked rule
+when the user says always; changes as "Proposed adjustment"); the Web Master harvests it and
+decides promotion (see `<web-lab>/docs/LADDER.md`).
 
 ## Format recommendations (when asked)
 

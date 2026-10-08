@@ -155,10 +155,10 @@ own site.
 
 At the close of each phase, the usual retro, written into this app's own `docs/learnings.md`
 (create it from `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the
-section for every role involved: cooper, rosenfeld, frost, osmani, hopper, schneier. Bring the
-file to a web-lab session at project close so it merges into the persistent
-`<web-lab>/learnings/<role>.md` files, with date and app name preserved. A correction about
-style, tone or tooling goes to `docs/PREFERENCES.md` right then.
+section for every role involved: cooper, rosenfeld, frost, osmani, hopper, schneier. Record
+corrections about style, tone, or tooling as "Preference" entries (marked rule if always so)
+and other changes as "Proposed adjustment"; the Web Master harvests it and decides promotion
+(see `<web-lab>/docs/LADDER.md`).
 
 This project type recurs across Yuno's apps, so patterns compound: a question that turned out to
 matter, a section that did not convert, a forum rule that stopped spam, and a lesson seen three

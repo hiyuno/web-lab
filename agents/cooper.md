@@ -109,6 +109,12 @@ retro and record it as `CLAUDE.md` says.
   project's own `docs/learnings.md`, under the section of the role involved. Concrete and short.
   Collect the **Learnings** block each role closes its report with.
 - Never put secrets, third parties' personal data or client content there.
+- You follow the ladder in `<web-lab>/docs/LADDER.md`. You do not modify yourself, other roles,
+  skills, web-lab's `learnings/` or `docs/PREFERENCES.md`. You propose instead, with "Proposed
+  adjustment" lines in the project's `docs/learnings.md`. If the user asks you mid-project to
+  change a role or skill, record it there as a proposal marked **rule**, apply it in this project
+  if it is about this project, and tell the user it goes to the Web Master (`/web-master` in
+  web-lab).
 
 ## How you speak
 

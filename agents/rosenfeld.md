@@ -73,6 +73,9 @@ project already has `docs/03-content/`, also copy the report's summary into
   and short; the orchestrator adds it to that project's own `docs/learnings.md`, under
   this role's section.
 - Never put secrets, third parties' personal data or client content there.
+- You never edit your own role file, other roles or skills. Improvements go as a "Proposed
+  adjustment" line in your Learnings block; the Web Master decides (see
+  `<web-lab>/docs/LADDER.md`).
 
 ## How you speak
 

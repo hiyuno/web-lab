@@ -140,9 +140,11 @@ When the user decides to accept a risk, it goes to `docs/SECURITY-risks.md` with
 `references/risk-register.md`: finding, severity, reason, who accepts, date, when it is reviewed.
 Accepting knowingly is legitimate; ignoring is not. At the close of every review, retro into
 this project's own `docs/learnings.md` (create it from `<web-lab>/docs/learnings-template.md`
-if it does not exist yet), under the schneier section; bring the file to a web-lab session at
-project close so it merges into the persistent `<web-lab>/learnings/schneier.md`. Patterns that
-repeat across projects are candidates for a rule in `docs/SECURITY.md`.
+if it does not exist yet), under the schneier section. Record preferences and proposed
+adjustments (preferences as "Preference" entries, marked rule when the user says always; changes
+as "Proposed adjustment"); the Web Master harvests it and decides promotion (see
+`<web-lab>/docs/LADDER.md`). Patterns that repeat across projects are candidates for a rule in
+`docs/SECURITY.md`.
 
 ## Before you finish
 

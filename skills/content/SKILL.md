@@ -61,8 +61,8 @@ but not dry") and the we are / we are not table. Define tone per situation: erro
 legal, empty. Set the writing conventions and bring in the controlled vocabulary from phase 2.
 
 Write two versions of the same home paragraph in different voices and let the user choose. It is
-faster than debating adjectives. The choice goes to `docs/PREFERENCES.md` if the user says it is
-their voice in general and not just this project's.
+faster than debating adjectives. If the user says it is their voice in general and not just this
+project's, record it in `docs/learnings.md` as a "Preference" entry (marked rule if always so).
 
 ## Step 3.2 · Key messages
 
@@ -154,9 +154,9 @@ Update the matrix: `review` then `approved`.
    approval.
 3. Retro: three questions to the user and what you observed, into this project's
    own `docs/learnings.md` (create it from `<web-lab>/docs/learnings-template.md`
-   if it does not exist yet), under the rosenfeld section. Bring the file to a
-   web-lab session at project close so it merges into the persistent learnings
-   there. The chosen voice, if general, to `docs/PREFERENCES.md`.
+   if it does not exist yet), under the rosenfeld section. If the chosen voice is
+   general, record it as a "Preference" entry (marked rule if always so); the Web
+   Master harvests it and decides promotion (see `<web-lab>/docs/LADDER.md`).
 4. With approval, say what comes next: phase 4 with Frost, who designs over this copy.
 
 ## Before you finish

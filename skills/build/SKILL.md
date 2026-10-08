@@ -182,8 +182,8 @@ is fixed before the checkpoint.
    explicit approval.
 2. Retro into this project's own `docs/learnings.md` (create it from
    `<web-lab>/docs/learnings-template.md` if it does not exist yet), under the osmani and hopper
-   sections. Bring the file to a web-lab session at project close so it merges into the
-   persistent learnings there. Confirmed stack or tool preferences to `docs/PREFERENCES.md`.
+   sections. Record confirmed stack or tool preferences as "Preference" entries (marked rule if
+   always so); the Web Master harvests it and decides promotion (see `<web-lab>/docs/LADDER.md`).
 3. With approval, say what comes next: phase 6 with Beizer on staging.
 
 ## Before you finish

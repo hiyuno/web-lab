@@ -14,12 +14,14 @@ at the start of the next. The user's stable preferences that apply to everyone l
 2. **When closing each phase**, the orchestrator runs a three-question retro and writes what
    comes out into that project's own `docs/learnings.md`, under the role's section, with date
    and project: what worked, what did not, what user preference we discovered.
-3. **Comes from other projects.** When the user hands a project's filled `docs/learnings.md` to
-   a web-lab session — usually at project close — each role's entries are appended here, into
-   its file, with date and project preserved.
-4. **When a lesson repeats three times** or the user marks it as a rule, it is promoted: it
-   moves to the role file in `agents/`, to the skill, or to `docs/PREFERENCES.md`, and is
-   removed from here. That keeps learning files short and makes roles truly improve.
+3. **Comes from other projects.** The Web Master runs `/web-master harvest` here in web-lab: it
+   reads every project's `docs/learnings.md` read-only and appends each role's new entries here,
+   into its file, with date and project preserved. [`LEDGER.md`](LEDGER.md) records what was
+   already reviewed, so the next harvest only brings what is new.
+4. **When a lesson repeats three times** or the user marks it as a rule, the Web Master promotes
+   it: it moves to the role file in `agents/`, to the skill, or to `docs/PREFERENCES.md`, and is
+   removed from here. That keeps learning files short and makes roles truly improve. Cooper and
+   the roles never edit these files; see [`docs/LADDER.md`](../docs/LADDER.md).
 5. **Never** store secrets, third parties' personal data or client content that is not the
    user's. Project and lesson, nothing else.
 

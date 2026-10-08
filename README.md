@@ -70,10 +70,13 @@ git submodule update --remote --merge  # pull the latest version
 
 Roles improve with every project. Each project (not this repo) keeps its own `docs/learnings.md`
 copied from [`docs/learnings-template.md`](docs/learnings-template.md), filled at each phase's
-retro; when it comes back to a web-lab session, it merges into
-[`learnings/`](learnings/README.md), one file per role. See `CLAUDE.md`'s `## Learning` section
-for the full mechanism. [`docs/PREFERENCES.md`](docs/PREFERENCES.md) holds the user's stable
-preferences that apply to all. Whatever repeats three times is promoted to the role or the skill.
+retro. The Web Master (Berners-Lee, `/web-master`) harvests those files read-only, merges them
+into [`learnings/`](learnings/README.md), one file per role, and promotes what repeats three
+times, or what the user marks as a rule, to the role or the skill.
+[`docs/PREFERENCES.md`](docs/PREFERENCES.md) holds the user's stable preferences that apply to
+all. Who may change what follows the ladder in [`docs/LADDER.md`](docs/LADDER.md): Yuno → Yubot
+→ Web Master → Cooper → roles; Cooper and the roles propose, never edit the team. See
+`CLAUDE.md`'s `## Learning` section for the full mechanism.
 
 ## Skills
 
@@ -218,6 +221,17 @@ needs a rendered page and a live trace).
 - App: `skills/audit-animations/app/` (Python stdlib only, no dependencies)
 - Check catalog and Framer-specific fixes: `skills/audit-animations/references/`
 
+### `/web-master` · Berners-Lee
+
+Improves Cooper and the roles: harvests every project's `docs/learnings.md` read-only, triages
+and promotes what repeats, audits the team, and applies approved changes with before/after.
+Lives in `.claude/skills/web-master/` and only runs inside a web-lab checkout: `/update` never
+installs it, so it never reaches a project. Its queue is
+[`docs/MASTER_BACKLOG.md`](docs/MASTER_BACKLOG.md), its record
+[`learnings/LEDGER.md`](learnings/LEDGER.md).
+
+- Skill: [`.claude/skills/web-master/SKILL.md`](.claude/skills/web-master/SKILL.md)
+
 ### `/update`
 
 Pulls the latest `web-lab` and relinks its roles into `~/.claude/agents` and its skills (own and
@@ -240,7 +254,7 @@ Afterwards, `/update` from any project pulls the latest web-lab and relinks role
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
 `/launch`, `/security`, `/optimize-assets`, `/audit-seo`, `/audit-animations` and `/update` appear
 in Claude Code along with the eleven `interfaces` skills, and the nine roles are available as
-subagents.
+subagents. `/web-master` is not installed: it is available only in a session opened in web-lab.
 
 ## App tests
 

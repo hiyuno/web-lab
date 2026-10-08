@@ -182,9 +182,9 @@ when to roll back. A short runbook that exists beats a long one that does not.
 With `references/postmortem.md`, within 72 hours of every incident: what happened, timeline,
 what allowed it, what changes, actions with owner and date. Never who. The incident runbook is
 updated with what was learned; what applies to other projects goes into this project's own
-`docs/learnings.md`, under the allspaw section. Bring the file to a web-lab session at project
-close (or after a significant incident) so it merges into the persistent
-`<web-lab>/learnings/allspaw.md`.
+`docs/learnings.md`, under the allspaw section. Record preferences and proposed adjustments
+(preferences as "Preference" entries, marked rule when the user says always; changes as "Proposed
+adjustment"); the Web Master harvests it and decides promotion (see `<web-lab>/docs/LADDER.md`).
 
 ## Before you finish
 

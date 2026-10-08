@@ -44,4 +44,4 @@ real piece (normally the home hero) built on the real page with real copy, behin
 ## Decision
 
 Chosen: [ ] · Why: [ ] · What is borrowed from the others: [ ]
-Goes to `docs/PREFERENCES.md`: [what the user said is their taste in general]
+Record in `docs/learnings.md` as Preference: [what the user said is their taste in general]
