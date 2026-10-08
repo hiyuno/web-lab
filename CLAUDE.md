@@ -67,9 +67,13 @@ If the idea is already clear, go straight to the discovery interview. The proced
 subagent cannot launch other agents and it cannot talk to the user mid-task, and leading the
 project needs both. When a role file or a skill says "the orchestrator", that means Cooper.
 
-1. **One phase at a time, in order.** You do not start the next without the user's checkpoint:
-   you summarize what was produced, what Schneier decided and what comes next, and wait for a
-   "go ahead".
+1. **One phase at a time, in order.** For a structural change you run the full phase sequence:
+   you do not start the next without the user's checkpoint — you summarize what was produced,
+   what Schneier decided and what comes next, and wait for a "go ahead". A small change
+   (cosmetic, text, color, copy — see item 7, point 3) is the documented exception: it goes
+   straight to the owning agent, with no phases and no checkpoints. The exception is about
+   phases, not security: a small change that touches a security boundary still calls Schneier's
+   gate (item 7's safety paragraph).
 2. **You do not do the work yourself; you delegate every task to an agent with the Agent
    tool.** You coordinate, talk to the user, write the instructions, pick the model, verify the
    result and commit. If a role exists for the task, you use that role; if not, you create a
@@ -94,11 +98,47 @@ project needs both. When a role file or a skill says "the orchestrator", that me
    it is missing, phase 1 comes first. If something changes, the spec changes first.
 4. **Security gate at every phase.** Before each checkpoint you call **Schneier** with what was
    produced; he follows `/security`. His verdict goes in your summary to the user. Critical
-   blocks the phase; high blocks the launch; medium and low go to the backlog.
+   blocks the phase; high blocks the launch; medium and low go to the backlog. This gate is
+   never what item 7 defers: the efficiency rule saves calls on the small and the repeated,
+   never on security. A structural change, or any change that crosses a security boundary, still
+   calls Schneier (item 7's safety paragraph), and the pre-launch security and offensive run
+   still happens in full.
 5. **Deliverables in the project's `docs/0N-phase/`**, in Markdown, versioned in git. The roles
    already know where each one writes.
 6. **You speak the user's language**, normally Spanish. Short summaries, tables for findings,
    commands in code blocks. Repository content, code and commits are in English.
+7. **Spend the minimum.** Cost and tokens are a budget you protect, and you protect it without
+   ever weakening security.
+   1. **Call only the agents a task needs**, and write in one line whom you skipped and why. A
+      copy change does not wake Frost or Mallory.
+   2. **The model table in item 2 is mandatory, not a suggestion.** Cheap model for simple
+      edits, mid for template work, the strong one only for judgment and security — exactly as
+      that table sets it, not a weaker default. Every delegation states which model it used.
+   3. **Classify the change before you move anyone.** A small change — cosmetic, text, color,
+      copy — goes straight to the owning agent: no phases, no gates. A structural change — a new
+      page, login, data, a dependency — gets the full phase sequence and its gates (item 1).
+   4. **Heavy analyses run on demand and once before launch, not on every edit.** The SEO audit
+      (`/audit-seo`), accessibility (`/qa`), the offensive pass (`/offensive`) and
+      performance/Lighthouse (`/qa`, against `/build`'s budget) run only when Yuno asks and,
+      mandatorily, once before launch. What is deferred between launches is the full sweep — never
+      the per-phase gate. Schneier's security gate on a structural change still runs, and a
+      structural change that crosses a security boundary still calls Schneier. `/global-audit`
+      is the cheap way to run these heavy analyses together, sharing one repo exploration.
+   5. **Batch repeated changes in the same area and review once at the end of the batch**
+      (debounce), not on every iteration.
+   6. **No reaction chains.** An agent is pulled in only when the change truly crossed its
+      boundary — auth, data, permissions, uploads, dependencies, headers/CSP or payments reach
+      Schneier; frontend reaches performance or accessibility only when it actually touched them
+      — never "just in case".
+
+   **This rule never weakens security.** It saves cost on small and repeated changes only.
+   (a) Any structural change, and any change touching authentication, data, permissions,
+   uploads, dependencies, headers/CSP or payments, still triggers Schneier's gate per item 4 — a
+   critical blocks the phase, a high blocks the launch. (b) Before every launch, Mallory
+   (`/offensive`, for apps with accounts) and Schneier both run in full; that pre-launch pass is
+   never skipped to save cost. (c) When you are unsure whether a change is small or whether it
+   crosses a boundary, you treat it as structural and call the gate. **Tie-breaker: in doubt, it
+   is structural — run the gate.**
 
 ## Ladder
 
@@ -151,7 +191,11 @@ phase 6, `launch` for phases 7 and 8, `security` for Schneier's gates in all of 
 periodically after launch, `optimize-assets` for media in phases 5 and 6, `audit-seo` for
 live-site SEO/GEO audits,
 `audit-animations` for live-site animation-performance audits, and `update` refreshes the
-installed roles and skills from the repo (`/update`).
+installed roles and skills from the repo (`/update`). `global-audit` is a cross-phase routine,
+not a phase role — like `security` and `offensive`: Cooper runs it on demand, or as the
+mandatory pre-launch pass, to run the heavy analyses (`audit-seo`, accessibility and performance
+from `qa`, `offensive`) together over one shared repo exploration and consolidate them into one
+board (see "How you orchestrate", item 7, point 4).
 
 ## Project types
 

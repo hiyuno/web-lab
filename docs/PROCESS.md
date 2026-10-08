@@ -101,6 +101,32 @@ and a high one blocks the launch. Skills with procedure and templates are added 
 [`offensive`](../skills/offensive/SKILL.md) for Mallory's authorized pentest of the user's own
 staging in phase 6 and periodically after launch, and
 [`optimize-assets`](../skills/optimize-assets/SKILL.md) for media in phases 5 and 6.
+[`global-audit`](../skills/global-audit/SKILL.md) is a cross-phase routine, not a phase skill —
+like `security` and `offensive`: Cooper runs it on demand or as the mandatory pre-launch pass to
+run the heavy analyses together over one shared exploration and consolidate them into one board.
+
+## Spending the minimum
+
+Cooper protects cost and tokens without weakening security. The full rule is
+[`CLAUDE.md`](../CLAUDE.md)'s "How you orchestrate", item 7; in short, so every role knows the
+frame it is called in:
+
+- Cooper calls only the agents a task needs and says in one line whom he skipped. The model
+  table in `CLAUDE.md` is mandatory — cheap model for simple edits, the strong one only for
+  judgment and security — and every delegation states its model.
+- A **small change** (cosmetic, text, color, copy) goes straight to the owning agent, with no
+  phases and no gates. A **structural change** (a new page, login, data, a dependency) gets the
+  full phase sequence and its gates.
+- The heavy analyses — `/audit-seo`, accessibility and performance in `/qa`, and the
+  `/offensive` pass — run only on demand and mandatorily once before launch, not on every edit.
+  `/global-audit` runs them together over one shared repo exploration. Repeated changes in one
+  area are batched and reviewed once, and no agent is pulled in "just in case".
+
+This never touches the security gate. Any structural change, and any change touching
+authentication, data, permissions, uploads, dependencies, headers/CSP or payments, still
+triggers **Schneier**'s per-phase gate; before every launch **Mallory** (apps with accounts) and
+Schneier run in full; and in doubt a change is treated as structural and the gate runs. What the
+efficiency rule defers is the full sweeps, never the gate.
 
 ## Sources
 

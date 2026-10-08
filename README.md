@@ -238,6 +238,23 @@ needs a rendered page and a live trace).
 - App: `skills/audit-animations/app/` (Python stdlib only, no dependencies)
 - Check catalog and Framer-specific fixes: `skills/audit-animations/references/`
 
+### `/global-audit` · Cooper
+
+Cross-phase routine, not a phase role (like `/security` and `/offensive`). Runs web-lab's heavy
+analyses together — SEO/GEO (`/audit-seo`), accessibility and performance (`/qa`), the authorized
+offensive pass (`/offensive`) and Schneier's security consolidation — over **one shared repo and
+staging exploration**, so no agent re-reads everything, then consolidates every finding into one
+severity-ranked board in `docs/06-qa/global-audit.md`. It reuses the existing audit skills'
+scripts (`audit-seo`'s `sitemap.py`, `check_site.py`, `pagespeed.py`; `qa`'s `crawl_check.py` and
+its dependency/secret commands) rather than inventing new ones. Runs only on demand or as the
+mandatory pre-launch pass; triages away what does not apply with a one-line reason but never skips
+the pre-launch security and offensive run; consolidates and orders, never invents severities.
+Modes: `/global-audit` (all that apply), `/global-audit <names>` (`seo`, `a11y`, `perf`,
+`offensive`, `security`), `/global-audit status` (re-read outputs, refresh the board, no re-run).
+
+- Skill: [`skills/global-audit/SKILL.md`](skills/global-audit/SKILL.md)
+- Uses the existing roles and skills; adds no role and no output of its own beyond the board.
+
 ### `/web-master` · Berners-Lee
 
 Improves Cooper and the roles: harvests every project's `docs/learnings.md` read-only, triages
@@ -269,10 +286,10 @@ bash ~/Documents/GitSync/web-lab/skills/update/scripts/update.sh --no-pull
 Afterwards, `/update` from any project pulls the latest web-lab and relinks roles and skills.
 
 With that, `/app-web`, `/discovery`, `/structure`, `/content`, `/design-system`, `/build`, `/qa`,
-`/launch`, `/security`, `/offensive`, `/optimize-assets`, `/audit-seo`, `/audit-animations` and
-`/update` appear in Claude Code along with the eleven `interfaces` skills, and the ten roles are
-available as subagents. `/web-master` is not installed: it is available only in a session opened
-in web-lab.
+`/launch`, `/security`, `/offensive`, `/optimize-assets`, `/audit-seo`, `/audit-animations`,
+`/global-audit` and `/update` appear in Claude Code along with the eleven `interfaces` skills, and
+the ten roles are available as subagents. `/web-master` is not installed: it is available only in
+a session opened in web-lab.
 
 ## App tests
 
