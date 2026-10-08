@@ -82,12 +82,28 @@ README there). When the user names one, at the start of the project or of this p
 
 If the user names a preset that does not exist, list the saved ones and ask.
 
+## From the app's brand package
+
+When `/app-web` step 0 found a valid brand package for the app, it replaces the preset as the
+starting point. The contract is `docs/app-brand-package.md`; its rules are cited here by
+section, not restated.
+
+1. Read the package read-only from the app repo path in the intake (`<app repo>/brand-package/`,
+   §2). Never copy the folder into the project; the only file that comes over is the next one.
+2. Copy its `tokens.tokens.json` to `docs/04-design/tokens.tokens.json` as the starting tokens.
+3. Record in `visual-direction.md` the `package_version`, the `source.commit` and the style mode
+   from `docs/01-discovery/spec.md` (`mirror` or `adapted`, §4).
+4. Steps 4.1 to 4.4 then run in that mode, as each step says below. Every value you change from
+   the package, derived steps included, is a deviation recorded in `visual-direction.md` with its
+   reason (§4).
+
 ## Step 4.0 · Entry
 
 0. Read this project's own `docs/learnings.md` (frost's section, if it has entries) and
    `<web-lab>/docs/PREFERENCES.md`. If visual styles
    the user likes or dislikes are already there, they are the starting point for 4.1.
-1. If the user named a saved preset, apply "Saved presets" above first. Then read
+1. If the project has a valid brand package, apply "From the app's brand package" above first;
+   otherwise, if the user named a saved preset, apply "Saved presets". Then read
    `docs/03-content/matrix.md` (approved), `editorial-guide.md`, `briefs/`, `assets.md`;
    `docs/02-structure/wireframes/` with their component annotations and `flows.md`;
    `docs/01-discovery/brief.md` for what exists of the brand and `architecture-decision.md` to
@@ -109,6 +125,10 @@ piece that defines the others (normally the home hero) following `references/var
 page with real copy, behind a URL picker, no favorite marked. Use `ui-ux-pro-max` to start each
 from a coherent style, palette and font pair. If there is no brand, the minimum is decided here:
 wordmark, palette and typography.
+
+**With a brand package**, the style mode sets this step (contract §4, "Step 4.1 visual
+direction"): in `mirror` it is a confirmation with the real copy, as with a saved preset; in
+`adapted` it is the normal step, with variants only on the axes the §4 table leaves unlocked.
 
 **Checkpoint A**: the user picks the variant; it is promoted to the system and the others are
 deleted. If they say something about what they like or dislike in general, record it in
@@ -140,6 +160,21 @@ python3 <skill>/scripts/tokens_to_tailwind.py docs/04-design/tokens.tokens.json 
 If a pair fails in light or dark, the script says so and you do not continue until the token is
 fixed. No color is adjusted by eye.
 
+**With a brand package**, before converting:
+
+1. **Single-mode app.** If the token file's root has `$extensions.appleapplab.mode_missing`,
+   derive the missing mode, replace the placeholders and remove the marker (contract §5,
+   "Single-mode apps"). The script refuses to convert while the marker is there.
+2. **Derived values.** Steps marked `$extensions.appleapplab.derived: true` (the brand ramp,
+   spacing) may be re-derived; the `source: true` accent is kept, and in `adapted` the hue stays
+   locked (§5, "Derived values"; §4).
+3. **Contrast.** Run `--check` and read both the light and the dark column, in `mirror` too. A
+   failing pair is fixed here as a recorded deviation and reported back to AppleAppLab as an app
+   finding (§6).
+4. **Translation.** Fonts as Apple system stacks never served as files, squircle corners,
+   materials as `backdrop-filter` within the budget, motion and reduced motion, `rem` sizes and
+   SF Symbols through `icons.map.json` all follow the table in contract §6.
+
 ## Step 4.3 · Components
 
 Inventory from the component annotations in the wireframes. Choose the base with
@@ -148,6 +183,10 @@ sites. Build bottom up, one file per component with `references/component.md`: a
 variants, sizes, and **all** states: default, hover, visible focus, active, disabled, loading,
 error, empty, selected. Plus behavior with long and short copy, changes per breakpoint, and
 accessibility notes: role, accessible name, keyboard, what the screen reader announces.
+
+With a brand package, in `mirror` the components are rebuilt from the key-screen captures and
+the tokens; in `adapted` the captures are reference and the source for the site's screenshots
+(contract §7). The same holds for the templates in 4.4.
 
 Start with button, form field and link: they repeat the most and a missing state shows most.
 Load `better-ui` for concentric radii (outer = inner + padding), shadows instead of borders for

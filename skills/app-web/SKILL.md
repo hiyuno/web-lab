@@ -44,6 +44,15 @@ words at a plain reading level, and one vote per person per request enforced by 
 `(request_id, voter_id)` index in the database, not in the UI. Copy you find less "professional"
 is not a finding; a second competing primary CTA is.
 
+## Brand package version check
+
+When the project uses the app's brand package (`docs/app-brand-package.md`), Cooper checks its
+version at the start of every phase from 2 on (contract §9): he compares the app repo's current
+`package_version` with the one recorded in `docs/04-design/visual-direction.md`, or in the
+phase-1 summary before phase 4 exists. On a newer one he tells Yuno what changed, from the
+package's `CHANGELOG.md`, and asks whether to adopt it before the phase continues. Nothing is
+adopted without his yes; a refusal keeps the recorded version.
+
 ## Step 0 · Entry
 
 0. Read this project's own `docs/learnings.md` for every role this project touches (cooper,
@@ -54,7 +63,19 @@ is not a finding; a second competing primary CTA is.
    wants no forum, see **Before you finish**.
 2. If `docs/01-discovery/spec.md` already exists for this app, skip to the step that is missing.
 3. If the user brings a filled `app-web-intake.md` from AppleAppLab, load it as the starting
-   point before running the discovery add-on interview.
+   point before running the discovery add-on interview. Also read its **App repo** header field
+   and its **Brand package** field (`docs/app-brand-package.md`, "Intake fields (Round D)"):
+   - **A version is set**: delegate the intake check of contract §10 to a general-purpose agent
+     (`sonnet`): read-only from `<app repo>/brand-package/`, nothing copied into this project;
+     the manifest per §3, the key screens and their captures per §7, the tokens converted with
+     `tokens_to_tailwind.py` on a scratch copy outside this repo (a root `mode_missing` marker is
+     expected on a single-mode app and is removed only in that copy, §5), and a scan for secrets
+     and real user data per §11. The phase-1 summary states the package version and either
+     "valid" or which fallback case of §10 applies, with what failed.
+   - **Brand package is TBD or absent, App repo is empty or the path does not exist, or the
+     intake still has the old "Primary/accent brand color (hex)" field**: no package; today's
+     behavior (§10 case 1). The old hex, if present, is an input to Frost's 4.1 like any
+     existing brand color.
 
 ## Step 1 · Discovery add-on → `/discovery`, Cooper
 
@@ -62,7 +83,8 @@ Run `/discovery` as normal, and add `references/discovery-addon.md` to the inter
 extra questions on platform and App Store listing, time to first value, the feature pillars, the
 pricing model, real proof, existing auth to reuse for forum sign-in, who moderates the forum and
 how fast, where release notes come from today, what the app collects about people, and the
-domain.
+domain; plus a thirteenth, the style mode (`mirror` or `adapted`), asked only when step 0 found a
+valid brand package.
 
 Two answers steer everything downstream:
 
@@ -75,7 +97,8 @@ Cooper writes the architecture decision as Next.js with the forum as the stated 
 threat model with Schneier includes the forum as a public-write surface from the start.
 
 **Checkpoint A**: spec approved, with the app's platforms, the primary CTA, the pricing model,
-the auth to reuse and the forum's moderation owner recorded in it.
+the auth to reuse and the forum's moderation owner recorded in it, and the style mode when there
+is a valid brand package.
 
 ## Step 2 · Structure → `/structure`, Rosenfeld
 
@@ -104,9 +127,10 @@ content written over what Schneier decides, not a new owner of security rules.
 ## Step 4 · Design → `/design-system`, Frost
 
 Run `/design-system` as normal, from `skills/design-system/references/tokens.tokens.json` or a
-saved preset. This project type needs four patterns from the style lab beyond the usual eight:
-**Pricing**, **Feature showcase**, **Changelog** and **Voting board**. Frost tunes the direction
-on those alongside the rest.
+saved preset. With a valid brand package, Frost starts from the package instead, in the spec's
+style mode (`/design-system`, "From the app's brand package"). This project type needs four
+patterns from the style lab beyond the usual eight: **Pricing**, **Feature showcase**,
+**Changelog** and **Voting board**. Frost tunes the direction on those alongside the rest.
 
 Request status badges (open, planned, in progress, shipped, declined) reuse the semantic tag
 colors already in the token set — `accent`, `warning`, `success`, `danger` — plus `muted` for

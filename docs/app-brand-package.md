@@ -64,9 +64,11 @@ and never copies its values.
 The template changes in both repos on the same date: AppleAppLab's intake template, and on the
 web-lab side `/app-web` step 0 item 3, which loads a filled intake as the starting point and will
 read these fields. (web-lab keeps no field-by-field copy of the template today; if one is added,
-it changes on the same date too.) The intake keeps carrying the app repo's path. Wording, verbatim:
+it changes on the same date too.) Wording, verbatim:
 
 ```markdown
+- Added, in the header next to the dates:
+  App repo: [ ] (local path of this app's repo on the Mac, e.g. ~/Documents/GitSync/MyApp; web-lab reads brand-package/ there)
 - Removed: `Primary/accent brand color (hex), if already chosen`.
 - Added, first in Round D:
   - **Brand package:** [ ] — version of brand-package/ at this repo's root (e.g. 1.0.0). Leave TBD until /app-brand-package has generated one. When set, it is the source for colors, type, shape, materials, motion, logo, icon and key screens.
@@ -76,7 +78,9 @@ it changes on the same date too.) The intake keeps carrying the app repo's path.
   - **Available screenshots:** [ ] (file names or a one-line description per screen, "in brand package", or TBD)
 ```
 
-Owner of the new field: Steve, updated by `/app-brand-package` in auto mode.
+Owners: "App repo" is filled by Steve when he creates the intake; "Brand package" by Steve,
+updated by `/app-brand-package` in auto mode. ("App repo" added 2026-10-08, agreed by both
+Masters through Yuno: the contract required the path and the template had no field for it.)
 
 ## 2. Package layout
 

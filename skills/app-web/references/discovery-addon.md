@@ -1,7 +1,8 @@
 # Discovery add-on · app site with feature forum
 
 Twelve extra questions for `/discovery`, on top of the seven rounds in
-`skills/discovery/references/interview.md`. Four short rounds. Ask them woven into the rounds
+`skills/discovery/references/interview.md`, plus a thirteenth only when the app has a valid brand
+package. Four short rounds. Ask them woven into the rounds
 they extend, not as a separate interrogation: round A after round 1, round B after round 2,
 round C after round 5, round D after round 6. At most four questions per turn; summarize and
 confirm before moving on.
@@ -107,6 +108,21 @@ Extends round 6. Feeds: threat model, `/security`, `/docs`, `/launch`.
     One site per app, so this is per-app, not shared. Decides what Allspaw sets up in phase 7 and
     whether a domain purchase is on the critical path. A subdomain of an existing domain is fine
     and is decided here, not on launch day.
+
+## Only with a brand package · Style mode
+
+Ask it in round A, after question 4, and only when `/app-web` step 0 found a valid brand package
+(`docs/app-brand-package.md` §10). Without one, skip it: there is nothing to mirror. Like the
+forum questions, it is never in the intake: the style mode is a web-lab decision (contract §1).
+Feeds: `docs/01-discovery/spec.md`, phase 4.
+
+13. **¿El sitio se ve igual que la app, o es la misma marca adaptada a la web?**
+    Ask it in plain Spanish, without the terms. "Igual que la app" is `mirror`; "la misma marca
+    adaptada" is `adapted`. Decides how Frost starts phase 4 from the package: what stays locked
+    to the app and what he may change, per the table in contract §4. Record the answer in the
+    spec as `Style mode: mirror` or `Style mode: adapted`.
+    *No default:* Yuno always chooses. Cooper does not close phase 1 until he picks `mirror` or
+    `adapted`.
 
 ## Warning signs across the add-on
 

@@ -2,6 +2,19 @@
 
 Date: [yyyy-mm-dd] · Author: Frost · Status: proposal | [A | B | C] chosen on [date]
 
+## App brand package
+
+Only when the project starts from one (`docs/app-brand-package.md`); otherwise delete this
+section.
+
+- Package version: [ ] · Source commit: [full SHA] · Style mode (from the spec): mirror | adapted
+
+Deviations: every value changed from the package, derived steps included (contract §4).
+
+| Token or value | Package | Here | Reason |
+|----------------|---------|------|--------|
+| | | | |
+
 ## From voice to look
 
 Every attribute in the editorial guide implies visual decisions.

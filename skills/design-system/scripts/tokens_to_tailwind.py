@@ -13,7 +13,9 @@ Usage:
   tokens_to_tailwind.py tokens.tokens.json                  # CSS to stdout + report to stderr
   tokens_to_tailwind.py tokens.tokens.json --css tokens.css # write the CSS
   tokens_to_tailwind.py tokens.tokens.json --check          # contrast report only
-Exits with code 1 if any contrast pair fails.
+Exits with code 1 if any contrast pair fails, and with code 2 without converting if the root
+carries $extensions.appleapplab.mode_missing (docs/app-brand-package.md §5). Other
+$extensions.appleapplab keys are ignored.
 """
 import argparse, json, math, re, sys
 
@@ -194,6 +196,12 @@ def main():
     ap.add_argument("--check", action="store_true", help="contrast check only")
     a = ap.parse_args()
     data = json.load(open(a.tokens, encoding="utf-8"))
+    # app brand package: a single-mode app carries placeholders until Frost derives the other mode
+    missing = data.get("$extensions", {}).get("appleapplab", {}).get("mode_missing")
+    if missing:
+        print(f"[tokens] mode_missing={missing}: derive the missing mode and remove the marker "
+              "before converting; see docs/app-brand-package.md §5", file=sys.stderr)
+        sys.exit(2)
     tokens = flatten(data)
     ok = check_contrast(tokens, data)
     if not a.check:
