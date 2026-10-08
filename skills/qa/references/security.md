@@ -25,6 +25,7 @@ curl -sI http://<staging> | head -3   # expect 301/308 to https
 ```
 
 - [ ] HSTS · CSP without `unsafe-inline` in script-src · nosniff · Referrer-Policy · Permissions-Policy · frame-ancestors
+- [ ] On Astro, where `security.csp` is a meta tag, the header carries only `frame-ancestors`: check the meta policy as in `skills/build/references/headers.md`, Verification
 - [ ] Valid certificate; no mixed content (browser console)
 
 ## 3. OWASP ZAP
@@ -52,15 +53,18 @@ Known false positives are listed in `zap-rules.tsv` with a reason. High alerts =
 
 ## 4. Authentication and authorization (if there are accounts)
 
-With two test users A and B:
+With two test users A and B. Items cited are from the "Better Auth configuration" checklist in the
+`security` skill (`references/code-review.md`, §6).
 
 | Test | How | Expected | Result |
 |------|-----|----------|--------|
 | IDOR read | with session A, open the URL of a resource of B | 404 or 403, same message as nonexistent | |
 | IDOR write | with session A, send the edit/delete action with B's id | rejected, nothing changes | |
 | Expired session | delete the session cookie and repeat an action | redirects to login, no 500 | |
-| Login rate limit | 20 failed attempts in a row | block or delay before the 20th | |
-| Enumeration | login and recovery with a nonexistent email | same message as with an existing one | |
+| Login rate limit | on a Vercel preview (not dev, where Better Auth's limiter is off by default), 20 failed sign-ins and 20 recovery requests in a row, spread across cold starts | `429` before the 20th, held across instances ("Better Auth configuration", item 1) | |
+| Session revocation | sign in as A in browsers 1 and 2; change the password in 1, then reset it | the session in 2 dies on its next request after each, within `cookieCache.maxAge` if enabled (item 2) | |
+| Enumeration | sign-in, sign-up and recovery with an existing and a nonexistent email | same message and status for both (item 5) | |
+| Untrusted origin | send the sign-in request with `Origin: https://evil.example` and a `callbackURL` on another host | rejected (item 3) | |
 | Open redirect | `?returnTo=https://evil.example` after login | ignored or relative paths only | |
 | Cookies | inspect in DevTools | HttpOnly, Secure, SameSite | |
 | Sign out | go back after signing out | no private content shown | |

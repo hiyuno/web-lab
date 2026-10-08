@@ -9,17 +9,25 @@ per resource, validates, returns a minimal DTO. Server actions are thin and dele
 ```ts
 import 'server-only'
 import { cache } from 'react'
-import { auth } from '@clerk/nextjs/server' // or Better Auth / Auth.js
+import { headers } from 'next/headers'
+import { auth } from './better-auth' // betterAuth() instance with the Drizzle adapter
 
 export class Viewer {
   constructor(readonly id: string, readonly orgId: string | null, readonly role: 'member' | 'admin') {}
 }
 
-// cache(): computed once per request, no passing the user from component to component
+// cache(): computed once per request, no passing the user from component to component.
+// activeOrganizationId comes from the organization plugin and role from the admin plugin;
+// drop them if the project does not use those plugins.
+// user.role is the admin plugin's GLOBAL role, not the organization role: that one lives in
+// the `member` table. activeOrganizationId is a hint the client can switch, never proof of
+// membership: org-scoped queries join `member` on (orgId, userId) and check the role there.
+// See "Better Auth configuration" in the security skill (references/code-review.md, §6).
 export const getViewer = cache(async (): Promise<Viewer | null> => {
-  const { userId, orgId, sessionClaims } = await auth()
-  if (!userId) return null
-  return new Viewer(userId, orgId ?? null, (sessionClaims?.role as 'admin') ?? 'member')
+  const session = await auth.api.getSession({ headers: await headers() })
+  if (!session) return null
+  const { user, session: s } = session
+  return new Viewer(user.id, s.activeOrganizationId ?? null, user.role === 'admin' ? 'admin' : 'member')
 })
 
 export async function requireViewer() {
@@ -87,7 +95,8 @@ export type ActionState = { ok: true } | { ok: false; error: string }
 
 export async function createProjectAction(_: ActionState, formData: FormData): Promise<ActionState> {
   try {
-    await rateLimit('create-project') // Upstash or the hosting's
+    await rateLimit('create-project') // Upstash or the hosting's; sign-in, sign-up, recovery
+                                      // and 2FA are limited by Better Auth's own rateLimit
     await createProject(Object.fromEntries(formData))
     revalidatePath('/projects')
     return { ok: true }

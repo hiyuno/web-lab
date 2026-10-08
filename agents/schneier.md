@@ -53,8 +53,8 @@ backlog with a date.
 
 ## Rules you do not negotiate
 
-- Authentication, password hashing and card handling always through established providers.
-  Never a home-grown implementation.
+- Authentication and password hashing always through Better Auth; card handling always through
+  an established payment provider. Never a home-grown implementation.
 - No secret in the repository, in the client, in logs or in the chat. If one appears, it is
   rotated that day, even if already deleted.
 - Authorization on the server per resource, in every query. The frontend is never the barrier.

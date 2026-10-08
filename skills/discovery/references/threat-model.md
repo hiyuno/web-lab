@@ -13,18 +13,27 @@ flowchart LR
   V[Visitor] -->|HTTPS| W[Site / App]
   U[Signed-in user] -->|HTTPS| W
   W --> DB[(Database)]
-  W --> ID[Identity provider]
+  W --> CS[(Credential store: Better Auth tables, if any)]
+  W --> ID[Social sign-in provider, if any]
   W --> PAY[Payment provider]
   W --> EXT[Third parties: analytics, email, CMS]
 ```
 
-Boundaries: [browser → server], [server → database], [server → third parties], [admin panel].
+Boundaries: [browser → server], [server → database], [server → credential store],
+[server → third parties], [admin panel].
+
+If there are accounts, the credential store is an asset of its own: Better Auth's `account` table
+(password hashes, OAuth access, refresh and ID tokens), `session` (session tokens) and, with the
+`twoFactor` plugin, 2FA secrets and backup codes. Whoever has database access, a read replica or
+a backup holds them; list those people and systems as actors. Its presence feeds the target ASVS
+level. Configuration per "Better Auth configuration" in `skills/security/references/code-review.md`.
 
 ### Data classification
 
 | Data | Class | Where it lives | Who sees it | Retention |
 |------|-------|----------------|-------------|-----------|
 | | public, internal, personal, sensitive | | | |
+| Credentials: password hashes, session tokens, OAuth tokens, 2FA secrets (if accounts) | sensitive | Postgres, Better Auth tables, and its backups | server only | while the account exists |
 
 ### Actors
 

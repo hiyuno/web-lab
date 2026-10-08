@@ -91,7 +91,9 @@ Two answers steer everything downstream:
 - **Time to first value** decides the primary CTA. Instant value → "Download"; setup or an
   account first → "Try it" or "Get started".
 - **Existing auth** decides whether Hopper reuses the app's provider for forum sign-in or
-  provisions a minimal one. Votes are authenticated, never anonymous or fingerprinted.
+  provisions a minimal one with Better Auth. Votes are authenticated, never anonymous or fingerprinted,
+  and need a verified email (`requireEmailVerification`, per the "Better Auth configuration"
+  checklist in the `security` skill).
 
 Cooper writes the architecture decision as Next.js with the forum as the stated reason, and the
 threat model with Schneier includes the forum as a public-write surface from the start.
@@ -193,7 +195,7 @@ times gets promoted into this skill or into `references/discovery-addon.md`.
 | Symptom | Fix |
 |---------|-----|
 | The app has no App Store listing yet | primary CTA becomes the waitlist or TestFlight, not "Download"; no App Store badge until there is a real link, and no fake one as a placeholder |
-| The app has no auth of its own | Hopper provisions a minimal one with an established provider in step 5; forum sign-in reuses it and the app adopts it later. Never fall back to anonymous or fingerprinted votes |
+| The app has no auth of its own | Hopper provisions a minimal one with Better Auth in step 5; forum sign-in reuses it and the app adopts it later. Never fall back to anonymous or fingerprinted votes |
 | Yuno wants to skip the forum for one app | this skill assumes the forum is in scope. If he truly does not want it, do not strip steps out of here: run the plain `/discovery` → `/structure` → `/content` → `/design-system` → `/build` path, where Astro is back on the table |
 | More than one primary CTA above the fold | keep the one the time-to-first-value answer picked; demote the rest to secondary |
 | Features listed before the problem they solve | problem→solution block first; a feature list with no stated problem does not convert |

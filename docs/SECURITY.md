@@ -7,7 +7,7 @@ the launch.
 
 ## Rules that always apply
 
-- [ ] Authentication, password hashing and card data only through established providers.
+- [ ] Authentication and password hashing only through Better Auth; card data only through an established payment provider.
 - [ ] No secret in the repo, in the client, in logs or in the chat. If one appears, it is rotated that day.
 - [ ] Authorization on the server, per resource, in every query.
 - [ ] Security tests only against the user's own environments.
@@ -17,7 +17,7 @@ the launch.
 ## Phase 1 · Discovery
 
 - [ ] Threat model written: assets, data and classification (public, internal, personal, sensitive), actors, impact, legal obligations (Mexico's 2025 LFPDPPP, GDPR if there are users in Europe; see `skills/security/references/legal-mx.md`).
-- [ ] The spec names the identity and payment providers, if applicable.
+- [ ] The spec names the auth setup (Better Auth: sign-in methods, plugins) and the payment provider, if applicable.
 - [ ] Retention and deletion of personal data defined.
 - [ ] Target ASVS level decided by data classification.
 
@@ -54,8 +54,9 @@ Backend, applications only:
 - [ ] Every input validated with a schema at the boundary.
 - [ ] Per-resource authorization in every query; tested with another user's id.
 - [ ] Parameterized queries; never concatenate input into SQL, commands or paths.
-- [ ] Cookies `HttpOnly`, `Secure`, `SameSite`; sessions invalidated on password change.
-- [ ] Rate limiting on login, signup, recovery, public forms and expensive endpoints.
+- [ ] Better Auth configured per the "Better Auth configuration" checklist (`skills/security/references/code-review.md`, §6): its own rate limiting with persistent storage, session revocation on password reset and change, exact `trustedOrigins`, `twoFactor` on and enrolled for admins.
+- [ ] Cookies `HttpOnly`, `Secure`, `SameSite`.
+- [ ] Rate limiting on public forms and expensive endpoints; auth endpoints per the checklist above.
 - [ ] CSRF covered on every mutation.
 - [ ] Uploads: real type, max size, renamed, separate storage and origin.
 - [ ] Webhooks verified by signature.
@@ -70,7 +71,7 @@ Backend, applications only:
 - [ ] `gitleaks detect` over the whole history, clean.
 - [ ] Headers verified with `curl -sI` on staging.
 - [ ] HTTPS only, redirect from HTTP, no mixed content.
-- [ ] If there is auth: IDOR, expired session, attempt limit, generic messages tested.
+- [ ] If there is auth: IDOR, expired session, attempt limit on a Vercel preview, session revocation on password change, enumeration on sign-in, sign-up and recovery, tested (`skills/qa/references/security.md` §4, "Better Auth configuration" rows).
 - [ ] Forms tested with HTML, quotes, max size and fake extensions.
 - [ ] If there is an API: OWASP ZAP baseline against staging.
 - [ ] `.env`, `.git`, source maps, backups and admin panels are not public.

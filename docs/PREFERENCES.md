@@ -35,7 +35,7 @@ explicitly. Every line carries the date it was confirmed.
 ## Stack and tools
 
 - 2026-09-04 · Astro for content sites, Next.js for applications, Tailwind v4 with tokens,
-  Vercel as default hosting.
+  Vercel as default hosting. *Hosting superseded on 2026-10-08: Vercel only.*
 - 2026-09-04 · Tools without heavy dependencies: Python stdlib, Pillow, ffmpeg. Node only when
   truly needed. Exception agreed on 2026-09-05: the style lab uses Vite, React and DialKit
   because DialKit is the control panel the user asked for.
@@ -46,7 +46,14 @@ explicitly. Every line carries the date it was confirmed.
   scroll-driven, SplitText, DrawSVG), only on sites with real animation; simple sites stay on CSS.
   Every site that uses GSAP also gets Lenis smooth scroll, switched off under
   prefers-reduced-motion. No Barba: page transitions use the framework's own (Astro View
-  Transitions, Next.js).
+  Transitions, Next.js). *Astro View Transitions superseded on 2026-10-08, below.*
+- 2026-10-08 · One route per layer: hosting on Vercel only (no Netlify); auth with Better Auth
+  only, no alternative listed, never home-grown; Astro 6 for content sites; Drizzle as the only
+  ORM. *Astro 6 superseded on 2026-10-08, below.*
+- 2026-10-08 · Astro 7 for content sites (`astro@^7`), replacing Astro 6 above.
+- 2026-10-08 · Page transitions on Astro are CSS cross-document view transitions
+  (`@view-transition { navigation: auto; }`), off under prefers-reduced-motion; no
+  `<ClientRouter />`, so Astro's built-in CSP (`security.csp`) stays on every site.
 
 ## Context
 

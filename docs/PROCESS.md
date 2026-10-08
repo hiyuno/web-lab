@@ -81,7 +81,7 @@ ten to fifteen pages with a CMS.
   manual review.
 - Styling: Tailwind v4 with design tokens. Figma as design source; Code Connect emits React and
   Next.js components.
-- Deployment: Vercel or Netlify, on the edge.
+- Deployment: Vercel.
 - Continuous QA: regression and unit tests run during development, not at the end.
 
 ## Roles and security

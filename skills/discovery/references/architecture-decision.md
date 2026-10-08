@@ -23,9 +23,9 @@ Date: [yyyy-mm-dd] · Author: Cooper · Reviewed by: Schneier · Status: proposa
 - Styling: Tailwind v4 with Frost's tokens
 - CMS: [none | which and why]
 - Database: [none | Postgres on ...]
-- Identity: [none | Clerk | Auth.js | Supabase Auth]
+- Identity: [none | Better Auth: sign-in methods, plugins]
 - Payments: [none | Stripe | Mercado Pago]
-- Hosting: [Vercel | another the user already has]
+- Hosting: Vercel
 - Analytics: [cookieless: Plausible, Fathom, Vercel Analytics | with consent]
 - Transactional email: [none | Resend | other]
 

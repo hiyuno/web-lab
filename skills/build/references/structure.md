@@ -3,7 +3,7 @@
 Standard `package.json` scripts so CI and the roles do not guess: `dev`, `build`, `preview`,
 `lint`, `typecheck`, `test`, `test:e2e`, `format`.
 
-## Astro 5 · content site
+## Astro 7 · content site
 
 ```
 .
@@ -44,12 +44,15 @@ Rules: `client:*` only on interactive `components/ui` and with a reason in the P
 │   │   │   ├── error.tsx
 │   │   │   └── <route>/page.tsx
 │   │   ├── (auth)/        # login, recover (their own pages, never a modal)
-│   │   ├── api/           # route handlers only for webhooks and external APIs
+│   │   ├── api/           # route handlers only for webhooks, external APIs and auth/[...all]
 │   │   ├── layout.tsx     # tokens.css, fonts with next/font, nonce to <Script>
 │   │   ├── robots.ts · sitemap.ts · opengraph-image.tsx
 │   │   └── not-found.tsx
 │   ├── actions/           # "use server": thin; validate with Zod and call data/
 │   ├── data/              # data access layer: import 'server-only'; the only one touching db and process.env
+│   │   ├── better-auth.ts # betterAuth() instance: Drizzle adapter, secret from process.env
+│   │   │                  # (BETTER_AUTH_SECRET: ≥32 random bytes, one per Vercel environment,
+│   │   │                  # name only in .env.example; see "Better Auth configuration", item 8)
 │   │   ├── auth.ts        # getViewer() with cache()
 │   │   ├── db.ts          # Drizzle client (Neon)
 │   │   └── <entity>.ts    # get<X>DTO, create<X>, ... with authorization inside
@@ -67,7 +70,7 @@ Rules: `client:*` only on interactive `components/ui` and with a reason in the P
 
 Rules: `process.env` and `db` only in `src/data/`; `"use client"` only on leaves; every
 `actions/*` re-verifies the session and delegates; `[param]` validated with Zod; `route.ts` only
-for webhooks with a verified signature.
+for webhooks with a verified signature and Better Auth's `api/auth/[...all]` handler.
 
 ## Shared
 

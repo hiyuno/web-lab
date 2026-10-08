@@ -8,7 +8,7 @@ Date: [yyyy-mm-dd] · Author: Hopper · Applications only
 |------|----------|
 | Database | Postgres on Neon |
 | ORM and migrations | Drizzle, `drizzle/` |
-| Identity | Clerk / Better Auth / Auth.js |
+| Identity | Better Auth, Drizzle adapter |
 | Payments | Stripe / Mercado Pago |
 | Rate limiting | Upstash |
 | Files | Vercel Blob |

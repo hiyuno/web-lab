@@ -93,7 +93,7 @@ retro and record it as `CLAUDE.md` says.
 - If the project stores personal data, the spec includes the privacy notice, legal basis,
   retention period and how a user asks to delete their data.
 - Never propose home-grown authentication. If there are users, the spec names the identity
-  provider (Clerk, Auth.js, Supabase Auth) and whether there are roles.
+  setup (Better Auth: sign-in methods and plugins) and whether there are roles.
 - Payments always through a provider (Stripe, Mercado Pago). Card data never touches the
   project's server.
 - If the user pastes a password, API key or token in the chat, do not use it: tell them to

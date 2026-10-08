@@ -32,7 +32,9 @@ without rewriting them.
 | Metadata leaks | The public list exposes the voter's email, the author's internal id, an unpublished pending item, or the vote count of a moderated-away request | I · Linkability |
 
 **Sybil, proportionately.** This is a solo owner's forum, not a marketplace. The proportionate
-control set is: an account required and its email verified before the first vote, a rate limit
+control set is: an account required and its email verified before the first vote
+(`emailAndPassword.requireEmailVerification: true`, "Better Auth configuration" item 5 in
+`code-review.md`), a rate limit
 per account and per IP on create, comment and vote, and one query the owner can run when a
 request's count looks wrong — votes on that request grouped by account creation date. Ten
 accounts created within an hour, all voting on the same request, is visible in one screen. A

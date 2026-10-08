@@ -1,6 +1,6 @@
 ---
 name: build
-description: Osmani and Hopper, engineering. Phase 5 of the web-lab process. With the approved design, builds the site or app in Astro 5 or Next.js 16 following the spec: repo foundation with TypeScript, Tailwind v4 with Frost's tokens, CI with tests, audit and Lighthouse CI with a performance budget, tasks derived from the stories, a per-task cycle with tests first and pull requests with preview, a frontend track (components, SEO, headers and CSP, Core Web Vitals) and a backend track for apps only (server-only data access layer, Drizzle and Postgres, Zod, auth with a provider, per-resource authorization, rate limiting, webhooks). Use this skill when the user asks to build, implement, code, lay out, "turn the design into code", set up the repo, configure CI, Next.js, Astro, database, login, API, server actions, or when a project has an approved docs/04-design and no code yet. Works in tasks with user checkpoints.
+description: Osmani and Hopper, engineering. Phase 5 of the web-lab process. With the approved design, builds the site or app in Astro 7 or Next.js 16 following the spec: repo foundation with TypeScript, Tailwind v4 with Frost's tokens, CI with tests, audit and Lighthouse CI with a performance budget, tasks derived from the stories, a per-task cycle with tests first and pull requests with preview, a frontend track (components, SEO, headers and CSP, Core Web Vitals) and a backend track for apps only (server-only data access layer, Drizzle and Postgres, Zod, auth with Better Auth, per-resource authorization, rate limiting, webhooks). Use this skill when the user asks to build, implement, code, lay out, "turn the design into code", set up the repo, configure CI, Next.js, Astro, database, login, API, server actions, or when a project has an approved docs/04-design and no code yet. Works in tasks with user checkpoints.
 ---
 
 # /build · Osmani and Hopper
@@ -51,7 +51,11 @@ only required to be met. What was not tested in the browser is reported as **Not
 One day that saves weeks. With `references/structure.md` for each framework's folders:
 
 1. Scaffold: `pnpm create astro@latest` or `pnpm create next-app@latest` with strict TypeScript.
-   Tailwind v4 and `docs/04-design/tokens.css` as the main stylesheet.
+   On Astro, pin `astro@^7`, since `@latest` may scaffold a newer major. Node 22.12 or later
+   (Astro 7's floor; Next.js 16 needs 20.9). Tailwind v4 and `docs/04-design/tokens.css` as the
+   main stylesheet. Astro 7's compiler errors on unclosed tags instead of fixing them, and
+   `compressHTML: 'jsx'` (the new default) drops whitespace between inline elements on separate
+   lines: write `{" "}` where a space must stay.
 2. `.gitignore` with `.env*` (except `.env.example`) from the first commit. `.env.example` with
    names and descriptions, never values.
 3. Lint and format (ESLint, Prettier). Pre-commit hooks with lint-staged: lint, types and
@@ -109,7 +113,10 @@ You delegate to `osmani`. Beyond the cycle:
   template; islands only where there is real interaction, with `client:visible` or
   `client:idle`, never `client:load` without reason; Astro's `<Image>` and `<Picture>` with
   Bellard's assets; local subset fonts with `font-display: swap` and preload of the main one;
-  View Transitions if the design asks for them.
+  page transitions, if the design asks for them, only as CSS cross-document view transitions
+  (`@view-transition { navigation: auto; }`, off under `prefers-reduced-motion`), never
+  `<ClientRouter />`, which does not work with `security.csp` (`references/motion-gsap.md`,
+  `references/headers.md`).
 - **Next.js**: App Router; Server Components by default and `"use client"` only on interactive
   leaves; `(marketing)` and `(app)` route groups; Cache Components with explicit `"use cache"`
   and `cacheLife` on what is cacheable, Suspense on what is dynamic; `loading.tsx` and
@@ -119,8 +126,8 @@ You delegate to `osmani`. Beyond the cycle:
   `vercel:next-cache-components`.
 - **Shared**: semantic HTML with landmarks, visible focus, `label` on every field; the `seo.md`
   table implemented with metadata, JSON-LD, `sitemap.xml`, `robots.txt`, OG per page, canonical
-  and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, static on
-  Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
+  and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, `security.csp`
+  on Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
   external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client;
   motion follows `docs/04-design/motion.md`: where it marks GSAP, follow
   `references/motion-gsap.md`, otherwise CSS transitions.
@@ -143,14 +150,17 @@ You delegate to `hopper`. With `references/dal.md` as the pattern. For `app-web`
   production.
 - **Validation**: Zod at every boundary: `FormData`, `params`, `searchParams`, headers, webhook
   bodies. Types are erased at runtime; the schema is not.
-- **Auth** with a provider: Clerk, Better Auth or Auth.js per `architecture-decision.md`. Skill
-  `vercel:auth`. Cookies `HttpOnly`, `Secure`, `SameSite=Lax`. Middleware or `proxy.ts` only
-  redirects; it is never the barrier. Every server action and route handler re-verifies.
+- **Auth** with Better Auth per `architecture-decision.md`, Drizzle adapter on the project's
+  Postgres, configured per the "Better Auth configuration" checklist in the `security` skill
+  (`references/code-review.md`, §6). Cookies `HttpOnly`, `Secure`, `SameSite=Lax`. Middleware or
+  `proxy.ts` only redirects; it is never the barrier. Every server action and route handler
+  re-verifies.
 - **Thin server actions** in `src/actions/`: validate with Zod, call the data layer, return only
   what the UI needs, `revalidatePath` or `updateTag`. Generic errors to the client; detail to the
   log.
-- **Rate limiting** with `@upstash/ratelimit` or the hosting's on login, signup, recovery, public
-  forms and expensive operations.
+- **Rate limiting** with `@upstash/ratelimit` or the hosting's on public forms and expensive
+  operations. Login, signup, recovery and two-factor go through Better Auth's handler and are
+  limited by its own `rateLimit` with persistent storage, per the same checklist.
 - **Payments** with Stripe or Mercado Pago via Checkout; webhooks verified by signature before
   reading the body; idempotency by event id.
 - **Uploads** to Vercel Blob or S3: real type, max size, renamed, served from another origin.

@@ -2,8 +2,8 @@
 
 The recipe Osmani follows once per project when `docs/04-design/motion.md` marks motion as GSAP.
 Frost decides what animates and with which values; this file only says how to wire it. Verified
-against the official docs (gsap.com, the Lenis README, Astro's View Transitions guide) on
-2026-10-08; re-check the version lines when you install.
+against the official docs (gsap.com, the Lenis README, MDN's `@view-transition`) on 2026-10-08;
+re-check the version lines when you install.
 
 ## When
 
@@ -104,54 +104,56 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
 
 ## Astro
 
-- One module script, loaded from the layout: `src/scripts/motion.ts`. Add it to the pages that
-  animate, not to the whole site, when only some do.
-- Astro's `<ClientRouter />` (View Transitions, imported from `astro:transitions`) replaces the
-  `<body>` on every navigation, and bundled module scripts run only once. So the script
-  registers listeners once and builds and tears down the animations on the lifecycle events:
+Page transitions on Astro are CSS cross-document view transitions, never `<ClientRouter />`
+(imported from `astro:transitions`): it is incompatible with `security.csp`, which every site
+keeps (`headers.md`). So every navigation is a full page load.
 
-```ts
-let mm: gsap.MatchMedia | undefined;
-let cleanupLenis: (() => void) | undefined;
+- Opt in from the global stylesheet, only when motion is allowed. Both pages of a navigation
+  need the rule, and it only works between same-origin pages:
 
-function setup() {
-  teardown();
-  mm = gsap.matchMedia();
-  mm.add("(prefers-reduced-motion: no-preference)", () => {
-    const lenis = new Lenis();
-    lenis.on("scroll", ScrollTrigger.update);
-    const tick = (time: number) => lenis.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-    cleanupLenis = () => {
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-      cleanupLenis = undefined;
-    };
-    // ...this page's animations, as in the section above
-    return () => cleanupLenis?.(); // runs when the query stops matching
-  });
+```css
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
 }
-
-function teardown() {
-  mm?.revert();     // reverts this page's GSAP animations and ScrollTriggers
-  cleanupLenis?.(); // explicit, see below
-  mm = undefined;
-}
-
-document.addEventListener("astro:page-load", setup);   // first load and after each navigation
-document.addEventListener("astro:before-swap", teardown); // old page still visible, nothing stacks
 ```
 
-Lenis and the ticker callback are destroyed explicitly in `teardown()`. GSAP's docs guarantee
-that a `matchMedia` handler's returned function runs when the query stops matching; they do not
-say it runs on `mm.revert()`. Calling `cleanupLenis` directly means a navigation never leaves a
-Lenis instance or a ticker callback behind, whichever way that behaves. It clears itself, so a
-second call is harmless.
+- Under `reduce` there is no transition, just the normal page load. Custom
+  `::view-transition-old()` / `::view-transition-new()` animations and `view-transition-name`
+  pairs go inside the same media query; values come from Frost's `motion.md`.
+- Progressive enhancement: Chrome and Edge 126+ and Safari 18.2+ (macOS and iOS) run it; Firefox
+  does not yet (MDN browser-compat-data, 2026-10-08), and navigates with no transition. Nothing
+  may depend on it.
+- One module script, loaded from the layout: `src/scripts/motion.ts`. Add it to the pages that
+  animate, not to the whole site, when only some do. Astro bundles it as `type="module"`, which
+  runs after the document is parsed, so it builds at the top level, once per page load, as in
+  "Reduced motion" above:
 
-- `astro:page-load` also fires on the initial load of the page, so no separate first-run call.
-- Without `<ClientRouter />` there is no swap: build once on `DOMContentLoaded`, nothing to tear
-  down.
+```ts
+import { gsap, ScrollTrigger } from "../lib/gsap"; // registers the plugins
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+
+const mm = gsap.matchMedia();
+mm.add("(prefers-reduced-motion: no-preference)", () => {
+  const lenis = new Lenis();
+  lenis.on("scroll", ScrollTrigger.update);
+  const tick = (time: number) => lenis.raf(time * 1000);
+  gsap.ticker.add(tick);
+  gsap.ticker.lagSmoothing(0);
+  // ...this page's animations
+  return () => {
+    gsap.ticker.remove(tick);
+    lenis.destroy();
+  };
+});
+```
+
+- No `astro:page-load`, `astro:before-swap` or `astro:after-swap` listeners: those events belong
+  to `<ClientRouter />`. Each navigation discards the old document with its Lenis instance and
+  animations, so nothing needs tearing down across pages. A page restored from the back/forward
+  cache comes back as it was left, without re-running the script.
 - Islands with `client:visible` or `client:idle` that animate on their own follow the Next.js
   rules below.
 
@@ -251,4 +253,5 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   for good, `SplitText` instances once their animation has finished (`revert()` restores the
   original markup), and the whole context on navigation or unmount as above.
 
-No Barba: page transitions use the framework's own (Astro View Transitions, Next.js navigation).
+No Barba: page transitions use the platform's or the framework's own (CSS `@view-transition` on
+Astro, Next.js navigation).

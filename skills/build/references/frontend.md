@@ -1,6 +1,6 @@
 # Frontend · [project]
 
-Date: [yyyy-mm-dd] · Author: Osmani · Framework: Astro 5 | Next.js 16 · Hosting: Vercel
+Date: [yyyy-mm-dd] · Author: Osmani · Framework: Astro 7 | Next.js 16 · Hosting: Vercel
 
 ## How to run it
 

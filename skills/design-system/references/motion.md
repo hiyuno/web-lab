@@ -36,5 +36,6 @@ Date: [yyyy-mm-dd] · Author: Frost · Tokens: duration.*, ease.* · Reference: 
 
 ## Implementation (for Osmani)
 
-- CSS `transition` with tokens; View Transitions for page changes (`react-view-transitions` skill on Next.js).
+- CSS `transition` with tokens; page changes with CSS cross-document `@view-transition` on Astro
+  (never `<ClientRouter />`) and the `react-view-transitions` skill on Next.js.
 - Global `@media (prefers-reduced-motion: reduce)` that reduces durations to 0.01 ms except opacity.

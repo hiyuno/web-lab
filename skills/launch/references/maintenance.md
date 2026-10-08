@@ -14,7 +14,7 @@ Date: [yyyy-mm-dd] · Author: Allspaw · Plan owner: [name] · Plan review: ever
 | Monthly | Forms and email | test submission; arrives and not in spam | | | |
 | Monthly | Backups | verify they run; test restore every 6 months | | | |
 | Monthly | Expiries | domain > 60 days, certificate > 14 days | | | |
-| Quarterly | Secret rotation | the rotatable ones (API keys, tokens); with Schneier | | | |
+| Quarterly | Secret rotation | the rotatable ones (API keys, tokens, `BETTER_AUTH_SECRET` per "Better Auth configuration", item 8: rotating it signs everyone out); with Schneier | | | |
 | Quarterly | Access review | registrar, DNS, hosting, repo, analytics, payments; remove what is not needed | | | |
 | Quarterly | Content | legal pages current, prices, testimonials, dates | | | |
 | Semiannual | Incident runbook | reread; rehearse one scenario | | | |

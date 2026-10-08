@@ -24,7 +24,7 @@ then organizes the team through every phase. The security checklist is in
 | 2 and 3 | [`rosenfeld`](agents/rosenfeld.md) | Information architecture, content, SEO, redirects |
 | 4 | [`frost`](agents/frost.md) | Design system, components, accessibility, prototype |
 | 5 | [`osmani`](agents/osmani.md) | Frontend in Astro or Next.js, performance, CSP and headers |
-| 5 | [`hopper`](agents/hopper.md) | Backend, data, auth and payments with providers. Applications only |
+| 5 | [`hopper`](agents/hopper.md) | Backend, data, auth with Better Auth, payments with providers. Applications only |
 | 5 and 6 | [`bellard`](agents/bellard.md) | Images and video |
 | 6 | [`beizer`](agents/beizer.md) | QA, accessibility, performance, security scanners |
 | All | [`schneier`](agents/schneier.md) | Security and privacy. Gate at every phase, signs the launch. Skill `/security` |
@@ -131,7 +131,7 @@ block with dark mode and verifies the contrast of every semantic pair in both mo
 
 ### `/build` · Osmani and Hopper
 
-Phase 5. With the approved design, builds the site or app in Astro 5 or Next.js 16: repo
+Phase 5. With the approved design, builds the site or app in Astro 7 or Next.js 16: repo
 foundation with TypeScript, Tailwind v4 and Frost's tokens, CI with tests, audit, secret
 scanning and Lighthouse CI with a performance budget, tasks derived from the spec's stories
 (`scripts/tasks_from_spec.py`), a per-task cycle with tests first and pull requests with preview.

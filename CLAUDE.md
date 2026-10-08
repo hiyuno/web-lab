@@ -122,7 +122,7 @@ Full rules in `<web-lab>/docs/LADDER.md`.
 | any | `beizer` | Live-site animation-performance audit against an already published site (`/audit-animations`) |
 | 4 | `frost` | Tokens, components and states, responsive, accessibility, prototype |
 | 5 | `osmani` | Frontend in Astro or Next.js, Tailwind v4, performance, CSP and headers |
-| 5 | `hopper` | Backend, data, auth with a provider, payments, uploads, webhooks. Applications only |
+| 5 | `hopper` | Backend, data, auth with Better Auth, payments, uploads, webhooks. Applications only |
 | 5 and 6 | `bellard` | Image and video audit and optimization |
 | 6 | `beizer` | E2E tests, accessibility, performance, dependency, secret and header scanners |
 | All | `schneier` | Threat model, per-phase review, compliance, launch sign-off. Can block |
