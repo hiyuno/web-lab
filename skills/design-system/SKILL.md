@@ -177,6 +177,12 @@ curve tokens: 150 to 300 ms for interface transitions, springs for gestures, eve
 interruptible, everything with an alternative under `prefers-reduced-motion`. Use `apple-design`
 and `emil-design-eng` for judgment and `find-animation-opportunities` if the user wants more life.
 
+Mark in the project's `motion.md` (started from `references/motion.md`) which motion is plain CSS
+and which needs GSAP, per `docs/PREFERENCES.md`: hover, press and focus states always stay CSS;
+GSAP only for what CSS cannot do well (timelines, scroll-driven animation, text splitting, SVG
+drawing, inertia/drag). A site that uses GSAP also gets Lenis smooth scroll. The implementation
+recipe lives in `skills/build/references/motion-gsap.md`.
+
 ## Step 4.7 · Prototype
 
 In code, with the real components and copy: HTML with Tailwind v4 and `tokens.css` for content

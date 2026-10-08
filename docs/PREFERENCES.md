@@ -42,6 +42,11 @@ explicitly. Every line carries the date it was confirmed.
 - 2026-09-04 · Roles are named after a real figure in their discipline.
 - 2026-09-05 · Brand token: `accent` in the semantic tier, with `primary` as an alias so shadcn
   does not break.
+- 2026-10-08 · GSAP 3.15 for animation that CSS transitions can't do well (timelines,
+  scroll-driven, SplitText, DrawSVG), only on sites with real animation; simple sites stay on CSS.
+  Every site that uses GSAP also gets Lenis smooth scroll, switched off under
+  prefers-reduced-motion. No Barba: page transitions use the framework's own (Astro View
+  Transitions, Next.js).
 
 ## Context
 

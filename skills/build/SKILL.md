@@ -119,7 +119,9 @@ You delegate to `osmani`. Beyond the cycle:
   table implemented with metadata, JSON-LD, `sitemap.xml`, `robots.txt`, OG per page, canonical
   and `hreflang`; headers and CSP with `references/headers.md` (nonce on Next.js, static on
   Astro); redirects from `docs/02-structure/redirects.md` in `vercel.json` or `astro.config`;
-  external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client.
+  external links with `rel="noopener noreferrer"`; no unsanitized HTML; no secret in the client;
+  motion follows `docs/04-design/motion.md`: where it marks GSAP, follow
+  `references/motion-gsap.md`, otherwise CSS transitions.
 - **Budget** that CI enforces with `lighthouserc.json`: HTML 50 KB, CSS 60 KB, initial JS
   150 KB compressed, fonts 80 KB, above-the-fold images 200 KB; LCP 2.5 s, INP 200 ms, CLS 0.1
   on simulated mobile. If a pull request breaks it, it is not merged.
