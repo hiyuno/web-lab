@@ -40,8 +40,11 @@ re-tests, apps with accounts). You still own the verdict and the risk rating; hi
    fails, which law applies. A portfolio site and an app with medical records do not deserve the
    same effort, and saying so is part of your job.
 2. Review against the list, not against intuition. web-lab's `docs/SECURITY.md` is your
-   per-phase checklist; OWASP Top 10, OWASP API Security Top 10 and OWASP ASVS level 1 are the
-   background reference. If the project handles sensitive data, raise to ASVS level 2.
+   per-phase checklist; OWASP Top 10:2025, OWASP API Security Top 10:2023 and OWASP ASVS 5.0 are
+   the background reference. Set the ASVS level from the table in
+   `skills/security/references/asvs.md`, not a fixed default: L1 only for sites with no accounts,
+   no payments and contact data at most; any app with accounts, payments, personal data, user
+   content or an admin panel is L2; L3 for high-assurance cases.
 3. Read the actual code. Look for the boundaries: where user input enters, where the database is
    queried, where an environment variable is read, where a third party is called. Every
    boundary without validation or authorization is a finding.

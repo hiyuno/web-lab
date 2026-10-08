@@ -1,9 +1,14 @@
 # Security checklist by phase
 
 Minimum list that **Schneier** reviews at the close of every phase and that all roles apply in
-their work. Background references: OWASP Top 10, OWASP API Security Top 10, OWASP ASVS level 1
-(level 2 with sensitive data). A critical finding blocks the phase transition; a high one blocks
-the launch.
+their work. Background references: **OWASP Top 10:2025** (A01 Broken Access Control now absorbs
+SSRF; new A03 Software Supply Chain Failures and A10 Mishandling of Exceptional Conditions —
+confirm the final numbering against the published edition), **OWASP API Security Top 10:2023**, and
+**OWASP ASVS 5.0**. The ASVS level is not a fixed default: set it per the table in
+`skills/security/references/asvs.md` (L1 = no accounts/no payments/contact data only; **any app
+with accounts, payments, personal data, user content or an admin panel = L2**; L3 only for
+high-assurance cases). A critical finding blocks the phase transition; a high one blocks the
+launch.
 
 ## Rules that always apply
 
@@ -16,7 +21,8 @@ the launch.
 
 ## Phase 1 · Discovery
 
-- [ ] Threat model written: assets, data and classification (public, internal, personal, sensitive), actors, impact, legal obligations (Mexico's 2025 LFPDPPP, GDPR if there are users in Europe; see `skills/security/references/legal-mx.md`).
+- [ ] Threat model written: assets, data and classification (public, internal, personal, sensitive), actors, impact, legal obligations by audience and sector (Mexico's 2025 LFPDPPP — `skills/security/references/legal-mx.md`; GDPR if there are users in Europe — `skills/security/references/privacy-eu.md`; CCPA/CPRA and Global Privacy Control if there are users in California — `skills/security/references/privacy-us.md`).
+- [ ] Scope captured: do we have EU users, and do we sell into the EU or provide a covered service? If so the EAA may apply (`skills/security/references/accessibility-law.md`): WCAG 2.2 AA becomes an obligation and an accessibility statement is a deliverable.
 - [ ] The spec names the auth setup (Better Auth: sign-in methods, plugins) and the payment provider, if applicable.
 - [ ] Retention and deletion of personal data defined.
 - [ ] Target ASVS level decided by data classification.
@@ -25,7 +31,7 @@ the launch.
 
 - [ ] Forms with the minimum fields; each field has a written reason.
 - [ ] No personal data in URLs or parameters.
-- [ ] Privacy notice, terms, and consent management if there are non-essential cookies.
+- [ ] Privacy notice, terms, and consent management. Default is a consent banner (Accept and Reject equally easy, nothing non-essential before consent) honoring Global Privacy Control; the only documented exception is a site using cookieless analytics only, which needs no banner (`skills/content/references/legal.md`, `skills/build/references/headers.md`). "Do Not Sell or Share" notice and GPC honored if there are California users (`skills/security/references/privacy-us.md`).
 - [ ] User-generated content surfaces identified.
 - [ ] Login and recovery error messages defined as generic.
 

@@ -37,7 +37,7 @@ values) and how to run migrations.
 
 ## Security on the server
 
-You follow the OWASP Top 10 and the OWASP API Security Top 10 as the minimum list:
+You follow the OWASP Top 10:2025 and the OWASP API Security Top 10:2023 as the minimum list:
 
 - **Validation at the boundary**: everything that arrives (body, query, params, headers,
   cookies, webhooks) is validated with a schema (Zod or equivalent) before touching it. What

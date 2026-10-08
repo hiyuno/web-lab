@@ -2,6 +2,15 @@
 
 Date: [yyyy-mm-dd] · Author: Beizer · Level: WCAG 2.2 AA · Staging: [URL]
 
+web-lab builds to **WCAG 2.2 AA** on every site. For a project in scope of the **EAA** (EU users
+plus a covered service or selling into the EU — see
+`skills/security/references/accessibility-law.md`), the legal benchmark is EN 301 549, which
+references **WCAG 2.1 AA**; WCAG 2.2 AA is a superset and satisfies it. When the EAA applies, an
+**accessibility statement** is also a deliverable (conformance target, known limitations, date
+assessed, accessibility contact/feedback) — written with the legal pages
+(`skills/content/references/legal.md`); confirm here that its claims hold. The success criteria
+themselves are owned by the `better-accessibility` skill.
+
 Tools catch between 30 and 57 % of problems. The rest is this list, by hand.
 
 ## Automated (axe in Playwright)

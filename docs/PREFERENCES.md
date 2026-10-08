@@ -54,6 +54,11 @@ explicitly. Every line carries the date it was confirmed.
 - 2026-10-08 · Page transitions on Astro are CSS cross-document view transitions
   (`@view-transition { navigation: auto; }`), off under prefers-reduced-motion; no
   `<ClientRouter />`, so Astro's built-in CSP (`security.csp`) stays on every site.
+- 2026-10-08 · Cookies: the default is a consent banner with Accept and Reject equally easy,
+  honoring Global Privacy Control (GPC present = treated as rejected, no dark pattern), nothing
+  non-essential before consent. Reference tool: Klaro (open source, BSD-3-Clause, self-hosted — no
+  SaaS dependency; chosen over Cookiebot, which is a paid Usercentrics SaaS). Documented exception:
+  a site using cookieless analytics only (e.g. Plausible) needs no banner.
 
 ## Context
 

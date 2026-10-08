@@ -67,6 +67,33 @@ How it arrives and its limits, per the Astro docs:
 
 JSON-LD is `type="application/ld+json"` and is **not** blocked by CSP; it does not count.
 
+## Consent and Global Privacy Control
+
+Third parties on the CSP allowlist that set non-essential cookies (ads, non-cookieless analytics,
+embeds) must not load before consent. The default is a **consent banner** with Accept and Reject
+equally easy; the reference tool is **Klaro** (open source, BSD-3-Clause, self-hosted — no SaaS
+dependency; configure each service with its purpose and load its script only on consent via
+`data-name`/`type="text/plain" data-type`). **Exception:** a site with **cookieless analytics
+only** (e.g. Plausible) sets no non-essential cookies and needs no banner.
+
+**Honor Global Privacy Control** on every site. GPC arrives as the `Sec-GPC: 1` request header and
+the `navigator.globalPrivacyControl` property. Treat it as an opt-out of sale/share and of
+non-essential cookies, before any banner renders and with no dark-pattern re-prompt:
+
+```js
+// Run before loading non-essential scripts / showing the banner.
+const gpc = navigator.globalPrivacyControl === true
+if (gpc) {
+  // Default everything non-essential to rejected; do not re-prompt.
+  // Klaro: pass { default: false } and skip auto-show for GPC visitors.
+}
+```
+
+Klaro does not read GPC itself, so this gate is wired by hand. Server-side, code that decides
+whether to sell/share may also read the `Sec-GPC` header. See
+`skills/security/references/privacy-us.md` (GPC is a legal opt-out in California and 12+ US states)
+and `skills/content/references/legal.md` (banner and cookie-policy copy).
+
 The other headers, and the CSP header that carries only what a meta tag cannot, in `vercel.json`:
 
 ```json

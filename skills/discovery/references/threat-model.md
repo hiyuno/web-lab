@@ -1,6 +1,6 @@
 # Threat model · [project name]
 
-Date: [yyyy-mm-dd] · Authors: Schneier with Cooper · Target ASVS level: [1 | 2] · Review: [yearly or when scope changes]
+Date: [yyyy-mm-dd] · Authors: Schneier with Cooper · Target ASVS level: [L1 | L2 | L3] · Review: [yearly or when scope changes]
 
 ## 1. What are we building?
 
@@ -63,7 +63,9 @@ non-repudiation, detectability, disclosure, unawareness, non-compliance) if ther
 ## 4. Legal obligations
 
 - Mexico's 2025 LFPDPPP (in force since 21 March 2025; authority: Secretaría Anticorrupción y Buen Gobierno): privacy notice with sensitive data identified, ARCO rights, [applies | does not apply]. See `skills/security/references/legal-mx.md`.
-- GDPR (Europe): legal basis, consent, right to erasure, [applies | does not apply].
+- GDPR (Europe): lawful basis per purpose, consent standard, data subject rights (erasure, portability, objection), transfers (SCCs), breach 72 h, [applies | does not apply]. See `skills/security/references/privacy-eu.md`.
+- CCPA/CPRA (California): Do Not Sell/Share, Global Privacy Control honored, consumer rights, [applies | does not apply]. See `skills/security/references/privacy-us.md`.
+- EAA accessibility (EU): EU users and a covered service or selling into the EU → WCAG 2.2 AA is an obligation and an accessibility statement is a deliverable, [applies | does not apply | exempt microenterprise-service]. See `skills/security/references/accessibility-law.md`.
 - Sector: [health, finance, minors: what applies].
 
 ## 5. Did we do a good job?

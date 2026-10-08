@@ -2,6 +2,11 @@
 
 Date: [yyyy-mm-dd] · Author: Frost · Level: WCAG 2.2 AA · Verified in tokens and components, not page by page.
 
+Level is **WCAG 2.2 AA** on every site. For a project in scope of the **EAA**, the legal benchmark
+EN 301 549 references **WCAG 2.1 AA**; WCAG 2.2 AA is a superset and satisfies it (see
+`skills/security/references/accessibility-law.md`; the criteria below stay owned by the
+`better-accessibility` skill).
+
 ## Contrast (verified by `tokens_to_tailwind.py`)
 
 | Pair | Minimum | Light | Dark | Ok |

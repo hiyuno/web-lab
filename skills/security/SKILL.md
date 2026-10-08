@@ -54,12 +54,9 @@ projects.
 
 ## S.1 · ASVS level and threat model (phase 1, with Cooper)
 
-With `references/asvs.md` set the level and write it in the model:
-
-- **L1**: content site with no accounts; personal data limited to a contact form.
-- **L2**: any application with accounts, payments, personal data or user content. Baseline for
-  businesses.
-- **L3**: health, finance, minors, or when a breach is irreversible.
+Set the level from the table in `references/asvs.md` (the owner: L1 content sites with no
+accounts, L2 any app with accounts/payments/personal data/user content/admin panel, L3
+high-assurance) and write it in the model.
 
 With `references/threat-model.md` (script) fill in the `/discovery` template:
 
@@ -72,7 +69,12 @@ With `references/threat-model.md` (script) fill in the `/discovery` template:
 4. **Did we do well**: review at the close of phase 5 and yearly.
 
 Legal obligations by where the people live: Mexico's data protection law in force since 21 March
-2025 (see `references/legal-mx.md`), GDPR if there are users in the European Union.
+2025 (`references/legal-mx.md`), GDPR if there are users in the European Union
+(`references/privacy-eu.md`), CCPA/CPRA and Global Privacy Control if there are users in California
+(`references/privacy-us.md`). Also record whether the EAA applies — EU users plus a covered service
+or selling into the EU — which makes WCAG 2.2 AA an obligation and an accessibility statement a
+deliverable (`references/accessibility-law.md`); the accessibility criteria stay owned by the
+`better-accessibility` skill.
 
 ## S.2 · Design review (phases 2, 3 and 4)
 
