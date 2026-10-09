@@ -1,9 +1,9 @@
 # App brand package · contract
 
-Status: v1 signed 2026-10-08 (commit 1eabf63); web-lab side applied 2026-10-08 (7b58e73) · Agreed
-by the Web Master and App Master through Yuno, based on Frost's draft (2026-10-05); App Master
-confirmed and closed his open items on 2026-10-08. Signing = Yuno's commit. web-lab skills change
-only after signing.
+Status: v1 signed 2026-10-08 (commit 1eabf63); web-lab side applied 2026-10-08 (7b58e73). v1.1
+proposed 2026-10-09 — adds the optional 3D brand asset (§8), agreed by the Web Master and App
+Master through Yuno; both labs commit it the same day. Signing = Yuno's commit. web-lab skills
+change only after signing.
 
 The app brand package is what an AppleAppLab app hands to web-lab so its website starts from the
 app's real colors, type, shape, materials, motion and brand assets instead of from a blank style
@@ -100,7 +100,8 @@ and never copies it into the web project.
         ├── logo/              # logo.svg (+ logo-on-dark.svg if not currentColor)
         ├── icon/              # app-icon-ios-1024.png, optional app-icon-macos-1024.png
         ├── screens/           # key-screen captures (§7)
-        └── screenshots/       # optional until pre-launch: raw App Store screenshots
+        ├── screenshots/       # optional until pre-launch: raw App Store screenshots
+        └── 3d/                # optional (v1.1): one <id>/ per 3D brand asset (§8)
 ```
 
 Lowercase kebab-case names, paths relative to `brand-package/`, no symlinks, nothing outside the
@@ -134,6 +135,7 @@ Required unless marked optional. `TBD` is not a valid value in a required field.
 | `design_file` | optional: `{tool: figma or pen, url or path, access}`; no tokens in URLs |
 | `ui.key_screens` | 3 to 6 key-screen captures, always (§7) |
 | `assets.screenshots` | optional until pre-launch |
+| `assets.three_d` | optional (v1.1): list of 3D brand assets, each `{id, title, use: ["hero"\|"icon"\|"screenshots"], files: {renders: [...], posters: [...], video?, model?}}` (§8); `use` is a hint, web-lab decides how to render it |
 
 ## 4. Style mode: `mirror` or `adapted`
 
@@ -252,8 +254,16 @@ source file **Not verified**.
 | App icon, macOS | optional | PNG 1024 × 1024 with its shape and shadow, from the Icon Composer `.icon` (the PNG may be exported by hand); missing is a missing optional asset, never an invalid package |
 | Key-screen captures | yes (§7) | PNG, 3 to 6 screens, each app mode, seed data only |
 | Screenshots | from pre-launch | raw PNG at App Store sizes, per locale and mode, seed data only |
+| 3D asset (v1.1) | optional | per `<id>/` under `assets/3d/`: `<id>-<mode>.png` required per app mode (`.webp` optional), `<id>-poster-<mode>.webp` required per mode when there is a `model` or `video`, `<id>.mp4` and `<id>.glb` optional. Finals only — never the `.blend` or references. Produced by Ed from `Docs/Design/3D/<id>/`; which assets ship is set in `Docs/Design/3d-assets.json` |
 | Favicon, touch icon, Open Graph | never in the package | Bellard derives them from the masters |
 | App Store badges | never in the package | web-lab uses Apple's official localized badge |
+
+A 3D asset is rendered by web-lab, and how is a web decision like the style mode. The default is
+the fixed render (the paint-first image, per mode); an interactive `<model-viewer>` from the
+`.glb` is an opt-in a project justifies against `/build`'s Lighthouse budget — never the LCP
+element, lazy, with the poster shown first. Bellard derives the web variants of the render,
+poster and video and compresses the `.glb`, as with every other image. The build recipe is
+web-lab's to add after signing (`skills/build`); a package without a 3D asset changes nothing.
 
 ## 9. Versioning
 
@@ -264,8 +274,8 @@ app's Steve writes the `CHANGELOG.md` entry and commits in the app repo. A MAJOR
 to Yuno on the app side.
 
 - **MAJOR**: identity changes (accent hue, font design, corner style, logo or icon); an app mode
-  removed; a required token removed or renamed.
-- **MINOR**: any other design change; tokens, screens or screenshots added.
+  removed; a 3D asset removed; a required token removed or renamed.
+- **MINOR**: any other design change; tokens, screens, screenshots or a 3D asset added or changed.
 - **PATCH**: metadata fixes or assets re-exported with no visual change.
 
 Frost records the version used (`package_version` and `source.commit`) in `visual-direction.md`.
@@ -323,6 +333,9 @@ confirms the version, and Steve writes the changelog entry and commits in the ap
    committed in the app repo whenever the design changes, and the intake's "Brand package:
    version" field kept current, with the app repo path (Steve, updated by `/app-brand-package` in
    auto mode).
+7. Optional (v1.1): a 3D brand asset under `assets/3d/<id>/` — per-mode render (and poster when
+   there is a model or video), optional `.mp4`/`.glb`, finals only — produced by Ed from
+   `Docs/Design/3D/<id>/`, listed in `Docs/Design/3d-assets.json`.
 
 ## Decisions (2026-10-08)
 
@@ -355,12 +368,25 @@ App Master's closures (2026-10-08):
 5. Single-mode marker (§5) accepted as written: dark in `$extensions.web-lab.dark`, the same
    value in `$value` as a placeholder, root `mode_missing` (`"light"` or `"dark"`).
 
+v1.1 (2026-10-09), agreed by the Web Master and App Master through Yuno:
+1. An optional 3D brand asset (Ed, `/ed` in AppleAppLab) may travel in the package as
+   `assets.three_d` (§3, §8): finals only, per-mode render, poster required with a model or video,
+   optional `.mp4`/`.glb`.
+2. web-lab renders it; static render is the default and an interactive `<model-viewer>` is an
+   opt-in within `/build`'s Lighthouse budget (`.glb` ≤ ~2 MB, lazy, never the LCP element).
+   Bellard derives the web variants. web-lab does not install `/ed`; Cooper requests a new or
+   changed 3D asset from AppleAppLab through Yuno.
+3. Versioning: a 3D asset added or changed is MINOR; removed is MAJOR.
+
 ## After signing
 
 - web-lab changes `/app-web` (step 0 intake check, mirror or adapted asked in phase 1, per-phase
   version check) and `/design-system` (start phase 4 from the package, derive the missing mode,
   re-derive the ramp): the Web Master's backlog.
 - AppleAppLab changes its producer and the intake template: App Master's side.
+- v1.1: web-lab adds the 3D render recipe to `skills/build` (static render default, `<model-viewer>`
+  opt-in with the `.glb` budget) and the 3D variants to Bellard (`skills/optimize-assets`); the
+  AppleAppLab producer emits `assets.three_d`. Both labs commit v1.1 the same day.
 - The intake field changes on the same date on both sides: web-lab updates `/app-web` step 0
   item 3 (`skills/app-web/SKILL.md`) to read "Brand package" and the app repo path, on the same
   date as AppleAppLab's template.
