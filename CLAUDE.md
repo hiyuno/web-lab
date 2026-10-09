@@ -244,7 +244,7 @@ approve coverage you did not inspect.
 | Typography: scale, line-height, fonts, wrapping | `better-typography` |
 | Color ramps, color tokens, notation, contrast measurement | `better-colors` (the required level is set by `better-accessibility`) |
 | Surfaces, radii, shadows, icons, motion aesthetics | `better-ui` |
-| Security and privacy: threats, risk severity, verdict, accepted risks | `security` |
+| Security and privacy: threats, risk severity, verdict, accepted risks, legal deliverable list and data inventory | `security` |
 | Performance: budget, Core Web Vitals, images and video | `build` (budget) and `optimize-assets` (media) |
 | Content, copy, legal pages | `content` |
 | SEO, AEO/GEO, keyword research, structured data for search, title/meta limits, AI-crawler robots policy | `seo` (Sullivan) |

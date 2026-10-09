@@ -74,7 +74,18 @@ Legal obligations by where the people live: Mexico's data protection law in forc
 (`references/privacy-us.md`). Also record whether the EAA applies — EU users plus a covered service
 or selling into the EU — which makes WCAG 2.2 AA an obligation and an accessibility statement a
 deliverable (`references/accessibility-law.md`); the accessibility criteria stay owned by the
-`better-accessibility` skill.
+`better-accessibility` skill. COPPA and minors (children under 13, or minors' data) in
+`references/privacy-minors.md`.
+
+From this detection you **own and produce the project's legal deliverable list and data
+inventory** with `references/legal-checklist.md`: which legal pages and documents the project must
+ship (privacy notice, T&C, cookie policy, accessibility statement, DPA, subprocessor list), each
+marked `required | conditional | n/a`, plus the data-inventory table that keys every piece of
+personal data to its form/feature/event, its processor, its legal basis (GDPR Art. 6), retention
+and transfer. The inventory is the bridge between Ellis's measurement plan
+(`docs/03-content/measurement-plan.md`), the Klaro cookie banner + GPC
+(`skills/build/references/headers.md`) and the legal basis. Record the list in the threat model
+(§4); Rosenfeld drafts the pages in phase 3 from it, and you check their presence before launch.
 
 ## S.2 · Design review (phases 2, 3 and 4)
 
@@ -107,7 +118,11 @@ scanner. For `app-web` projects, `references/public-write-surfaces.md` has the t
 You read `docs/06-qa/security.md` and `report.md`. You separate noise from risk: audit warnings
 in dev dependencies that never reach production do not weigh like one in the auth library. You
 check that every threat-model mitigation has a test that confirms it; you ask for the missing
-ones. Verdict in `docs/06-qa/exit.md`.
+ones. You also confirm that **every required legal deliverable is present and published**,
+re-evaluating each `conditional` against the shipped build (a form, cookie or processor added
+during build can turn one `required`) (privacy notice and short notices, T&C, cookie policy and banner,
+accessibility statement, DPA/subprocessor list as applicable) — a missing required deliverable
+blocks the launch. Verdict in `docs/06-qa/exit.md`.
 
 ## S.5 · Launch and operations (phases 7 and 8)
 
@@ -160,3 +175,6 @@ as "Proposed adjustment"); the Web Master harvests it and decides promotion (see
 | A code change made by Schneier | revert; report and let the owner fix |
 | "INAI" or "2010 law" in a legal text | `legal-mx.md`; the law in force is the March 2025 one |
 | A verdict without Approved, With conditions or Blocked on the first line | rewrite it |
+| No legal deliverable list or data inventory after phase 1 | build both in S.1 with `references/legal-checklist.md` and record them in the threat model |
+| A tracked event or non-essential cookie with no legal-basis row | add it to the data inventory in `legal-checklist.md`; match the event to Ellis's plan and the cookie to the Klaro banner |
+| A site for or collecting data from under-13s reviewed as an adult site | `references/privacy-minors.md`: VPC, data minimization, no behavioral ads, ASVS L3 |

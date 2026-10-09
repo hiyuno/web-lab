@@ -66,7 +66,28 @@ non-repudiation, detectability, disclosure, unawareness, non-compliance) if ther
 - GDPR (Europe): lawful basis per purpose, consent standard, data subject rights (erasure, portability, objection), transfers (SCCs), breach 72 h, [applies | does not apply]. See `skills/security/references/privacy-eu.md`.
 - CCPA/CPRA (California): Do Not Sell/Share, Global Privacy Control honored, consumer rights, [applies | does not apply]. See `skills/security/references/privacy-us.md`.
 - EAA accessibility (EU): EU users and a covered service or selling into the EU → WCAG 2.2 AA is an obligation and an accessibility statement is a deliverable, [applies | does not apply | exempt microenterprise-service]. See `skills/security/references/accessibility-law.md`.
-- Sector: [health, finance, minors: what applies].
+- COPPA / minors: the trigger is the audience as much as the data — a site **directed to children under 13**, or that knowingly collects their data, applies even before its forms exist, so ask who the site is for, not only what it stores. Verifiable parental consent, data minimization, no behavioral ads; GDPR child-consent age; LFPDPPP minors as sensitive → ASVS L3, [applies | does not apply]. See `skills/security/references/privacy-minors.md`.
+- B2B / processor: the site acts as a processor or engages processors → DPA + subprocessor list, [applies | does not apply]. See `skills/security/references/privacy-eu.md` (Art. 28) and `privacy-us.md`.
+- Other sector: [health, finance: what applies].
+
+### Legal deliverable list (owned by Schneier, from `skills/security/references/legal-checklist.md`)
+
+| Deliverable | Status | Trigger that applies |
+|-------------|--------|----------------------|
+| Privacy notice (full + short per form) | required | any personal data |
+| Terms & conditions | [required | conditional | n/a] | sale / account / user content |
+| Cookie policy + consent banner | [required | conditional | n/a] | non-essential cookies (none if cookieless-only) |
+| Accessibility statement | [required | conditional | n/a] | EAA applies |
+| DPA + subprocessor list | [required | conditional | n/a] | B2B / processors |
+
+### Data inventory (from `legal-checklist.md`)
+
+| Data | Source (form / feature / event) | Stored where | Provider | Legal basis | Retention | Transfer → SCCs? |
+|------|--------------------------------|--------------|----------|-------------|-----------|------------------|
+| | | | | consent / contract / legitimate interest | | |
+
+Analytics/event rows match Ellis's `docs/03-content/measurement-plan.md`; cookie rows map to the
+Klaro banner + GPC (`skills/build/references/headers.md`).
 
 ## 5. Did we do a good job?
 

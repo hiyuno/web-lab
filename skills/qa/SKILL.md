@@ -158,7 +158,10 @@ you retest only what failed and turn every bug into a Playwright test.
    defensive scans in 6.6, he runs the adversarial pass.
 3. Launch `schneier` with `security.md`, `report.md` and, when it exists, `offensive.md`. Ask for
    what is missing. His verdict goes in `docs/06-qa/security-verdict.md`, per `security`;
-   `exit.md` links to it.
+   `exit.md` links to it. Schneier also verifies every legal deliverable the phase-1 list
+   (`skills/security/references/legal-checklist.md`) is present and published — re-evaluating
+   each `conditional` against the shipped build (a cookie, form or processor added during build
+   can turn one `required`); a missing one blocks the launch.
 4. **Checkpoint B**: present in ten lines the numbers: tests, findings by severity, Lighthouse,
    axe, scan, and the verdict. Ask for explicit approval.
 5. Retro into this project's own `docs/learnings.md` (create it from

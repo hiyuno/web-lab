@@ -2,6 +2,12 @@
 
 Date: [yyyy-mm-dd] · Authors: Rosenfeld with Schneier · Status: draft | reviewed by Schneier | approved
 
+**Which pages to write comes from Schneier's deliverable list**
+(`skills/security/references/legal-checklist.md`), set in phase 1 from the regime detection and its
+data inventory: privacy notice always, T&C / cookie policy / accessibility statement as their
+triggers hold, and — for a B2B / processor project — a **DPA and subprocessor list**. Draft only
+what the list marks `required` or `conditional`; Schneier owns what each must say.
+
 Never copied from another site. Real data of the controller, in plain language. Applicable law in
 Mexico: the LFPDPPP published on 20 March 2025 (replaces the 2010 law; the authority is the
 Secretaría Anticorrupción y Buen Gobierno, not INAI). Summary in
@@ -80,6 +86,23 @@ into the EU; the criteria are owned by the `better-accessibility` skill). A publ
 - [ ] Known limitations, if any, and planned fixes
 - [ ] Date the site was assessed
 - [ ] A contact and feedback mechanism for accessibility problems
+
+## Minors · only if the site targets or collects data from under-13s
+
+Per `skills/security/references/privacy-minors.md` (set in the threat model; raises the ASVS level).
+In the privacy notice:
+
+- [ ] What is collected from the child and why, with data minimization stated
+- [ ] The verifiable-parental-consent method used, and how a parent gives/withdraws it
+- [ ] The data-retention policy (required by the 2025 COPPA amendments)
+- [ ] No behavioral advertising / third-party sharing without separate opt-in, presented as optional
+- [ ] How a parent reviews, deletes and stops further collection of their child's data
+
+## DPA and subprocessor list · only for B2B / processor projects
+
+Per `skills/security/references/legal-checklist.md` (deliverable list) and `privacy-eu.md` (Art. 28).
+The subprocessor-list template and the data inventory that fills it live in `legal-checklist.md`;
+draft the DPA text and publish or make the subprocessor list available on request.
 
 ## Copy Schneier reviews
 

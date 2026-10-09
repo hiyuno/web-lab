@@ -137,7 +137,13 @@ the model with the `references/threat-model.md` template: Shostack's four questi
 diagram with trust boundaries in Mermaid, data classification, STRIDE per boundary-crossing
 interaction, LINDDUN if there is personal data, a response for every threat (mitigate,
 eliminate, transfer, accept) and legal obligations (Mexico's 2025 LFPDPPP, GDPR if there are
-users in Europe; Schneier brings the detail from `/security`).
+users in Europe, CCPA/CPRA for California, the EAA for a covered EU service, and COPPA/minors if
+the site targets or collects data from under-13s; Schneier brings the detail from `/security`).
+After that detection, Schneier produces the project's **legal deliverable list and data inventory**
+from `skills/security/references/legal-checklist.md` and records them in the model's §4 — which
+legal pages must ship (owned by Schneier, drafted by Rosenfeld in phase 3) and the data-inventory
+table that keys each piece of personal data to its form, feature or event, its processor, its legal
+basis, retention and transfer. The B2B/DPA and COPPA/minors cases are part of the detection.
 
 Proportion: a portfolio deserves half a page; an app with payments, a full document. Schneier
 decides the target ASVS level and writes it. Whatever comes out as a mitigation enters the spec

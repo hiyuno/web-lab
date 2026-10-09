@@ -125,6 +125,12 @@ The `seo.md` table is what Osmani implements in phase 5 without asking.
 
 ## Step 3.6 · Legal and privacy
 
+The **set of legal pages to write is Schneier's deliverable list** from
+`skills/security/references/legal-checklist.md`, decided in phase 1 and recorded in the threat
+model; you draft what it marks `required` or `conditional`, driven by its data inventory. For a
+B2B / processor project the list adds a **DPA and a subprocessor list** as deliverables — you draft
+the text, Schneier owns what they must say.
+
 With the `references/legal.md` template and the `schneier` subagent. Ask the user for the real
 data: legal name, address, contact email for ARCO rights, what data is collected and why, who
 it is shared with. Write the privacy notice compliant with Mexico's 2025 LFPDPPP (see
