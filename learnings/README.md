@@ -17,7 +17,8 @@ at the start of the next. The user's stable preferences that apply to everyone l
 3. **Comes from other projects.** The Web Master runs `/web-master harvest` here in web-lab: it
    reads every project's `docs/learnings.md` read-only and appends each role's new entries here,
    into its file, with date and project preserved. [`LEDGER.md`](LEDGER.md) records what was
-   already reviewed, so the next harvest only brings what is new.
+   already reviewed, so the next harvest only brings what is new. Harvest runs on a cadence, not
+   only when asked: at the close of every project and quarterly thereafter.
 4. **When a lesson repeats three times** or the user marks it as a rule, the Web Master promotes
    it: it moves to the role file in `agents/`, to the skill, or to `docs/PREFERENCES.md`, and is
    removed from here. That keeps learning files short and makes roles truly improve. Cooper and

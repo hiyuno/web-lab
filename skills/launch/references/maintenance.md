@@ -1,6 +1,32 @@
 # Maintenance plan · [project]
 
-Date: [yyyy-mm-dd] · Author: Allspaw · Plan owner: [name] · Plan review: every 6 months
+Date: [yyyy-mm-dd] · Author: Allspaw · Plan owner: Allspaw · Alerts a decision to: Yuno ·
+Plan review: every 6 months
+
+## How it fires: owner, trigger, routing
+
+Without this section the calendar below is a wish list nobody runs. Two things make it real:
+
+- **Owner and routing.** **Allspaw owns this schedule and is the point of contact.** He runs and
+  triages every scheduled task, handles what is routine himself, and **alerts Yuno on anything
+  that needs a decision** (a major version to plan, a secret or access to revoke, a cost or expiry
+  to approve). The per-task **Owner** column names who does that task when it is not Allspaw; the
+  routing to Yuno for decisions is the same for all of them.
+- **Trigger: a dated checklist, committed in git (default).** The task fires because a date came
+  due, not because someone remembered. The **Last** and **Next** columns below are that mechanism:
+  fill **Next** for every row at project close (step 8.1), commit this file to
+  `docs/08-maintenance/plan.md`, and Allspaw works from the rows whose **Next** has arrived,
+  stamping **Last** and setting the following **Next** each time. This needs no infrastructure,
+  lives in git, and survives any handoff — the next owner inherits the dates. *Optional upgrade:*
+  a cron job or a calendar reminder that pushes the due rows to Allspaw's channel, for teams that
+  want a notification instead of reading the file. The checklist stays the source of truth; the
+  reminder only points at it.
+
+**This is not monitoring.** `monitoring.md` is the **real-time machine** channel: uptime, error
+and Core Web Vitals alerts fire automatically the moment the user's experience breaks, to a named
+person, day or night. This file is the **scheduled periodic human** channel: tasks that come due
+on a date and need a person to run and judge them. The two never overlap — an outage is
+`monitoring.md`; a quarterly access review is here.
 
 ## Calendar
 

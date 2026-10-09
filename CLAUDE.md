@@ -298,7 +298,9 @@ a merge step that happens here, in web-lab, when that file comes back.
    `docs/learnings.md` with `/web-master harvest`, appends new entries into
    [`learnings/<role>.md`](learnings/README.md) with date and project preserved, keeps
    `learnings/LEDGER.md`, and promotes what repeats three times or the user marks as a rule to
-   `<web-lab>/docs/PREFERENCES.md`, the role file in `agents/` or the skill.
+   `<web-lab>/docs/PREFERENCES.md`, the role file in `agents/` or the skill. Harvest runs on a
+   cadence, not only when asked: at the close of every project and quarterly thereafter (the
+   LEDGER means each run brings only new entries).
 5. **Cooper never edits** role files, skills, `learnings/` or `<web-lab>/docs/PREFERENCES.md`, even
    when asked mid-project: he records the proposal and tells the user it goes to the Web Master. See
    `<web-lab>/docs/LADDER.md`.

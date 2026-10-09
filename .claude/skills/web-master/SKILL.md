@@ -102,6 +102,15 @@ projects with new or changed entries (count per role), and backlog items that ar
 
 ### harvest [project]
 
+**When to harvest (cadence).** Harvest is not only on-demand. Run `/web-master harvest` (1) **at
+the close of every project**, when its `docs/learnings.md` comes back, so what one site learned is
+promoted before the next starts; and (2) **on a periodic review, quarterly** — the right beat
+given how often projects finish here: frequent enough that nothing useful sits unpromoted for a
+season, rare enough not to churn. Adjust the period if project cadence changes (monthly if several
+run at once). Between runs `learnings/LEDGER.md` tracks what has already been reviewed, so each run
+brings only new or changed entries and re-running early is cheap and safe. Yuno asking for it any
+time still works.
+
 **1. Collect, touching nothing.** Every `docs/learnings.md` in a direct subfolder of
 `~/Documents/GitSync/`, except web-lab itself. Entries follow the template in
 [`docs/learnings-template.md`](../../../docs/learnings-template.md): a `## <role>` section, and

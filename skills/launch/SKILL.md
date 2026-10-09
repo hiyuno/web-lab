@@ -166,7 +166,19 @@ ops and watch the signals; they decide the SEO and growth work and what goes bac
 
 ## Step 8.1 · Maintenance plan
 
-With `references/maintenance.md`: a calendar with an owner per task.
+With `references/maintenance.md`: a calendar with an owner per task. At project close, set it up
+so it actually fires — this is a close-of-project deliverable written once, not per-change
+(efficiency — `CLAUDE.md`, item 7):
+
+- **Fill the `Next` date for every row** and commit the file to `docs/08-maintenance/plan.md`. The
+  dated checklist is the trigger: a task fires because its `Next` came due, not because someone
+  remembered. (A cron or calendar reminder pointing at the file is an optional upgrade; the
+  checklist stays the source of truth.)
+- **Name Allspaw as the owner** of the schedule and the point of contact: he runs and triages the
+  scheduled tasks and **alerts Yuno on anything needing a decision**. Put per-task owners in the
+  `Owner` column.
+- Keep this distinct from `monitoring.md`: that file is the real-time machine channel (uptime,
+  errors, CWV) for when the experience breaks now; this one is the scheduled periodic human tasks.
 
 - Continuous: Dependabot (Renovate if monorepo) with weekly grouping and same-day security
   patches; CI decides whether they merge. Major versions as a planned task.
