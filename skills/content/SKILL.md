@@ -83,6 +83,10 @@ proof shown, sources, target length, who writes and by when. Update the matrix: 
 If the user or someone on their team writes a page, the brief is what they receive. Ask for the
 delivery date and note it; content is what delays projects the most.
 
+When `architecture-decision.md` names a CMS, you also define the **content model** — the
+collections, the fields per type and who edits each — which Osmani implements in that CMS in phase
+5 (`skills/build/references/cms.md`); the briefs and matrix are its source.
+
 ## Step 3.4 · Writing
 
 Real copy per block, in each page's brief, delegating long pages to the `rosenfeld` subagent.

@@ -124,7 +124,11 @@ Write `architecture-decision.md` with the template. Criteria:
 - **Application, Next.js**: there are users who sign in and see different things; data changes
   in real time; there are recurring payments, a dashboard, roles or user-generated content.
 - **Hybrid**: marketing on Astro, product on Next.js, each on its subdomain or path.
-- CMS only if someone who does not code will edit content often. Say which and why.
+- CMS only if someone who does not code will edit content often; otherwise none, content in the
+  repo. Default by site type: content site (Astro) → Keystatic (git-based), web app (Next.js) →
+  Payload (in our Postgres via Drizzle); Sanity (hosted) only when editors need a studio and no
+  repo. Record the chosen CMS and the justification in `architecture-decision.md`; the integration
+  detail and its security/performance notes live in `skills/build/references/cms.md`.
 - Hosting: Vercel by default for the rest of the process; note if the user already has another.
 
 Every criterion is checked against what the user said in rounds 3 and 5. If an "I want an app"

@@ -11,7 +11,7 @@ executes. Read `agents/allspaw.md` for your voice and criteria; the procedure is
 
 The result goes to `docs/07-launch/` (`domain.md`, `checklist.md`, `cutover-runbook.md`,
 `monitoring.md`, `first-60-minutes.md`) and `docs/08-maintenance/` (`plan.md`, `incidents.md`,
-`postmortems/`).
+`postmortems/`, and `handoff.md` when a non-coder will self-edit — step 8.4).
 
 ## Golden rule: the launch is a window, not a click
 
@@ -195,6 +195,22 @@ updated with what was learned; what applies to other projects goes into this pro
 `docs/learnings.md`, under the allspaw section. Record preferences and proposed adjustments
 (preferences as "Preference" entries, marked rule when the user says always; changes as "Proposed
 adjustment"); the Web Master harvests it and decides promotion (see `<web-lab>/docs/LADDER.md`).
+
+## Step 8.4 · Client handoff (when the owner self-edits)
+
+Only when a **non-coder owner or editor will keep the content fresh** — typically when the
+project has a CMS (`skills/build/references/cms.md`) or a content collection they will edit. If
+the owner is technical or every change keeps coming through the team, skip it and say so in one
+line (efficiency — `CLAUDE.md`, item 7). It is a close-of-project deliverable, written once, not
+a per-change artefact.
+
+Cooper assembles it with the team, each on their part: **Osmani** the CMS specifics (where to log
+in, how publish works), **Rosenfeld** the content model (which fields and collections, who owns
+each), **Bellard** the image step so uploads stay optimized (`skills/optimize-assets`). Fill
+[`references/handoff.md`](references/handoff.md) and deliver it to
+`docs/08-maintenance/handoff.md`, beside the maintenance plan. It covers: how to log in, edit and
+publish; uploading images through Bellard's flow with alt text; what NOT to touch (code, config,
+secrets, DNS, accounts); and who to contact.
 
 ## Before you finish
 

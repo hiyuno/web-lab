@@ -247,6 +247,7 @@ approve coverage you did not inspect.
 | Security and privacy: threats, risk severity, verdict, accepted risks, legal deliverable list and data inventory | `security` |
 | Performance: budget, Core Web Vitals, images and video | `build` (budget) and `optimize-assets` (media) |
 | Content, copy, legal pages | `content` |
+| CMS: by-type default, integration, sanitization and image handling (model is `content`'s) | `build` (`references/cms.md`, Osmani) |
 | SEO, AEO/GEO, keyword research, structured data for search, title/meta limits, AI-crawler robots policy | `seo` (Sullivan) |
 | Measurement plan, analytics and events, CRO hypotheses/evidence, experimentation, north-star and funnel, the 30/60/90 review | `growth` (Ellis) |
 | Domain, DNS, email, monitoring, incidents | `launch` |

@@ -59,6 +59,14 @@ One day that saves weeks. With `references/structure.md` for each framework's fo
    lines: write `{" "}` where a space must stay.
 2. `.gitignore` with `.env*` (except `.env.example`) from the first commit. `.env.example` with
    names and descriptions, never values.
+   - **CMS**: if `architecture-decision.md` names a CMS (Keystatic, Sanity or Payload), Osmani
+     integrates it here as part of the foundation, following
+     [`references/cms.md`](references/cms.md) for the per-type default, the hosted/git/our-DB
+     trade-off, auth and editor roles, rich-text sanitization and image handling. **Rosenfeld's
+     content model** (`skills/content`, the matrix and briefs) drives the schema — collections and
+     fields are not invented here. A CMS is a new dependency (and, for Sanity/Payload, a new data
+     and auth surface), so it is structural: it runs the full flow and Schneier's gate (step 5.8).
+     If the decision says `none`, content stays in the repo and this item is skipped.
 3. Lint and format (ESLint, Prettier). Pre-commit hooks with lint-staged: lint, types and
    `gitleaks protect --staged`.
 4. CI with `references/ci.yml`: types, lint, tests, build, `pnpm audit --audit-level=high` and
